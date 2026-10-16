@@ -1,54 +1,54 @@
-# Vérification du parcours pédagogique d’Analyse 1
+# Résultats réellement exécutés — S1 QUEST
 
-Résultat observé sur les fichiers actuels : **67 tests réussis, 0 échec**.
+## Phase A : référence préservée
 
-## Exécution
+Le 16 octobre 2026, avant import des micro-missions : **67 PASS / 0 FAIL**, dont 49 tests de logique et 18 scénarios Chromium (environ 15,3 s). Détails : [audit Phase A](docs/phase-a-audit.md).
 
-```bash
-node --test tests/core.test.cjs tests/migration.test.cjs tests/curriculum.test.cjs
-node --test tests/browser.cjs
+## Phase B : vérification finale
+
+Commande exécutée sur le code livré :
+
+```sh
+node --test tests/core.test.cjs tests/migration.test.cjs tests/curriculum.test.cjs tests/microcurriculum.test.cjs tests/browser.cjs tests/microbrowser.cjs
 ```
 
-Les 49 tests unitaires utilisent uniquement les modules intégrés de Node.js. Les 18 scénarios navigateur utilisent Playwright et Chromium, disponibles dans l’environnement de développement. Ils démarrent et arrêtent leur propre serveur HTTP local ; aucun serveur externe n’est nécessaire. Le chemin Chromium peut être adapté avec la variable `CHROMIUM_PATH`.
+**PASS : 112 tests ; FAIL : 0 ; ignorés : 0 ; annulés : 0.** Durée : 25,24 secondes. Node 24.19.0, Playwright et Chromium système, 16 octobre 2026. Journal local : `/tmp/s1quest-phase-b-tests-final.log` ; la suite ne dépend pas de ce journal pour être relancée.
 
-Playwright est une dépendance de vérification, pas une dépendance du site publié. Aucun backend IA ni appel payant n’a été utilisé.
+| Suite | Exécutés | Résultat | Vérifications principales |
+| --- | ---: | --- | --- |
+| `core.test.cjs` | 24 | PASS | Modules, calculs pondérés/arrondis, tâches personnelles, stockage, reset protégé |
+| `migration.test.cjs` | 9 | PASS | Conversion v1→3, sauvegarde brute vérifiée, quota, corruption, concurrence |
+| `curriculum.test.cjs` | 16 | PASS | Compatibilité du catalogue antérieur et historique, liens/liaisons sûrs |
+| `microcurriculum.test.cjs` | 30 | PASS | 454 feuilles, IDs, sources, ordre, bonus, indépendance des états, migration v2, import, filtres et absence de doublons |
+| `browser.cjs` | 18 | PASS | Régressions des interactions existantes adaptées aux feuilles ; brouillons, modales et courses asynchrones |
+| `microbrowser.cjs` | 15 | PASS | Parcours réel, états, Cours→TD, ressources locales, import confirmé, corruption/quota/conflit, mobile/clavier et base GitHub Pages |
 
-## Résultats
+Les 18 scénarios navigateur antérieurs ont été conservés et adaptés au nouveau catalogue ; le CRUD personnel cible explicitement les tâches personnelles. Les 16 tests du catalogue historique s’appuient sur `data/curriculum-legacy.json`, tandis que les 30 nouveaux tests utilisent le catalogue courant. Ce ne sont pas 112 examens de documents académiques.
 
-| Fichier | Tests réussis | Vérifications principales |
-| --- | ---: | --- |
-| `tests/core.test.cjs` | 24 | Régressions des tâches personnelles, identifiants, dates, calculs pondérés, arrondis, personnalisation, exportabilité, stockage corrompu/indisponible, quotas, conflits et sauvegarde avant réinitialisation |
-| `tests/migration.test.cjs` | 9 | Conversion v1→v2 sans mutation de la source ; conservation intégrale des tâches, dates, IDs et personnalisations ; copie brute relue avant remplacement ; chargements répétés ; échecs de copie, d’écriture et de vérification ; conflit entre onglets ; versions invalides/futures |
-| `tests/curriculum.test.cjs` | 16 | Quatre chapitres et trois séries exacts ; ordre pédagogique ; aucune sous-partie inventée ; import répété sans doublon ni écriture du catalogue dans la progression ; Cours et TD indépendants ; relation multiple sans double comptage ; conservation et rattachement explicite des tâches personnelles ; masquage et titres personnalisés persistants ; validation du catalogue et des URL |
-| `tests/browser.cjs` | 18 | Régressions de l’interface existante, formulaires, navigation, paramètres, export, double confirmation, avertissements et clavier ; parcours Analyse 1, liens PDF, recommandations, progression, rechargements, migration, rattachement, masquage/restauration, viewport mobile, chargement retardé du catalogue, import privé dans le navigateur et priorité du dernier import sur un ancien chargement en attente |
+## Contrôles supplémentaires exécutés
 
-Les tests Cours/TD vérifient notamment :
+- **PASS** : syntaxe JavaScript (`node --check script.js`, helpers et suites).
+- **PASS** : `git diff --check`.
+- **PASS** : JSON Schema Draft 2020-12 valide ; catalogue fourni conforme avec Python `jsonschema`. Six exemples invalides refusés et extension à 455 feuilles acceptée lors de la vérification du schéma.
+- **PASS** : `curriculum.json` identique octet par octet au fichier utilisateur. SHA256 : `77f6c63345297ba54e106eb9ee0f289ad09d287ba787f1c372ef0bf3bdb8986b`.
+- **PASS** : les sept véritables identifiants Drive locaux sont absents des fichiers publics candidats ; fichier de liens ignoré par Git ; aucun PDF versionné.
+- **PASS** : serveur local port 8000, requête HTTP 200 sur `index.html`, chargement du Dashboard et du module Analyse 1 dans Chromium.
+- **PASS** : captures réelles ordinateur/mobile, sans liens privés chargés ; inspection visuelle du Dashboard, d’Analyse 1 et du viewport mobile.
+- **PASS** : chargement des assets relatifs et rechargement d’une route sous `/S1-QUEST/`, sur serveur de test simulant ce chemin ; ce n’est pas un déploiement GitHub Pages.
 
-- 1 chapitre terminé sur 4 : **25 %** pour Cours.
-- 1 série terminée sur 3 : **33,33 %** pour TD.
-- Total du module : 2 éléments terminés sur 7, sans recompter une série recommandée sous plusieurs chapitres.
-- Accès et validation d’un TD avant la validation du cours.
-- Conservation de l’ordre des quatre chapitres après validation et après trois rechargements.
+Observation indicative de performance sur cette machine : Dashboard prêt en 624 ms ; Analyse 1 rend initialement 10 feuilles et 494 éléments DOM. Les autres feuilles sont accessibles par accordéons et « Voir plus ». Ce relevé isolé n’est pas un benchmark multi-appareils ni une garantie de délai.
 
-Les anciens contenus personnels ne sont pas fusionnés par titre. Le scénario de rattachement explicite vérifie qu’une tâche existante conserve son identifiant, ses dates et sa case cochée, tout en étant comptée une seule fois.
+## Limites et contrôles non exécutés
 
-Le chargement retardé du catalogue est testé pendant la modification d’une tâche : la modale, le titre non soumis et le focus restent en place. L’import JSON des liens privés dans Paramètres est testé avec conservation après rechargement, absence de changement de progression et rejet atomique des JSON illisibles, des valeurs `null` ou tableaux, des URL dangereuses et des identifiants de ressources inconnus. Un scénario retarde la réponse d’un ancien fichier de liens jusqu’après un nouvel import explicite : les liens affichés et stockés restent ceux du dernier choix utilisateur.
+| Vérification | Statut | Limite |
+| --- | --- | --- |
+| Ouverture des vrais PDF Drive | NON VÉRIFIÉE | Les tentatives antérieures ont rencontré le proxy 403 ; les fenêtres PDF des tests utilisent des liens factices interceptés. |
+| Validation académique des 454 contenus dans les PDF | NON EXÉCUTÉE | Le catalogue et ses niveaux de confiance ont été intégrés tels que fournis ; voir les réserves académiques. |
+| Données du navigateur personnel sur le site publié | NON ACCESSIBLES | Les migrations sont testées sur des sauvegardes représentatives isolées ; exporter les données réelles avant mise à jour. |
+| Safari, Firefox, appareil physique et lecteur d’écran | NON EXÉCUTÉ | Tests Chromium ordinateur/mobile, clavier et contrôles de focus seulement ; pas de certification complète WCAG. |
+| Audit automatique complet de contraste WCAG | NON EXÉCUTÉ | Style sombre et focus conservés, inspection visuelle réalisée. |
+| XP, quêtes et succès Phase C | NON EXÉCUTÉS | Non implémentés dans les phases A/B. |
+| IA, OCR, indexation, authentification backend | NON EXÉCUTÉS | Phases ultérieures, aucun service externe activé. |
+| Déploiement, push, fusion dans `main` | NON EXÉCUTÉS | Hors autorisation actuelle. |
 
-## Liens Drive : portée exacte des contrôles
-
-Les tests navigateur utilisent des URL Drive fictives **uniquement comme fixtures de test**, injectées dans un complément local simulé. Ils vérifient l’association entre chaque ressource et son lien, l’ouverture dans un nouvel onglet, les attributs `noopener noreferrer`, l’absence de modification de progression à l’ouverture et le rejet intégral d’un complément contenant un lien invalide. Le contenu distant est simulé : ces tests ne prouvent pas l’accès aux vrais PDF.
-
-Un contrôle local séparé a vérifié que les **sept liens réels** du complément privé correspondent exactement aux sept associations titre/document fournies par l’utilisateur et respectent le format HTTPS Google Drive. Ces liens ne figurent pas dans les fixtures versionnées.
-
-L’accès réel aux PDF Google Drive n’est **pas validé**. Les permissions et le contenu doivent être contrôlés avec le compte Google autorisé. Les associations Cours–TD restent donc affichées comme propositions à confirmer ; aucune source ni page de PDF n’est présentée comme vérifiée.
-
-Les tests confirment également que les liens du complément privé, qu’ils proviennent du fichier local ou de l’import dans Paramètres, ne sont copiés ni dans le cache du catalogue public ni dans l’export JSON de progression. Le catalogue versionné ne contient aucune URL Drive privée.
-
-## Limites restantes
-
-- L’ordre des titres provient de l’inventaire utilisateur, pas d’une lecture réussie des PDF dans cet environnement.
-- Les sous-parties et correspondances pédagogiques définitives demandent une lecture des documents réels.
-- Les scénarios sont passés dans Chromium, dont un viewport mobile de 390 × 844. Safari, Firefox, smartphone physique et lecteur d’écran restent à vérifier.
-- Aucune publication GitHub Pages, modification de permissions Drive ou intégration IA n’a été réalisée pour ces tests.
-
-Le serveur du harnais navigateur s’arrête automatiquement après la suite. Ses données et les téléchargements de test utilisent des contextes de navigateur isolés, sans accès à la progression d’un utilisateur réel.
+Les tests ne modifient ni les permissions Drive ni un compte externe. Chaque contexte navigateur est isolé. Le serveur de test refuse explicitement le fichier de liens privé avant toute lecture.

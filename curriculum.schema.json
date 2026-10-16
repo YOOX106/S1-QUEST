@@ -1,0 +1,608 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:s1quest:curriculum:1",
+  "title": "S1 QUEST — Catalogue public des micro-missions, version 1",
+  "description": "Structure du catalogue de référence fourni par le propriétaire. Ce schéma ne certifie ni les contenus académiques ni les accès aux PDF. Le validateur JavaScript contrôle également les identifiants uniques, les références croisées, les sections permises, les pages et les associations. Aucun nombre fixe de chapitres ou de feuilles ne limite les futures mises à jour.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "version",
+    "created",
+    "purpose",
+    "privacy",
+    "rules",
+    "sources",
+    "modules",
+    "suggested_course_td_links",
+    "review_needed"
+  ],
+  "properties": {
+    "format": {
+      "const": "s1quest_curriculum_microtasks"
+    },
+    "version": {
+      "const": 1
+    },
+    "created": {
+      "type": "string",
+      "format": "date"
+    },
+    "purpose": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/text"
+        }
+      ],
+      "maxLength": 2000
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contains_private_urls",
+        "drive_links_excluded_intentionally",
+        "no_public_repo_private_file_ids"
+      ],
+      "properties": {
+        "contains_private_urls": {
+          "const": false
+        },
+        "drive_links_excluded_intentionally": {
+          "const": true
+        },
+        "no_public_repo_private_file_ids": {
+          "const": true
+        }
+      }
+    },
+    "rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "no_precompleted_tasks",
+        "status_storage",
+        "progress_cours",
+        "progress_td",
+        "progress_tp",
+        "chapter_progress",
+        "cross_chapter_td",
+        "recommended_states",
+        "empty_module",
+        "source_link_policy"
+      ],
+      "properties": {
+        "no_precompleted_tasks": {
+          "const": true
+        },
+        "status_storage": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/text"
+            }
+          ],
+          "maxLength": 2000
+        },
+        "progress_cours": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/text"
+            }
+          ],
+          "maxLength": 2000
+        },
+        "progress_td": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/text"
+            }
+          ],
+          "maxLength": 2000
+        },
+        "progress_tp": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/text"
+            }
+          ],
+          "maxLength": 2000
+        },
+        "chapter_progress": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/text"
+            }
+          ],
+          "maxLength": 2000
+        },
+        "cross_chapter_td": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/text"
+            }
+          ],
+          "maxLength": 2000
+        },
+        "recommended_states": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "non_commencé",
+              "en_cours",
+              "à_revoir",
+              "maîtrisé"
+            ]
+          },
+          "minItems": 4,
+          "maxItems": 4,
+          "uniqueItems": true
+        },
+        "empty_module": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/text"
+            }
+          ],
+          "maxLength": 2000
+        },
+        "source_link_policy": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/text"
+            }
+          ],
+          "maxLength": 2000
+        }
+      }
+    },
+    "sources": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z0-9]+:(cours|td|tp):[a-z0-9]+$"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "modules": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "prefixItems": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/module"
+            },
+            {
+              "properties": {
+                "id": {
+                  "const": "analyse1"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/module"
+            },
+            {
+              "properties": {
+                "id": {
+                  "const": "algebre1"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/module"
+            },
+            {
+              "properties": {
+                "id": {
+                  "const": "algebre2"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/module"
+            },
+            {
+              "properties": {
+                "id": {
+                  "const": "thermodynamique"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/module"
+            },
+            {
+              "properties": {
+                "id": {
+                  "const": "mecanique"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/module"
+            },
+            {
+              "properties": {
+                "id": {
+                  "const": "informatique1"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/module"
+            },
+            {
+              "properties": {
+                "id": {
+                  "const": "methodologie"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "items": false
+    },
+    "suggested_course_td_links": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/relation"
+      }
+    },
+    "review_needed": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/$defs/text"
+          }
+        ],
+        "maxLength": 2000
+      }
+    }
+  },
+  "$defs": {
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!\\s)(?!.*[\\u0000-\\u001f\\u007f])(?!.*\\s$).+$"
+    },
+    "id": {
+      "type": "string",
+      "maxLength": 120,
+      "pattern": "^(?!constructor$|prototype$)[a-z][a-z0-9-]*$"
+    },
+    "moduleId": {
+      "enum": [
+        "analyse1",
+        "algebre1",
+        "algebre2",
+        "thermodynamique",
+        "mecanique",
+        "informatique1",
+        "methodologie"
+      ]
+    },
+    "section": {
+      "enum": [
+        "cours",
+        "td",
+        "tp"
+      ]
+    },
+    "sourceId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+:(cours|td|tp):[a-z0-9]+$"
+    },
+    "unitConfidence": {
+      "enum": [
+        "source_grounded_editorial_microtopic",
+        "verified_exercise_headers",
+        "verified_source_heading",
+        "editorial_page_split_verified_scan",
+        "verified_from_page_images",
+        "visually_verified_exercises",
+        "verified_pdf_operations"
+      ]
+    },
+    "groupConfidence": {
+      "enum": [
+        "topics_identified_in_pdf",
+        "verified_pdf_heading_filename_mismatch",
+        "verified_pdf_headings",
+        "verified_table_of_contents",
+        "visual_verified_chapter_title"
+      ]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "filename",
+        "module",
+        "section",
+        "pdf_pages",
+        "content_inspected",
+        "visibility",
+        "drive_url"
+      ],
+      "properties": {
+        "filename": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/text"
+            }
+          ],
+          "maxLength": 240
+        },
+        "module": {
+          "$ref": "#/$defs/moduleId"
+        },
+        "section": {
+          "$ref": "#/$defs/section"
+        },
+        "pdf_pages": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "integer",
+              "minimum": 1
+            }
+          ]
+        },
+        "content_inspected": {
+          "type": "boolean"
+        },
+        "visibility": {
+          "const": "private_by_default"
+        },
+        "drive_url": {
+          "type": "null"
+        },
+        "notes": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/text"
+            }
+          ],
+          "maxLength": 2000
+        },
+        "supplementary": {
+          "type": "boolean"
+        }
+      }
+    },
+    "unit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "type",
+        "source_id",
+        "duration_hint_minutes",
+        "confidence"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "title": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/text"
+            }
+          ],
+          "maxLength": 240
+        },
+        "type": {
+          "$ref": "#/$defs/section"
+        },
+        "source_id": {
+          "$ref": "#/$defs/sourceId"
+        },
+        "duration_hint_minutes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1440
+        },
+        "confidence": {
+          "$ref": "#/$defs/unitConfidence"
+        },
+        "optional": {
+          "type": "boolean"
+        },
+        "pdf_page": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "pdf_pages": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "integer",
+              "minimum": 1
+            }
+          ],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        }
+      }
+    },
+    "group": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "source_id",
+        "units"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "title": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/text"
+            }
+          ],
+          "maxLength": 240
+        },
+        "source_id": {
+          "$ref": "#/$defs/sourceId"
+        },
+        "units": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/unit"
+          }
+        },
+        "source_confidence": {
+          "$ref": "#/$defs/groupConfidence"
+        }
+      }
+    },
+    "sections": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cours",
+        "td",
+        "tp"
+      ],
+      "properties": {
+        "cours": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/group"
+          }
+        },
+        "td": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/group"
+          }
+        },
+        "tp": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/group"
+          }
+        }
+      }
+    },
+    "module": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "status",
+        "sections"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/moduleId"
+        },
+        "name": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/text"
+            }
+          ],
+          "maxLength": 240
+        },
+        "status": {
+          "enum": [
+            "verified_partial",
+            "awaiting_real_material"
+          ]
+        },
+        "sections": {
+          "$ref": "#/$defs/sections"
+        },
+        "missing_reason": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/text"
+            }
+          ],
+          "maxLength": 2000
+        }
+      }
+    },
+    "relation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cours_id",
+        "td_id",
+        "status",
+        "confidence",
+        "reason"
+      ],
+      "properties": {
+        "cours_id": {
+          "$ref": "#/$defs/id"
+        },
+        "td_id": {
+          "$ref": "#/$defs/id"
+        },
+        "status": {
+          "const": "proposed_not_confirmed"
+        },
+        "confidence": {
+          "enum": [
+            "high",
+            "medium",
+            "low"
+          ]
+        },
+        "reason": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/text"
+            }
+          ],
+          "maxLength": 1000
+        }
+      }
+    }
+  }
+}

@@ -1,92 +1,82 @@
-# S1-QUEST
+# S1 QUEST
 
-S1 QUEST conserve son Dashboard, ses sept modules, la gestion des tâches personnelles, les paramètres et l’export de progression. Cette étape ajoute le **parcours pédagogique d’Analyse 1**, sans backend ni assistant IA.
+Application statique de révision S1 MI, JavaScript natif, compatible GitHub Pages. Le site existant est conservé et enrichi par les phases **A et B** : catalogue fourni de 454 micro-missions, suivi personnel, révisions et sources privées associées localement. Aucun backend, appel IA, service payant ou déploiement n’est activé.
 
-## Lancer le site
+## Prévisualiser sur son ordinateur
 
-Depuis la racine du projet :
+Récupérer la branche de travail et ouvrir son dossier dans un terminal :
 
 ```sh
+git switch feature/s1-quest-study-rpg
 python3 -m http.server 8000 --bind 127.0.0.1
 ```
 
-Ouvrir le site sur le port 8000 dans un navigateur moderne. Utiliser un serveur HTTP : le catalogue JSON ne se charge pas de manière fiable avec une ouverture directe `file://`. Aucun build ni dépendance d’exécution n’est nécessaire.
+Dans **le navigateur du même ordinateur**, saisir `http://127.0.0.1:8000`. Sous Windows, utiliser `py -m http.server 8000 --bind 127.0.0.1` si nécessaire. Pour un dossier téléchargé sans Git, lancer simplement la commande Python à sa racine. Ne pas ouvrir `index.html` en `file://` : le catalogue est chargé par HTTP.
 
-Fichiers nécessaires : `index.html`, `style.css`, `script.js`, `js/curriculum.js` et `curriculum.json`. Les chemins sont relatifs et les routes utilisent le hash, par exemple `#/module/analyse1`.
+Le serveur du cloud Codex n’est pas automatiquement accessible depuis votre PC. Aucun aperçu interactif externe n’est fourni par cet environnement. Les captures et les tests Chromium attestent uniquement des essais locaux.
 
-## Parcours Analyse 1
+Aucun build ni dépendance d’exécution. Conserver ensemble `index.html`, `style.css`, `script.js`, `curriculum.json`, `js/curriculum.js` et `js/microcurriculum.js`. Les chemins relatifs et les routes hash (`#/module/analyse1`) fonctionnent aussi sous `/S1-QUEST/`.
 
-Le catalogue contient exactement les titres fournis par l’utilisateur :
+## Parcours livré
 
-1. Chapitre I : Nombres réels.
-2. Chapitre II : Suites numériques.
-3. Chapitre III : Fonctions réelles d'une variable réelle.
-4. Chapitre IV : Fonctions dérivables.
+- Sept modules fixes ; six documentés, Méthodologie **À configurer**, sans programme inventé.
+- Module → Cours/TD/TP autorisés → chapitre/série → petite mission ou exercice. Parents repliables, cinq unités affichées d’abord, puis « Voir plus » ; ordre source conservé.
+- Cases « Terminé », démarrage et compréhension distincts : inconnue, À revoir, Compris, Maîtrisé. Ouvrir un PDF ou choisir Maîtrisé ne coche rien.
+- Pourcentages Cours, TD, TP, groupe, module et semestre pondérés par les feuilles uniques. Par défaut **437 unités d’objectif et 17 bonus**, hors tâches personnelles. Les bonus peuvent être inclus explicitement dans l’objectif personnel.
+- Recherche, filtres, prochaine mission déterministe, pages Révisions et Ressources, tâches personnelles et personnalisations conservées.
+- 24 associations Cours–TD **proposées**, jamais confirmées automatiquement. Les TD restent accessibles avant le cours et ne sont pas dupliqués par les recommandations.
 
-La section TD contient **TD Série 1**, **TD Série 2** et **TD Série 3**. Aucun TP d’Analyse 1, sous-chapitre ou contenu d’un autre module n’est inventé. Les sous-parties ne seront affichées que si elles sont identifiées et vérifiées dans un document ; elles restent informatives et ne sont pas comptées en plus du chapitre.
+Le JSON joint est conservé à l’identique dans `curriculum.json`. Ses 66 références correspondent à 63 couples module/nom de fichier distincts. Ce catalogue préparatoire n’est pas une certification du programme officiel. Les intitulés et niveaux de confiance proviennent du document fourni ; les PDF n’ont pas été réinspectés ici. Voir [la validation académique](docs/validation-academique.md).
 
-Les chapitres et TD gardent leur ordre pédagogique même lorsqu’ils sont cochés. Un clic sur « Ouvrir le PDF » ouvre le fichier Drive dans un nouvel onglet, sans modifier sa case. Le TD peut être travaillé avant le cours.
+## Protection des données et migration
 
-Quatre associations sont **proposées et à confirmer**, d’après les observations communiquées : chapitre I → TD 1 ; chapitre II → TD 2 et TD 3 ; chapitre III → TD 3. Le chapitre IV n’a pas d’association proposée. Les boutons conduisent à l’entrée unique du TD, qui n’est jamais comptée plusieurs fois.
+**Avant toute mise à jour du site habituel : exporter sa sauvegarde JSON.** localStorage dépend du navigateur, du domaine et du port. Les données de votre navigateur sur GitHub Pages ne sont pas accessibles depuis cette copie cloud.
 
-Les tentatives d’accès aux sept liens réels ont été bloquées par le proxy réseau de l’environnement (403). Cela ne prouve ni une erreur du lien ni un refus de permission Drive. Les PDF et leurs contenus ne sont donc pas déclarés vérifiés. Aucun partage ni aucune permission n’a été modifié.
+La clé active reste `s1quest_data`. Le site antérieur de cet environnement utilisait déjà le schéma 2 ; cette étape utilise donc le **schéma 3**, avec migration depuis 1 ou 2. Une copie brute horodatée `s1quest_backup_*` est écrite et relue avant toute migration ou import remplaçant les données. Version inconnue, corruption, quota et conflit ne déclenchent jamais de remise à zéro automatique. Un échec de persistance est signalé ; exporter alors les changements en mémoire avant de fermer la page.
 
-## Liens Drive privés et dépôt public
+Le programme reste séparé de la progression :
 
-Le fichier versionné `curriculum.json` contient des titres, identifiants, ressources et relations, **sans les URL privées fournies**. Le code et les tests versionnés ne contiennent pas non plus leurs identifiants Drive.
+- `curriculumProgress` conserve les anciens chapitres/séries, leurs validations, masquages, titres et liaisons.
+- `unitProgress` contient les états des nouvelles feuilles par ID canonique stable.
+- Les anciennes validations de chapitres **ne valident pas leurs enfants automatiquement**. L’historique est affiché dans le groupe. Un ancien parent masqué garde ses enfants hors objectif jusqu’à restauration explicite.
+- Une tâche personnelle anciennement liée à un parent reste visible comme historique hors calcul, pour éviter le double compte avec les nouvelles feuilles. On peut la rattacher explicitement à une feuille.
+- Aucun rapprochement par titre n’est automatique. Une liaison explicite et réversible réutilise l’ID et les dates de la tâche personnelle et ne la compte qu’une fois.
+- Charger dix fois le catalogue n’insère aucune nouvelle tâche dans la sauvegarde. Les états d’IDs momentanément absents restent conservés.
 
-Les sept URL exactes sont préparées pour les essais locaux dans `curriculum.links.local.json`, exclu de Git par `.gitignore`. Ne pas forcer son ajout à Git et ne pas inclure ce fichier dans une publication publique. Aucune publication ou poussée Git n’a été effectuée.
+**Paramètres → Sauvegarde JSON** exporte la progression et permet un import validé, avec aperçu et saisie obligatoire `IMPORTER` avant remplacement. L’import remplace la progression, il ne fusionne pas deux sauvegardes. La réinitialisation conserve ses deux confirmations et exige elle aussi une copie de secours vérifiée. Les autres applications ne sont jamais effacées.
 
-Sur une installation GitHub Pages, ouvrir **Paramètres → Mes liens privés Google Drive** et choisir ce fichier JSON depuis l’ordinateur. Les liens seront conservés dans le navigateur, sous une clé distincte `s1quest_private_links`, et utilisés après rechargement. L’ancien fichier de configuration local reste facultatif. Si aucun lien n’est disponible, le site affiche « PDF à renseigner » plutôt qu’un faux bouton.
+Pour récupérer une copie brute locale : dans les outils du navigateur, rubrique Stockage local, retrouver une clé `s1quest_backup_*`, copier sa valeur dans un fichier JSON puis l’importer via Paramètres. Garder aussi un export sur disque ; les copies locales peuvent disparaître avec les données du navigateur.
 
-Format attendu (sans URL d’exemple inventée) : un objet de version numérique `schemaVersion: 1` et un objet `links` qui associe les IDs de ressources du catalogue aux URL Drive exactes. Les ressources sont `a1-resource-cours-01` à `a1-resource-cours-04`, puis `a1-resource-td-01` à `a1-resource-td-03`.
+## PDF et confidentialité
 
-Tout le fichier est validé avant application. Seuls les liens HTTPS de fichiers sur `drive.google.com` sont acceptés. Cette validation contrôle la structure du lien, jamais les permissions ou le contenu du document. Un fichier invalide ne remplace ni la configuration précédente ni la progression. En cas de quota, les nouveaux liens restent utilisables en mémoire et un avertissement demande de conserver le fichier source.
+Le catalogue public n’embarque **aucune URL Drive privée, aucun identifiant Drive privé ni PDF**. Les PDF restent privés et les permissions Google Drive ne sont jamais modifiées. Les titres et noms de fichiers du catalogue fourni sont visibles dans le dépôt public.
 
-Les liens importés restent hors du catalogue public, du cache public et de l’export de progression. Les conserver dans ce navigateur ne rend pas publics les fichiers Drive. Leur ouverture continue de dépendre du compte Google et des permissions réelles. Les navigateurs et les autres applications du même domaine partagent la frontière d’origine de localStorage : cette fonction n’est pas un coffre chiffré ni une synchronisation cloud.
+« Associer un PDF » enregistre un lien Google Drive autorisé sur cet appareil, sous la clé distincte `s1quest_private_links`. Cette association contrôle la syntaxe HTTPS du lien, **pas son accès effectif**. Le document s’ouvre dans un nouvel onglet si votre compte Google possède les droits. Le lien privé reste exclu du cache public et de l’export de progression. localStorage partage la frontière du domaine ; ce n’est pas un coffre chiffré.
 
-## Conservation de la progression
+Les sept liens Analyse 1 déjà fournis sont disponibles uniquement dans `curriculum.links.local.json`, ignoré par Git. Ne jamais forcer son ajout ou le publier. Sur GitHub Pages, importer ce JSON depuis **Paramètres → Mes liens privés Google Drive**. Format : `schemaVersion: 1`, puis `links`, objet associant les IDs des ressources à leurs vrais liens. Les IDs Analyse 1 restent `a1-resource-cours-01` à `04` et `a1-resource-td-01` à `03`. Les autres sont consultables dans Ressources et résolus depuis `source_id` par `js/microcurriculum.js`.
 
-Avant de mettre à jour le site, télécharger un export JSON depuis la version utilisée sur l’adresse habituelle du site.
-
-La clé active reste **`s1quest_data`**. La migration **schemaVersion 1 → 2** conserve les sept modules, les IDs et dates des tâches personnelles, leurs cases cochées, le pseudo, les personnalisations et les autres champs existants. Elle exige une copie brute de secours vérifiée avant remplacement. Une erreur de quota, une sauvegarde invalide ou un conflit n’entraîne jamais une réinitialisation automatique. En cas d’écriture non vérifiable, une alerte indique que l’enregistrement n’est pas confirmé et la copie brute précédente est conservée.
-
-Le contenu académique reste dans le catalogue. La progression du catalogue est stockée séparément dans `curriculumProgress`, référencée par IDs stables. Le chargement est une projection : il ne pousse pas de nouvelles tâches à chaque visite. Recharger ou réimporter la même version ne crée pas de doublons. Les états des éléments absents d’un nouveau catalogue restent conservés ; ils ne sont pas effacés.
-
-Les tâches personnelles déjà présentes ne sont jamais fusionnées sur la seule égalité des titres. Le bouton **Rattacher une tâche existante** permet un rapprochement explicite, dans la même section : il réutilise la case, l’ID et les dates de la tâche choisie et la compte une seule fois. Détacher conserve la tâche personnelle et la progression copiée ; elles redeviennent des entrées distinctes.
-
-Un élément du catalogue peut être **masqué**, puis réaffiché avec sa progression depuis « Éléments masqués ». Un rechargement ne le recrée pas automatiquement. Les titres personnalisés restent des préférences utilisateur et ne changent pas le titre source du catalogue.
-
-Le catalogue public validé dispose d’un cache distinct. Si le fichier est indisponible, le site tente ce cache et le signale. Sans catalogue ni cache utilisable, les tâches personnelles restent disponibles et le bandeau précise que les pourcentages affichés sont partiels. Le cache ne remplace pas la sauvegarde de progression.
-
-localStorage est propre au navigateur et à l’origine du site. Changer de domaine, de protocole ou de port ne transfère pas les données. Ne pas changer l’adresse de publication pour cette mise à jour sans préparer leur transfert. L’export des données n’inclut pas les liens privés ; l’import de sauvegardes de progression n’est pas ajouté dans cette étape.
-
-## Calculs et réinitialisation
-
-Cours et TD ont des cases et pourcentages indépendants. Les progressions du module et du semestre sont pondérées par les unités réellement affichées, y compris les tâches personnelles conservées ; les recommandations et sous-parties informatives n’ajoutent aucune unité. L’arrondi est appliqué uniquement à l’affichage et le reste est son complément exact à 100 %.
-
-Les autres modules restent à configurer lorsqu’ils n’ont aucune tâche. Les sept IDs, leurs sections et l’ordre des modules restent fixes. La réinitialisation conserve les deux confirmations et une copie de secours obligatoire : elle efface les données personnelles et les cases du catalogue, pas les titres académiques ni les liens privés conservés séparément.
+Aucun accès réel aux PDF n’est garanti par les tests : les tentatives précédentes dans ce cloud ont rencontré un refus du proxy (403). Les tests de liens utilisent des documents factices interceptés, jamais les PDF privés. Aucune synchronisation Drive automatique n’est annoncée.
 
 ## Tests
 
-Tests de logique et de migration, sans dépendance :
+Node 20 ou plus récent pour la logique :
 
 ```sh
-node --test tests/core.test.cjs tests/migration.test.cjs tests/curriculum.test.cjs
+node --test tests/core.test.cjs tests/migration.test.cjs tests/curriculum.test.cjs tests/microcurriculum.test.cjs
 ```
 
-Tests navigateur avec Playwright accessible à Node et Chromium installé :
+Les tests du catalogue antérieur utilisent `data/curriculum-legacy.json` pour vérifier la compatibilité ; les tests `microcurriculum` portent sur le catalogue courant.
+
+Avec Playwright et Chromium installés pour les essais navigateur :
 
 ```sh
-node --test tests/browser.cjs
+node --test tests/browser.cjs tests/microbrowser.cjs
 ```
 
-La suite navigateur lance son serveur temporaire et utilise des contextes isolés. `CHROMIUM_PATH` permet d’indiquer un autre chemin que `/usr/bin/chromium`. Les liens externes et fenêtres de PDF sont simulés dans la suite ; ils ne prouvent pas l’accès aux vrais documents.
+`CHROMIUM_PATH` permet de choisir l’exécutable (défaut `/usr/bin/chromium`). Les serveurs de test utilisent un port temporaire, refusent le véritable fichier privé et n’appellent aucun service IA. Sur une nouvelle machine, installer Playwright uniquement pour développer/tester ; le site fonctionne sans ce paquet. Le schéma JSON peut être contrôlé avec Python `jsonschema`, facultatif et distinct de la validation JavaScript exécutée par le site.
 
-Voir [TESTS.md](./TESTS.md) pour les résultats réels, leurs preuves et les limites restantes.
+Résultats réellement exécutés : [TESTS.md](TESTS.md). Livraison et fichiers : [docs/phase-b-livraison.md](docs/phase-b-livraison.md).
 
-## GitHub Pages
+## Suite du projet
 
-Le site conserve son déploiement statique : branche choisie dans **Settings → Pages**, dossier racine, sans build ni fichier `.nojekyll`. Publier seulement les fichiers publics nécessaires, dont le dossier `js/` et `curriculum.json`. Les liens privés restent exclus et sont chargés depuis Paramètres sur chaque navigateur autorisé.
-
-Cette intervention ne publie rien, ne déploie aucun backend, n’indexe aucun PDF et n’effectue aucun appel à une API IA. L’étape suivante attendra la validation du parcours sur les documents réels.
+La phase C ajoutera XP/rangs/succès et mini-quêtes après validation de ce socle. La phase D sera une démonstration IA clairement signalée. La phase E réelle nécessite un accord distinct pour les documents autorisés, l’authentification, les coûts, l’indexation et le déploiement. Aucune clé API ne doit être ajoutée au frontend. Rien n’a été poussé, fusionné dans `main` ou publié par cette intervention.

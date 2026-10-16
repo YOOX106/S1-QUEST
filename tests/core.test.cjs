@@ -56,7 +56,7 @@ function savedFixture() {
 
 test('T01–T05 — official seven modules, fixed order, exact sections, no invented tasks', () => {
   const state = core.createState();
-  assert.equal(state.schemaVersion, 2);
+  assert.equal(state.schemaVersion, 3);
   assert.equal(state.profile.nickname, 'AMINE');
   assert.deepEqual(state.modules.map(module => module.id), expectedModules.map(([id]) => id));
   for (const [id, sections] of expectedModules) {

@@ -6,7 +6,7 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
 
-  const SCHEMA_VERSION = 2;
+  const SCHEMA_VERSION = 3;
   const STORAGE_KEY = 's1quest_data';
   const BACKUP_PREFIX = 's1quest_backup_';
   const PALETTE = Object.freeze([
@@ -49,6 +49,7 @@
       schemaVersion: SCHEMA_VERSION,
       profile: { nickname: 'AMINE' },
       curriculumProgress: {},
+      unitProgress: {},
       idCounter: 0,
       idNamespace: newNamespace(),
       modules: MODULES.map(definition => ({
@@ -63,12 +64,17 @@
 
   function stats(tasks) {
     if (!Array.isArray(tasks)) throw new Error('La liste des tâches est invalide.');
-    const total = tasks.length;
-    const completed = tasks.reduce((sum, task) => sum + (task.completed === true ? 1 : 0), 0);
+    const unique = [...new Map(tasks.map((task, index) => [task.curriculumId ? 'catalog:'+task.curriculumId : task.id ? 'manual:'+task.id : 'position:'+index, task])).values()];
+    const required = unique.filter(task => !task.optional && !task.legacyOnly);
+    const bonus = unique.filter(task => task.isBonus);
+    const total = required.length;
+    const completed = required.reduce((sum, task) => sum + (task.completed === true ? 1 : 0), 0);
     const progressHundredths = total ? Math.round(completed * 10000 / total) : null;
     return {
       total,
       completed,
+      bonusTotal: bonus.length,
+      bonusCompleted: bonus.filter(task => task.completed).length,
       remaining: total - completed,
       progress: total ? completed / total * 100 : null,
       progressHundredths,
@@ -188,8 +194,8 @@
     return validateCommonState(state, 1);
   }
 
-  function validateState(state) {
-    validateCommonState(state, SCHEMA_VERSION);
+  function validateV2(state, version = 2) {
+    validateCommonState(state, version);
     if (!isObject(state.curriculumProgress)) throw new Error('La progression du catalogue est invalide.');
     const manualIds = new Set(state.modules.flatMap(module => Object.values(module.sections).flat()).map(task => task.id));
     const linkedIds = new Set();
@@ -209,15 +215,38 @@
     return state;
   }
 
-  // Pure conversion: persistence is performed only by Store after a verified backup.
+  function validateState(state) {
+    validateV2(state, SCHEMA_VERSION);
+    if (!isObject(state.unitProgress)) throw new Error('La progression des micro-missions est invalide.');
+    const manualIds = new Set(state.modules.flatMap(m => Object.values(m.sections).flat()).map(t => t.id));
+    const linkedIds = new Set();
+    for (const [id, r] of Object.entries(state.unitProgress)) {
+      if (!/^[a-z][a-z0-9-]{0,119}$/.test(id) || ['constructor','prototype'].includes(id) || !isObject(r) ||
+        typeof r.completed !== 'boolean' || typeof r.hidden !== 'boolean' || typeof r.optionalIncluded !== 'boolean' ||
+        !validDate(r.createdAt) || (r.completed ? !validDate(r.completedAt) : r.completedAt !== null) ||
+        !(r.startedAt === null || validDate(r.startedAt)) || !['unknown','review','understood','mastered'].includes(r.mastery) ||
+        !(r.titleOverride === null || (typeof r.titleOverride === 'string' && text(r.titleOverride,120,'Le titre') === r.titleOverride)) ||
+        !(r.linkedTaskId === null || (typeof r.linkedTaskId === 'string' && manualIds.has(r.linkedTaskId)))) {
+        throw new Error('Une progression de micro-mission est invalide.');
+      }
+      if (r.linkedTaskId !== null) {
+        if (linkedIds.has(r.linkedTaskId)) throw new Error('Une tâche ne peut être associée à plusieurs micro-missions.');
+        linkedIds.add(r.linkedTaskId);
+      }
+    }
+    return state;
+  }
+
+  // Pure conversion. Older chapter validations remain historical: no child is completed implicitly.
   function migrateState(state) {
     if (!isObject(state)) throw new Error('La sauvegarde est invalide.');
     if (state.schemaVersion === SCHEMA_VERSION) return validateState(state);
-    if (state.schemaVersion !== 1) throw new Error('Aucune migration sûre n’est disponible pour cette version.');
-    validateLegacyState(state);
+    if (![1,2].includes(state.schemaVersion)) throw new Error('Aucune migration sûre n’est disponible pour cette version.');
+    if (state.schemaVersion === 1) validateLegacyState(state); else validateV2(state);
     const migrated = JSON.parse(JSON.stringify(state));
+    if (state.schemaVersion === 1) migrated.curriculumProgress = {};
+    migrated.unitProgress = {};
     migrated.schemaVersion = SCHEMA_VERSION;
-    migrated.curriculumProgress = {};
     return validateState(migrated);
   }
 
@@ -289,7 +318,7 @@
     const index = tasks.findIndex(task => task.id === id);
     if (index < 0) throw new Error('Tâche introuvable.');
     const removed = tasks[index];
-    for (const record of Object.values(state.curriculumProgress || {})) {
+    for (const record of [...Object.values(state.curriculumProgress || {}), ...Object.values(state.unitProgress || {})]) {
       if (record.linkedTaskId === id) {
         record.linkedTaskId = null;
         record.completed = removed.completed;
@@ -370,7 +399,7 @@
       let parsed;
       try { parsed = JSON.parse(result.raw); }
       catch (_) { return this.protect('corrupt', 'La sauvegarde contient un JSON illisible.'); }
-      if (isObject(parsed) && typeof parsed.schemaVersion === 'number' && ![1, SCHEMA_VERSION].includes(parsed.schemaVersion)) {
+      if (isObject(parsed) && typeof parsed.schemaVersion === 'number' && ![1, 2, SCHEMA_VERSION].includes(parsed.schemaVersion)) {
         return this.protect('unsupported', 'Cette sauvegarde utilise une version non prise en charge.');
       }
       let migrated;
@@ -381,7 +410,7 @@
       const pending = message => {
         this.blocked = true;
         this.blockReason = 'migration-pending';
-        return { state: migrated, status: 'migration-pending', migration: true, message: message + ' Les données v1 restent protégées ; la version v2 est utilisable en mémoire. Exporte tes changements avant de fermer cette page.' };
+        return { state: migrated, status: 'migration-pending', migration: true, message: message + ' Les données originales restent protégées ; la version 3 est utilisable en mémoire. Exporte tes changements avant de fermer cette page.' };
       };
       if (!this.backup(originalRaw).ok) return pending('La copie de secours avant migration a échoué. La sauvegarde originale n’a pas été remplacée.');
       const beforeWrite = this.raw();
@@ -394,15 +423,15 @@
       try {
         this.storage.setItem(STORAGE_KEY, serialized);
         const verification = this.raw();
-        if (!verification.ok) return pending('L’écriture de la migration n’a pas pu être vérifiée. La copie brute v1 est conservée.');
+        if (!verification.ok) return pending('L’écriture de la migration n’a pas pu être vérifiée. La copie brute originale est conservée.');
         if (verification.raw !== serialized) {
           const conflict = this.conflict();
           return { ...conflict, state: migrated, migration: true };
         }
         validateState(JSON.parse(verification.raw));
         this.lastRaw = serialized;
-        return { state: migrated, status: 'loaded', migration: true, message: 'Sauvegarde migrée en version 2 ; copie brute v1 vérifiée conservée.' };
-      } catch (_) { return pending('La migration n’a pas pu être enregistrée. La copie brute v1 est conservée.'); }
+        return { state: migrated, status: 'loaded', migration: true, message: 'Sauvegarde migrée en version 3 ; copie brute originale vérifiée conservée.' };
+      } catch (_) { return pending('La migration n’a pas pu être enregistrée. La copie brute originale est conservée.'); }
     }
 
     protect(reason, detail) {
@@ -451,6 +480,14 @@
       };
     }
 
+    importData(input) {
+      let prepared;
+      try { prepared = migrateState(typeof input === 'string' ? JSON.parse(input) : input); }
+      catch (error) { return {ok:false,status:'invalid',message:'Import refusé : ' + error.message}; }
+      const result = this.reset(prepared);
+      return result.ok ? {...result,message:'Sauvegarde importée. La copie brute précédente est conservée.'} : result;
+    }
+
     reset(state = createState()) {
       let serialized;
       try { validateState(state); serialized = JSON.stringify(state); }
@@ -487,7 +524,7 @@
   return Object.freeze({
     SCHEMA_VERSION, STORAGE_KEY, BACKUP_PREFIX, MODULES, PALETTE,
     createState, stats, moduleStats, semesterStats, formatPercent,
-    validateState, validateLegacyState, migrateState, addTask, editTask, toggleTask, deleteTask,
+    validateState, validateLegacyState, validateV2, migrateState, addTask, editTask, toggleTask, deleteTask,
     setProfile, customizeModule, Store
   });
 });
@@ -497,7 +534,7 @@
   'use strict';
   if (typeof window === 'undefined' || typeof document === 'undefined') return;
   const C = globalThis.S1QuestCore;
-  const P = globalThis.S1Curriculum;
+  const P = globalThis.S1MicroCurriculum;
   let catalog = null;
   let catalogBase = null;
   let privateLinksInMemory = null;
@@ -513,6 +550,11 @@
   let modalContext = null;
   let lastTrigger = null;
   let announcementTimer;
+  const openGroups = new Map();
+  const visibleUnits = new Map();
+  const unitFilters = new Map();
+  let skippedMission = null;
+  const filtersFor = id => unitFilters.get(id) || {filter:'all',query:''};
 
   // Toutes les valeurs utilisateur sont des nœuds texte, jamais du HTML.
   function el(tag, className, text) {
@@ -657,6 +699,7 @@
     feedback.textContent = count + ' liens chargés. ' + (saved ? 'Conservés sur cet appareil uniquement.' : 'En mémoire uniquement : conserve le fichier JSON avant de fermer cette page.');
     showCurriculumStatus(count + ' liens privés ' + (saved ? 'chargés depuis ce navigateur.' : 'utilisables en mémoire uniquement ; leur sauvegarde a échoué.') + ' Aucun lien n’a été publié. L’accès Drive et les associations proposées restent à vérifier.');
     announce(feedback.textContent);
+    return feedback.textContent;
   }
 
   async function loadCurriculum() {
@@ -713,90 +756,136 @@
       const resource = catalog.resources.find(candidate => candidate.id === id);
       if (resource?.url && P.validateDriveUrl(resource.url)) {
         const a = link('Ouvrir le PDF', resource.url, 'button resource-link');
-        a.target = '_blank';
-        a.rel = 'noopener noreferrer';
+        a.target = '_blank'; a.rel = 'noopener noreferrer';
         a.setAttribute('aria-label', 'Ouvrir le PDF : ' + resource.title + ' dans Google Drive (nouvel onglet)');
         box.append(a);
-      } else {
-        append(box, el('span', 'resource-missing', 'PDF à renseigner · lien privé non publié'));
-      }
+      } else box.append(el('span', 'resource-missing', 'Ressource à associer'));
+      box.append(button(resource?.url ? 'Modifier le lien privé' : 'Associer un PDF', 'associate-pdf', 'button subtle compact', {resourceId:id}));
     }
-    if (!item.resourceIds.length) box.append(el('span', 'resource-missing', 'PDF à renseigner'));
     return box;
   }
+  function openUnit(id, start = false) {
+    const unit = P.getItem(catalog,id);
+    if (!unit || unit.units) return;
+    if (state.unitProgress[id]?.hidden || P.getLegacyRecord(state,unit.groupId)?.hidden) { announce('Cette mission est masquée. Réaffiche-la dans son module.'); return; }
+    if (start) { P.startUnit(state,id); persist(); }
+    openGroups.set(unit.groupId,true);
+    const group = P.getItem(catalog,unit.groupId);
+    visibleUnits.set(group.id,Math.max(visibleUnits.get(group.id)||5,unit.order));
+    unitFilters.set(unit.moduleId,{filter:'all',query:''});
+    const focus = () => requestAnimationFrame(() => {
+      const row = document.getElementById('curriculum-'+id);
+      $('input[type="checkbox"]',row || view)?.focus({preventScroll:true});
+      row?.scrollIntoView({block:'center',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
+    });
+    if (window.location.hash !== '#/module/'+unit.moduleId) {
+      window.addEventListener('hashchange',focus,{once:true});
+      window.location.hash='#/module/'+unit.moduleId;
+    } else { rerenderAt(null,{resetForm:$('form[data-action="unit-filters"]',view)}); focus(); }
+  }
   function goToTD(id) {
-    const item = P.getItem(catalog, id);
-    if (!item || item.section !== 'td') return;
-    const row = Array.from(view.querySelectorAll('.curriculum-task')).find(node => node.dataset.curriculumId === id);
-    if (!row) { announce('Ce TD est masqué. Réaffichez-le dans la section TD.'); return; }
-    const checkbox = $('input[type="checkbox"]', row);
-    checkbox?.focus({ preventScroll: true });
-    row.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'center' });
-    announce('Accès à ' + item.title + '. Le TD peut être travaillé indépendamment du cours.');
+    const group=P.getItem(catalog,id);
+    if (!group || group.section!=='td') return;
+    const leaf=group.units.find(u=>!state.unitProgress[u.id]?.hidden && !state.unitProgress[u.id]?.completed) || group.units.find(u=>!state.unitProgress[u.id]?.hidden);
+    if (!leaf) { announce('Les exercices de cette série sont masqués. Réaffiche-les dans la section TD.'); return; }
+    openUnit(leaf.id);
+    announce('Accès à '+group.title+'. Les TD sont accessibles indépendamment des cours.');
+  }
+  function confidenceText(unit) {
+    if (unit.confidence === 'editorial_page_split_verified_scan') return 'Blocs de pages provisoires · scan manuscrit';
+    if (unit.confidence === 'source_grounded_editorial_microtopic') return 'Découpage éditorial fondé sur le cours';
+    if (unit.moduleId==='algebre2' && unit.section==='td') return 'Lecture de photos · vérification finale requise';
+    return 'Intitulé identifié selon le catalogue fourni';
   }
   function enrichCurriculumTask(row, module, section, task) {
-    row.classList.add('curriculum-task');
-    row.dataset.curriculumId = task.curriculumId;
-    row.id = 'curriculum-' + task.curriculumId;
-    const main = el('div', 'task-main');
-    main.append(...Array.from(row.childNodes));
-    row.append(main);
-    const item = P.getItem(catalog, task.curriculumId);
-    if (!item) return row;
-    const detail = el('div', 'curriculum-detail');
-    if (task.title !== item.title) detail.append(el('p', 'canonical-title', 'Titre du document : ' + item.title));
-    append(detail, renderResources(item));
-    if (item.subsections.length) {
-      const parts = el('details', 'document-parts');
-      append(parts, el('summary', '', 'Sous-parties du document (informatives)'));
-      const list = el('ol');
-      item.subsections.slice().sort((a, b) => a.order - b.order).forEach(part => list.append(el('li', '', part.title)));
-      append(parts, list, el('p', 'muted', 'Ces sous-parties ne sont pas comptées en plus du chapitre.'));
-      detail.append(parts);
+    row.classList.add('curriculum-task'); row.dataset.curriculumId=task.curriculumId; row.id='curriculum-'+task.curriculumId;
+    const main=el('div','task-main'); main.append(...Array.from(row.childNodes)); row.append(main);
+    const unit=P.getItem(catalog,task.curriculumId);
+    const detail=el('div','curriculum-detail');
+    if (task.title!==unit.title) detail.append(el('p','canonical-title','Titre source : '+unit.title));
+    append(detail,el('p','source-confidence',confidenceText(unit)));
+    const source=catalog.resources.find(r=>r.id===unit.resourceIds[0]);
+    const page=unit.pdfPage ? ' · page PDF '+unit.pdfPage : unit.pdfPages ? ' · pages PDF '+unit.pdfPages.join('–') : ' · page non renseignée';
+    append(detail,el('p','source-reference',source.filename+page+' (selon le catalogue)'));
+    append(detail,el('p','duration-hint','≈ '+unit.durationHintMinutes+' min · suggestion à adapter, sans minuteur'));
+    const data={curriculumId:unit.id,moduleId:module.id,section};
+    const controls=el('div','study-controls');
+    const statusText=task.mastery==='review'?'À revoir':task.completed?'Terminé':task.startedAt?'En cours':'Non commencé';
+    append(controls,el('span','study-status status-'+P.status(task),statusText),button(task.startedAt?'Reprendre':'Je commence','start-unit','button subtle compact',data));
+    const label=el('label','mastery-label');const select=el('select','field compact');
+    select.dataset.action='mastery';Object.assign(select.dataset,data);
+    for (const [value,text] of [['unknown','Compréhension inconnue'],['review','À revoir'],['understood','Compris'],['mastered','Maîtrisé']]) {
+      const option=el('option','',text);option.value=value;option.selected=task.mastery===value;select.append(option);
     }
-    const record = state.curriculumProgress[task.curriculumId];
-    const available = getModule(module.id).sections[section];
-    if (record?.linkedTaskId) {
-      append(detail, append(el('div', 'catalog-binding'), el('span', '', '✓ Progression de la tâche personnelle associée'), button('Détacher', 'unlink-existing', 'button subtle compact', { curriculumId: task.curriculumId, moduleId: module.id, section })));
-    } else if (available.length) {
-      detail.append(button('Rattacher une tâche existante', 'link-existing', 'button subtle compact', { curriculumId: task.curriculumId, moduleId: module.id, section }));
+    append(label,el('span','sr-only','Compréhension : '+task.title),select);controls.append(label);
+    if (unit.optional) {
+      append(controls,el('span','bonus-badge','Bonus'),button(task.optional?'Inclure dans mon objectif':'Retirer de mon objectif','include-optional','button subtle compact',data));
     }
-    if (section === 'cours') {
-      const associated = el('section', 'associated-td');
-      associated.setAttribute('aria-label', 'TD associés à ' + item.title);
-      const relations = catalog.relations.filter(relation => relation.chapterId === item.id);
-      append(associated, el('h3', '', 'TD associés à ce chapitre'));
-      if (!relations.length) append(associated, el('p', 'muted', 'Aucune association vérifiée ou proposée pour ce chapitre. Tous les TD restent accessibles dans leur section.'));
-      for (const relation of relations) {
-        const td = P.getItem(catalog, relation.tdId);
-        const displayed = displayModule(module.id).sections.td.find(candidate => candidate.curriculumId === relation.tdId);
-        const recommendation = el('div', 'td-recommendation');
-        const heading = el('div', 'recommendation-heading');
-        append(heading, el('strong', '', td.title), el('span', 'relation-status ' + relation.status, relation.status === 'confirmed' ? 'Association confirmée' : 'Association proposée · à confirmer'));
-        append(recommendation, heading, el('p', 'relation-reason', relation.rationale));
-        if (displayed) {
-          append(recommendation, el('span', 'td-state', displayed.completed ? '✓ TD terminé' : '○ TD à faire'), button('Aller au ' + td.title, 'go-to-td', 'button subtle compact', { targetId: td.id }));
-        } else append(recommendation, el('p', 'muted', 'Ce TD est masqué. Il peut être réaffiché dans la section TD.'));
-        associated.append(recommendation);
-      }
-      detail.append(associated);
-    }
-    row.append(detail);
-    return row;
+    const options=el('details','unit-options');append(options,el('summary','','Source et options'),renderResources(unit));
+    const record=state.unitProgress[unit.id];
+    if (record?.linkedTaskId) append(options,el('p','','Progression de la tâche personnelle associée'),button('Détacher','unlink-existing','button subtle compact',data));
+    else if (getModule(module.id).sections[section].length) options.append(button('Rattacher une tâche existante','link-existing','button subtle compact',data));
+    append(detail,controls,options);row.append(detail);return row;
   }
-  function renderHidden(moduleId, section) {
-    const items = catalog?.modules.find(module => module.id === moduleId)?.sections[section] || [];
-    const hidden = items.filter(item => state.curriculumProgress[item.id]?.hidden);
+  function renderHidden(moduleId,section) {
+    const hidden=P.getUnits(catalog,moduleId,section).filter(item=>state.unitProgress[item.id]?.hidden);
     if (!hidden.length) return null;
-    const details = el('details', 'hidden-curriculum');
-    append(details, el('summary', '', 'Éléments masqués · ' + hidden.length));
-    for (const item of hidden) append(details, append(el('div', 'hidden-item'), el('span', '', item.title), button('Réafficher', 'restore-catalog', 'button subtle compact', { curriculumId: item.id, moduleId, section })));
+    const details=el('details','hidden-curriculum');append(details,el('summary','','Éléments masqués · '+hidden.length));
+    for (const item of hidden) append(details,append(el('div','hidden-item'),el('span','',item.title),button('Réafficher','restore-catalog','button subtle compact',{curriculumId:item.id,moduleId,section})));
+    return details;
+  }
+  function renderAssociated(group,module) {
+    if (group.section!=='cours') return null;
+    const box=el('section','associated-td');box.setAttribute('aria-label','TD associés à '+group.title);
+    append(box,el('h3','','TD associés à ce chapitre'));
+    const relations=catalog.relations.filter(r=>r.chapterId===group.id);
+    if (!relations.length) box.append(el('p','muted','Aucune association documentée. Tous les TD restent accessibles.'));
+    for (const relation of relations) {
+      const td=P.getItem(catalog,relation.tdId);const tasks=module.sections.td.filter(t=>t.groupId===td.id);const stats=C.stats(tasks);
+      const card=el('div','td-recommendation');
+      append(card,el('strong','',td.title),el('span','relation-status proposed','Association proposée · à confirmer'),el('p','relation-reason',relation.rationale),el('small','',stats.completed+' / '+stats.total+' exercices obligatoires terminés'),button('Aller au '+td.title,'go-to-td','button subtle compact',{targetId:td.id}));box.append(card);
+    }
+    return box;
+  }
+  function renderGroup(group,module,position) {
+    const tasks=module.sections[group.section].filter(t=>t.groupId===group.id);
+    const stats=C.stats(tasks);const filter=filtersFor(module.id);
+    const matches=tasks.filter(t=>P.matches(t,filter.filter,filter.query));
+    if (!matches.length && (filter.query || filter.filter!=='all')) return null;
+    const details=el('details','curriculum-group');details.dataset.groupId=group.id;details.id='group-'+group.id;
+    const open=filter.query || filter.filter!=='all' ? true : openGroups.has(group.id)?openGroups.get(group.id):position===0;
+    details.open=!!open;
+    const summary=el('summary','group-heading');
+    const legacyRecord=P.getLegacyRecord(state,group.id);
+    append(summary,el('strong','',legacyRecord?.titleOverride || group.title),el('span','count-label',stats.completed+' / '+stats.total+' · '+(stats.total?C.formatPercent(stats.progressHundredths):'Bonus')));
+    const body=el('div','group-body');let filled=false;
+    const fill=()=>{
+      if(filled)return;filled=true;
+      append(body,progressBlock(stats,'Progression '+group.title),renderResources(group));
+      if(stats.bonusTotal)body.append(el('p','bonus-badge','Bonus : '+stats.bonusCompleted+' / '+stats.bonusTotal+' terminés · hors objectif sauf inclusion explicite'));
+      const legacy=P.getLegacyRecord(state,group.id);
+      if(legacy?.titleOverride)body.append(el('p','canonical-title','Titre source : '+group.title));
+      if(legacy)body.append(el('p','notice','Historique conservé : '+(legacy.completed?'chapitre ou série validé auparavant':'chapitre ou série non validé auparavant')+'. Les petites missions sont suivies séparément.'));
+      if(group.sourceConfidence==='verified_pdf_heading_filename_mismatch')body.append(el('p','notice','À vérifier : le fichier MDPM-chapitre5.pdf porte le titre « Chapitre 6 : Chocs de deux particules ».'));
+      if(legacy?.hidden){append(body,el('p','notice','Cet ancien chapitre ou TD était masqué. Ses micro-missions restent exclues de ton objectif.'),button('Afficher ses micro-missions','restore-legacy-group','button subtle',{groupId:group.id}));return;}
+      const next=tasks.find(t=>!t.completed&&!t.optional);
+      if(next)body.append(el('p','group-next','Prochaine unité : '+next.title));
+      const limit=visibleUnits.get(group.id)||5;
+      const list=el('ol','task-list curriculum-list');list.setAttribute('aria-label',group.title+' · unités dans leur ordre');
+      matches.slice(0,limit).forEach(t=>list.append(renderTask(module,group.section,t)));
+      body.append(list);
+      if(matches.length>limit)body.append(button('Voir plus · '+(matches.length-limit)+' unités restantes','show-more','button subtle',{groupId:group.id}));
+      append(body,renderAssociated(group,module));
+    };
+    append(details,summary,body);if(open)fill();
+    summary.addEventListener('click',()=>{if(!details.open)fill();});
+    details.addEventListener('toggle',()=>{if(!details.isConnected)return;openGroups.set(group.id,details.open);if(details.open)fill();});
     return details;
   }
   function showLinkExisting(data, trigger) {
     const item = P.getItem(catalog, data.curriculumId);
     if (!item) return;
-    const used = new Set(Object.values(state.curriculumProgress).map(record => record.linkedTaskId).filter(Boolean));
+    const used = new Set(Object.values(state.unitProgress).map(record => record.linkedTaskId).filter(Boolean));
     const tasks = getModule(item.moduleId).sections[item.section].filter(task => !used.has(task.id));
     const box = form('link-existing-submit', { ...data });
     append(box, modalHeading('Rattacher une tâche personnelle'), el('p', '', 'La case cochée et les dates de la tâche choisie seront utilisées pour « ' + item.title + ' ». La tâche d’origine est conservée et comptée une seule fois. Aucun rapprochement n’est automatique.'));
@@ -850,7 +939,7 @@
     }
     append(nav, navItem('Tableau de bord', '#/', '▦'), el('p', 'nav-label', 'MES MODULES'));
     for (const module of state.modules) append(nav, navItem(module.name, '#/module/' + module.id, module.emoji));
-    append(nav, el('p', 'nav-label', 'MON ESPACE'), navItem('Paramètres', '#/settings', '⚙'));
+    append(nav, el('p', 'nav-label', 'MON ESPACE'), navItem('Révisions', '#/revisions', '↺'), navItem('Ressources', '#/resources', '▤'), navItem('Paramètres', '#/settings', '⚙'));
     $('#sidebar-nickname').textContent = state.profile.nickname;
     $('.student .avatar').textContent = Array.from(state.profile.nickname)[0] || 'A';
   }
@@ -876,10 +965,47 @@
     return wrap;
   }
   function moduleStatus(module, stats) {
-    if (!stats.total) return 'Aucune tâche configurée';
-    if (stats.fullyCompleted) return '✓ Toutes les sections configurées sont terminées';
-    if (stats.completed === stats.total && !stats.fullyConfigured) return 'Tâches cochées · sections encore à configurer';
-    return stats.remaining + (stats.remaining === 1 ? ' tâche à terminer' : ' tâches à terminer');
+    if (!stats.total) return 'À configurer';
+    const tasks=Object.values(displayModule(module.id).sections).flat().filter(t=>!t.optional&&!t.legacyOnly);
+    if(tasks.some(t=>t.mastery==='review'))return 'À revoir · '+tasks.filter(t=>t.mastery==='review').length+' unité(s)';
+    if(stats.completed===stats.total)return 'Terminé · contenus actuellement configurés';
+    if(tasks.some(t=>t.completed||t.startedAt||t.mastery!=='unknown'&&t.mastery))return 'En cours · '+stats.remaining+' unités restantes';
+    return 'Non commencé · '+stats.total+' unités';
+  }
+  function renderNextMission() {
+    const box=el('section','panel next-mission');
+    const task=P.nextMission(state,catalog,skippedMission)||P.nextMission(state,catalog);
+    append(box,el('p','eyebrow','UN PAS À LA FOIS'),el('h2','','Prochaine mission'));
+    if(!task){box.append(el('p','muted',catalog?'Aucune mission obligatoire à proposer. Les bonus restent disponibles.':'Le catalogue est en cours de chargement.'));return box;}
+    const unit=P.getItem(catalog,task.curriculumId);
+    append(box,el('h3','',task.title),el('p','muted',getModule(unit.moduleId).name+' · '+labels[unit.section]+' · ≈ '+unit.durationHintMinutes+' min indicatives'),el('p','',task.mastery==='review'?'Priorité à une notion que tu as marquée « À revoir ».':task.startedAt?'Reprends une mission déjà commencée.':'Première unité non terminée dans l’ordre du catalogue.'),button(task.startedAt?'Reprendre':'Démarrer','open-mission','button primary',{curriculumId:unit.id}),button('Changer la mission','change-mission','button subtle',{curriculumId:unit.id}));return box;
+  }
+  function reviewTasks() {return displayState().modules.flatMap(m=>Object.values(m.sections).flat()).filter(t=>t.curriculumId);}
+  function renderReviewSummary() {
+    const tasks=reviewTasks().filter(t=>!t.optional);const box=el('section','review-summary');
+    append(box,link('↺ À revoir · '+tasks.filter(t=>t.mastery==='review').length,'#/revisions','panel'),link('○ Jamais abordé · '+tasks.filter(t=>!t.startedAt&&!t.completed&&t.mastery==='unknown').length,'#/revisions','panel'));return box;
+  }
+  function renderRevisions() {
+    append(view,el('p','eyebrow','REPRENDRE SANS PRESSION'),el('h1','','Mes révisions'),el('p','subtitle','Tes choix de compréhension restent distincts des cases « Terminé ».'));
+    const tasks=reviewTasks();
+    for(const [heading,predicate] of [['À revoir',t=>t.mastery==='review'],['En cours',t=>!!t.startedAt&&!t.completed&&t.mastery!=='review'],['Jamais abordé',t=>!t.startedAt&&!t.completed&&t.mastery==='unknown']]) {
+      const group=tasks.filter(predicate);const box=el('section','panel');append(box,el('h2','',heading+' · '+group.length));
+      for(const task of group.slice(0,15)){const u=P.getItem(catalog,task.curriculumId);box.append(button(getModule(u.moduleId).name+' · '+P.getItem(catalog,u.groupId).title+' · '+task.title+(task.optional?' (Bonus)':''),'open-unit','revision-item',{curriculumId:task.curriculumId}));}
+      if(!group.length)box.append(el('p','muted','Aucune unité dans cet état.'));
+      if(group.length>15)box.append(el('p','muted','Les 15 premières sont affichées. Utilise les filtres des modules pour parcourir la suite.'));
+      view.append(box);
+    }
+  }
+  function renderResourcePage() {
+    append(view,el('h1','','Mes ressources'),el('p','subtitle','Références du catalogue fourni. Les liens sont associés sur cet appareil ; leur accès dépend de tes droits Google Drive.'));
+    if(!catalog){view.append(el('p','notice','Catalogue indisponible.'));return;}
+    for(const module of catalog.modules){
+      const sources=catalog.resources.filter(r=>r.sourceMeta.module===module.id);const box=el('details','panel resource-module');
+      append(box,el('summary','',getModule(module.id).name+' · '+sources.length+' références'));if(module.id==='analyse1')box.open=true;
+      if(!sources.length)box.append(el('p','muted','À configurer : aucun support fourni.'));
+      for(const source of sources)append(box,append(el('article','resource-card'),el('h3','',source.filename),el('p','source-reference',source.sourceId+' · PDF · '+(source.url?'Lien associé localement, accès à vérifier':'Ressource à associer')),renderResources({resourceIds:[source.id]})));
+      view.append(box);
+    }
   }
   function renderDashboard() {
     const overall = C.semesterStats(displayState());
@@ -899,7 +1025,7 @@
     const stats = el('section', 'stat-grid');
     stats.setAttribute('aria-label', 'Statistiques des tâches');
     const values = [
-      ['▤', overall.total, 'Tâches configurées'],
+      ['▤', overall.total, 'Unités de mon objectif'],
       ['✓', overall.completed, 'Tâches terminées'],
       ['◷', overall.remaining, 'Tâches restantes'],
       ['▦', overall.configuredModules + ' / 7', 'Modules configurés']
@@ -912,7 +1038,7 @@
       stats.append(stat);
     }
     const heading = el('div', 'section-heading');
-    append(heading, append(el('div'), el('h2', '', 'Tes modules'), el('p', '', 'Analyse 1 est prérempli ; ajoute tes autres chapitres et séries réels.')), el('span', 'count-label', '7 MODULES'));
+    append(heading, append(el('div'), el('h2', '', 'Tes modules'), el('p', '', 'Six modules documentés. Méthodologie attend ses supports réels.')), el('span', 'count-label', '7 MODULES'));
     const grid = el('div', 'module-grid');
     state.modules.forEach((module, position) => {
       const summary = C.moduleStats(displayModule(module.id));
@@ -924,7 +1050,7 @@
       const title = append(el('h3'), link(module.name, '#/module/' + module.id));
       const sections = el('div', 'module-sections');
       C.MODULES.find(item => item.id === module.id).sections.forEach(section => {
-        append(sections, progressBlock(C.stats(module.sections[section]), labels[section], { compact: true }));
+        append(sections, progressBlock(summary.sections[section], labels[section], { compact: true }));
       });
       const bottom = el('div', 'module-bottom');
       append(bottom, progressBlock(summary, 'Global du module'), el('p', 'module-status' + (summary.fullyCompleted ? ' complete' : ''), moduleStatus(module, summary)));
@@ -937,7 +1063,7 @@
     const note = overall.fullyCompleted
       ? '✓ Semestre entièrement terminé : toutes les sections applicables ont des tâches et toutes sont cochées. Cela décrit les tâches saisies, pas une certification du programme officiel.'
       : 'La progression concerne uniquement les tâches saisies. Une section vide reste à configurer ; 100 % de tâches cochées ne signifie pas que tout le programme universitaire est couvert.';
-    append(view, intro, player, stats, heading, grid, el('p', 'coverage-note', note));
+    append(view, intro, player, stats, renderNextMission(), renderReviewSummary(), heading, grid, el('p', 'coverage-note', note));
   }
 
   function renderTask(module, section, task) {
@@ -964,55 +1090,33 @@
     return row;
   }
   function renderModule(module) {
-    module = displayModule(module.id);
-    document.title = module.name + ' — S1 QUEST';
-    const back = link('← Tous les modules', '#/', 'breadcrumb');
-    const title = accent(el('div', 'module-title'), module.color);
-    const icon = el('span', 'module-icon', module.emoji);
-    icon.setAttribute('aria-hidden', 'true');
-    append(title, icon, append(el('div'), el('p', 'eyebrow', 'MON PARCOURS · SEMESTRE 01'), el('h1', '', module.name)));
-    const summary = C.moduleStats(displayModule(module.id));
-    const overview = accent(el('section', 'panel module-overview'), module.color);
-    append(overview, el('h2', '', 'Progression du module'), progressBlock(summary, 'Progression des tâches configurées'), el('p', 'module-status' + (summary.fullyCompleted ? ' complete' : ''), moduleStatus(module, summary)));
-    append(view, back, title, overview);
-    for (const section of C.MODULES.find(item => item.id === module.id).sections) {
-      const tasks = module.sections[section];
-      const panel = accent(el('section', 'panel task-section'), module.color);
-      panel.id = 'section-' + section;
-      const heading = el('div', 'section-heading');
-      append(heading, el('h2', '', labels[section]), el('span', 'count-label', tasks.length + (tasks.length === 1 ? ' TÂCHE' : ' TÂCHES')));
-      append(panel, heading, append(el('div', 'section-stats'), progressBlock(C.stats(tasks), 'Progression ' + labels[section])));
-      if (!tasks.length) {
-        append(panel, append(el('div', 'empty'), el('strong', '', 'À configurer'), el('span', '', 'Ajoute ton premier chapitre ou ta première série. Aucun contenu académique n’est inventé.')));
-      } else {
-        const curriculumTasks = tasks.filter(task => task.curriculumId);
-        const personalTasks = tasks.filter(task => !task.curriculumId);
-        if (curriculumTasks.length) {
-          const ordered = el('ol', 'task-list curriculum-list');
-          ordered.setAttribute('aria-label', labels[section] + ' dans l’ordre pédagogique');
-          curriculumTasks.forEach(task => ordered.append(renderTask(module, section, task)));
-          panel.append(ordered);
-        }
-        if (personalTasks.length) {
-          panel.append(el('h3', 'personal-heading', 'Mes tâches personnelles'));
-          for (const completed of [false, true]) {
-            const group = personalTasks.filter(task => task.completed === completed);
-            const sectionGroup = el('div', 'task-group');
-            const list = el('ul', 'task-list');
-            group.forEach(task => list.append(renderTask(module, section, task)));
-            append(sectionGroup, el('h3', '', (completed ? 'Terminées' : 'À faire') + ' · ' + group.length));
-            if (group.length) sectionGroup.append(list);
-            panel.append(sectionGroup);
-          }
-        }
-      }
-      append(panel, renderHidden(module.id, section));
-      const addForm = form('add-task', { moduleId: module.id, section }, 'add-task');
-      append(addForm, textField('Nouvelle tâche · ' + labels[section], 'title', '', 120, { placeholder: 'Titre du chapitre ou de la série…', autocomplete: 'off' }), submit('＋ Ajouter une tâche'));
-      panel.append(addForm);
-      view.append(panel);
+    module=displayModule(module.id);document.title=module.name+' — S1 QUEST';
+    const title=accent(el('div','module-title'),module.color);
+    append(title,el('span','module-icon',module.emoji),append(el('div'),el('p','eyebrow','MON PARCOURS · SEMESTRE 01'),el('h1','',module.name)));
+    const summary=C.moduleStats(module);const overview=accent(el('section','panel module-overview'),module.color);
+    append(overview,el('h2','','Progression du module'),progressBlock(summary,'Progression de mon objectif'),el('p','module-status',moduleStatus(module,summary)));
+    if(summary.bonusTotal)overview.append(el('p','bonus-badge','Bonus terminés : '+summary.bonusCompleted+' / '+summary.bonusTotal));
+    append(view,link('← Tous les modules','#/','breadcrumb'),title,overview);
+    const choices=filtersFor(module.id);const tools=form('unit-filters',{moduleId:module.id},'unit-filters');
+    const select=el('select','field');select.dataset.action='filter-units';select.dataset.moduleId=module.id;select.name='filter';
+    for(const [value,title] of [['all','Toutes'],['not_started','À faire · non commencées'],['in_progress','En cours'],['review','À revoir'],['completed','Terminées']]){const option=el('option','',title);option.value=value;option.selected=choices.filter===value;select.append(option);}
+    const filterLabel=append(el('label'),el('span','field-label','Afficher les missions'),select);
+    const searchLabel=textField('Rechercher dans les missions','query',choices.query,120,{placeholder:'Notion ou exercice…'});const search=$('input',searchLabel);search.required=false;search.dataset.action='search-units';search.dataset.moduleId=module.id;
+    append(tools,filterLabel,searchLabel);view.append(tools);
+    for(const section of C.MODULES.find(m=>m.id===module.id).sections){
+      const tasks=module.sections[section],stats=C.stats(tasks);const panel=accent(el('section','panel task-section'),module.color);panel.id='section-'+section;
+      append(panel,append(el('div','section-heading'),el('h2','',labels[section]),el('span','count-label',stats.total+' UNITÉS D’OBJECTIF')),append(el('div','section-stats'),progressBlock(stats,'Progression '+labels[section])));
+      if(!tasks.length)append(panel,append(el('div','empty'),el('strong','','À configurer'),el('span','','Aucun support réel fourni pour cette section. Tes tâches personnelles restent disponibles.')));
+      const groups=P.getGroups(catalog,module.id,section);const groupBox=el('div','curriculum-groups');
+      groups.forEach((g,i)=>append(groupBox,renderGroup(g,module,i)));panel.append(groupBox);
+      if(groups.length&&!groupBox.children.length)panel.append(el('p','empty','Aucune mission ne correspond au filtre.'));
+      const personal=tasks.filter(t=>!t.curriculumId);
+      if(personal.length){const list=el('ul','task-list');panel.append(el('h3','personal-heading','Mes tâches personnelles'));for(const task of personal){const row=renderTask(module,section,task);if(task.legacyOnly)row.append(el('p','notice','Ancienne liaison de chapitre conservée · historique hors calcul des micro-missions'));list.append(row);}panel.append(list);}
+      append(panel,renderHidden(module.id,section));
+      const addForm=form('add-task',{moduleId:module.id,section},'add-task');
+      append(addForm,textField('Nouvelle tâche · '+labels[section],'title','',120,{placeholder:'Une tâche personnelle réelle…',autocomplete:'off'}),submit('＋ Ajouter une tâche'));panel.append(addForm);view.append(panel);
     }
-    append(view, el('p', 'coverage-note', 'Les chapitres et TD comptent chacun une seule fois. Les recommandations ne créent pas de tâches supplémentaires. Ouvrir un PDF ne coche aucune case ; les cours et TD restent indépendants.'));
+    append(view,el('p','coverage-note','Seules les unités feuille de ton objectif et tes tâches personnelles sont comptées, une fois chacune. Les parents et recommandations ne comptent pas. Ouvrir un PDF ou choisir « Maîtrisé » ne termine aucune mission.'));
   }
 
   function renderSettings() {
@@ -1048,6 +1152,10 @@
     append(backupDescription, el('h2', '', 'Sauvegarde JSON'), el('p', 'settings-help', 'Télécharge une copie externe de tes tâches, de ta progression du catalogue et de tes personnalisations. Les liens privés locaux restent séparés de cet export.'));
     append(backupRow, backupDescription, button('↓ Exporter mes données', 'export', 'button primary'));
     append(backups, backupRow, el('p', 'settings-help', 'Le stockage est propre à ce navigateur et à cette adresse. Il ne synchronise pas tes appareils et peut être effacé par le navigateur. Une copie locale de secours ne remplace pas un export.'));
+    const importForm=form('import-progress');const importLabel=el('label');const importInput=el('input','field');
+    importInput.type='file';importInput.accept='.json,application/json';importInput.name='progressFile';importInput.required=true;
+    append(importLabel,el('span','field-label','Importer une sauvegarde de progression (2 Mo maximum)'),importInput);
+    append(importForm,importLabel,submit('Vérifier la sauvegarde'));backups.append(importForm);
     const danger = el('section', 'panel danger-zone');
     append(danger, el('h2', '', 'Réinitialisation'), el('p', 'settings-help', 'Efface les tâches personnelles, les cases cochées, les éléments masqués, le pseudo et les personnalisations. Les sept modules et le catalogue pédagogique restent disponibles. Une copie de secours locale vérifiée est obligatoire avant remplacement.'), button('Réinitialiser les données', 'reset-start', 'button danger'));
     const privatePanel = el('section', 'panel');
@@ -1071,6 +1179,8 @@
     document.title = 'S1 QUEST — Tableau de bord';
     renderNavigation();
     if (hash === '#/') renderDashboard();
+    else if (hash === '#/revisions') { document.title='Révisions — S1 QUEST'; renderRevisions(); }
+    else if (hash === '#/resources') { document.title='Ressources — S1 QUEST'; renderResourcePage(); }
     else if (hash === '#/settings') { document.title = 'Paramètres — S1 QUEST'; renderSettings(); }
     else {
       const match = /^#\/module\/([a-z0-9]+)$/.exec(hash);
@@ -1197,6 +1307,21 @@
     } catch (error) { announce('Export impossible : ' + error.message); }
   }
 
+  function showAssociatePDF(id,trigger) {
+    const resource=catalog?.resources.find(r=>r.id===id);if(!resource)return;
+    const box=form('associate-pdf-submit',{resourceId:id});
+    append(box,modalHeading('Associer un PDF privé'),el('p','',resource.filename+' — Le lien restera sur cet appareil et ne changera pas les permissions Drive.'),textField('Lien Google Drive du fichier','url',resource.url||'',2048),append(el('div','dialog-buttons'),button('Annuler','close-modal','button subtle'),submit('Associer sur cet appareil')));
+    openModal(box,{action:'associate-pdf'},trigger);
+  }
+  async function previewProgressImport(data,trigger) {
+    const file=data.get('progressFile');if(!file?.size||file.size>2097152)throw new Error('Choisis une sauvegarde JSON de moins de 2 Mo.');
+    const candidate=C.migrateState(JSON.parse(await file.text()));
+    const summary=C.semesterStats(P.projectState(candidate,catalog));const old=C.semesterStats(displayState());
+    const box=form('confirm-import');
+    append(box,modalHeading('Vérifier l’import de progression'),el('p','','Sauvegarde : '+candidate.profile.nickname+' · '+summary.completed+' / '+summary.total+' unités terminées.'),el('p','','Actuellement : '+state.profile.nickname+' · '+old.completed+' / '+old.total+' unités terminées.'),el('p','notice','Cet import remplace la progression active, sans fusion automatique. Une copie brute vérifiée de la sauvegarde actuelle est obligatoire. Tes liens privés restent séparés.'),textField('Saisis IMPORTER pour confirmer','confirmation','',12),append(el('div','dialog-buttons'),button('Annuler','close-modal','button subtle'),submit('Importer la progression')));
+    openModal(box,{action:'import',candidate},trigger);
+  }
+
   document.addEventListener('click', event => {
     const target = event.target.closest('[data-action]');
     if (!target || target.tagName === 'FORM' || target.type === 'submit') return;
@@ -1222,6 +1347,24 @@
         announce((context.curriculumId ? 'Élément masqué, progression conservée.' : 'Tâche supprimée.') + (saved ? '' : ' Attention : sauvegarde non confirmée.'));
         break;
       }
+      case 'restore-legacy-group': {
+        const old=P.getLegacyRecord(state,target.dataset.groupId);if(old){old.hidden=false;persist();rerenderAt(null);}break;
+      }
+      case 'show-more':
+        visibleUnits.set(target.dataset.groupId,(visibleUnits.get(target.dataset.groupId)||5)+10);
+        openGroups.set(target.dataset.groupId,true);rerenderAt(null);break;
+      case 'start-unit': {
+        const unit=P.getItem(catalog,data.curriculumId);
+        if(unit&&!unit.units){P.startUnit(state,data.curriculumId);persist();rerenderAt({action:'start-unit',...data});announce('Mission commencée. La case « Terminé » reste à ton choix.');}break;
+      }
+      case 'include-optional': {
+        const unit=P.getItem(catalog,data.curriculumId);if(!unit?.optional)break;
+        P.includeOptional(state,unit.id,!state.unitProgress[unit.id]?.optionalIncluded);persist();rerenderAt({action:'include-optional',...data});break;
+      }
+      case 'open-unit': openUnit(data.curriculumId);break;
+      case 'open-mission': openUnit(data.curriculumId,true);break;
+      case 'change-mission': skippedMission=data.curriculumId;rerenderAt({action:'change-mission'});break;
+      case 'associate-pdf': showAssociatePDF(target.dataset.resourceId,target);break;
       case 'go-to-td': goToTD(target.dataset.targetId); break;
       case 'link-existing': showLinkExisting(data, target); break;
       case 'unlink-existing':
@@ -1254,6 +1397,12 @@
   });
   document.addEventListener('change', event => {
     const checkbox = event.target;
+    if (checkbox.dataset.action === 'mastery') {
+      P.setMastery(state,checkbox.dataset.curriculumId,checkbox.value);persist();rerenderAt({action:'mastery',curriculumId:checkbox.dataset.curriculumId});announce('Compréhension mise à jour. La case « Terminé » est indépendante.');return;
+    }
+    if (checkbox.dataset.action === 'filter-units') {
+      const previous=filtersFor(checkbox.dataset.moduleId);unitFilters.set(checkbox.dataset.moduleId,{...previous,filter:checkbox.value});rerenderAt({action:'filter-units',moduleId:checkbox.dataset.moduleId});return;
+    }
     if (checkbox.dataset.action !== 'toggle-task') return;
     const { moduleId, section, taskId } = checkbox.dataset;
     if (checkbox.dataset.curriculumId) P.toggleCatalog(state, checkbox.dataset.curriculumId, checkbox.checked);
@@ -1265,6 +1414,9 @@
   document.addEventListener('input', event => {
     const formNode = event.target.closest('form');
     if (formNode) clearFormError(formNode);
+    if(event.target.dataset.action==='search-units') {
+      const id=event.target.dataset.moduleId;unitFilters.set(id,{...filtersFor(id),query:event.target.value});rerenderAt(null);
+    }
   });
   document.addEventListener('submit', async event => {
     const formNode = event.target;
@@ -1275,7 +1427,21 @@
     const data = new FormData(formNode);
     const { moduleId, section, taskId } = formNode.dataset;
     try {
-      if (action === 'import-private-links') {
+      if (action==='unit-filters') return;
+      if (action==='associate-pdf-submit') {
+        const url=String(data.get('url')).trim();if(!P.validateDriveUrl(url))throw new Error('Utilise le lien HTTPS exact d’un fichier Google Drive.');
+        const links=Object.fromEntries(catalog.resources.filter(r=>r.url).map(r=>[r.id,r.url]));links[formNode.dataset.resourceId]=url;
+        const local={schemaVersion:1,links};const serialized=JSON.stringify(local);
+        const feedback=await importPrivateLinks(formNode,{get:()=>({size:serialized.length,text:async()=>serialized})});
+        closeModal(false);rerenderAt(null);announce(feedback);
+      } else if(action==='import-progress') {
+        await previewProgressImport(data,formNode.querySelector('button[type="submit"]'));
+      } else if(action==='confirm-import') {
+        if(modalContext?.action!=='import')return;
+        if(String(data.get('confirmation')).trim()!=='IMPORTER'){setFormError(formNode,'Saisis exactement IMPORTER.','confirmation');return;}
+        const result=store.importData(modalContext.candidate);if(!result.ok){setFormError(formNode,result.message,'confirmation');return;}
+        state=result.state;storageResult=result;closeModal(false);renderStorage();rerenderAt(null);announce('Progression importée ; copie de secours précédente conservée.');
+      } else if (action === 'import-private-links') {
         await importPrivateLinks(formNode, data);
       } else if (action === 'add-task') {
         C.addTask(state, moduleId, section, String(data.get('title')));
@@ -1325,7 +1491,7 @@
         announce('Réinitialisation terminée. Les sept modules et le catalogue sont conservés ; toutes les cases sont décochées.');
       }
     } catch (error) {
-      setFormError(formNode, error.message || 'Cette modification est impossible.', action === 'profile' ? 'nickname' : action === 'customize' ? 'name' : action === 'import-private-links' ? 'linksFile' : 'title');
+      setFormError(formNode, error.message || 'Cette modification est impossible.', action === 'profile' ? 'nickname' : action === 'customize' ? 'name' : action === 'import-private-links' ? 'linksFile' : action === 'associate-pdf-submit' ? 'url' : action === 'import-progress' ? 'progressFile' : action === 'confirm-import' ? 'confirmation' : 'title');
     }
   });
   modal.addEventListener('cancel', event => { event.preventDefault(); closeModal(); });

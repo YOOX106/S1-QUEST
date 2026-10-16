@@ -40,21 +40,23 @@ function legacyFixture() {
   C.setProfile(state, 'MON PSEUDO EXISTANT');
   state.schemaVersion = 1;
   delete state.curriculumProgress;
+  delete state.unitProgress;
   C.validateLegacyState(state);
   return state;
 }
 
 const backups = storage => [...storage.entries].filter(([key]) => key.startsWith(C.BACKUP_PREFIX));
 
-test('M01 — pure v1→v2 conversion preserves every old field and does not mutate its source', () => {
+test('M01 — pure v1→v3 conversion preserves every old field and does not mutate its source', () => {
   const legacy = legacyFixture();
   const before = JSON.stringify(legacy);
   const migrated = C.migrateState(legacy);
-  assert.equal(migrated.schemaVersion, 2);
+  assert.equal(migrated.schemaVersion, 3);
   assert.deepEqual(migrated.curriculumProgress, {});
   const comparison = structuredClone(migrated);
   comparison.schemaVersion = 1;
   delete comparison.curriculumProgress;
+  delete comparison.unitProgress;
   assert.deepEqual(comparison, legacy);
   assert.equal(JSON.stringify(legacy), before);
   assert.doesNotThrow(() => C.validateState(migrated));
@@ -93,7 +95,7 @@ test('M03 — a quota failure writing the migration backup leaves v1 intact and 
   const store = new C.Store(storage);
   const result = store.load();
   assert.equal(result.status, 'migration-pending');
-  assert.equal(result.state.schemaVersion, 2);
+  assert.equal(result.state.schemaVersion, 3);
   assert.equal(store.blocked, true);
   const task = C.addTask(result.state, 'analyse1', 'cours', 'Progression en mémoire');
   assert.equal(store.save(result.state).ok, false);

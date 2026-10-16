@@ -18,6 +18,8 @@ before(async () => {
   server = http.createServer(async (request, response) => {
     try {
       const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
+      // Never read the real ignored private overlay, even when a route fails to intercept.
+      if (pathname.endsWith('/curriculum.links.local.json')) throw new Error('Private file');
       const relative = pathname === '/' ? 'index.html' : pathname.slice(1);
       const file = path.resolve(root, relative);
       if (!file.startsWith(root + path.sep)) throw new Error('Forbidden path');
@@ -67,6 +69,7 @@ async function curriculumLoaded(page) {
 }
 
 const action = (page, name) => page.locator(`[data-action="${name}"]`);
+const manualAction = (page, name) => page.locator(`.task-row:not(.curriculum-task) [data-action="${name}"]`);
 const stored = page => page.evaluate(() => JSON.parse(localStorage.getItem('s1quest_data')));
 
 async function openModule(page, id = 'algebre1') {
@@ -89,7 +92,7 @@ async function downloadJSON(page) {
   return JSON.parse(await fs.readFile(file, 'utf8'));
 }
 
-test('T01–T07 — first launch keeps seven modules and the exact sections of still-unpopulated modules', async () => {
+test('T01–T07 — first launch keeps seven modules and each module’s exact permitted sections', async () => {
   const { context, page, errors } = await session();
   try {
     const ids = ['analyse1', 'algebre1', 'algebre2', 'thermodynamique', 'mecanique', 'informatique1', 'methodologie'];
@@ -115,16 +118,16 @@ test('T14–T18,T21 — add, hostile-title edit, toggle, reload and precise conf
 
     const tdDraft = page.locator('form[data-action="add-task"][data-section="td"] [name="title"]');
     await tdDraft.fill('Brouillon TD non soumis');
-    await action(page, 'toggle-task').first().check();
+    await manualAction(page, 'toggle-task').first().check();
     assert.equal(await tdDraft.inputValue(), 'Brouillon TD non soumis', 'task action must preserve another section draft');
     data = await stored(page);
     assert.equal(data.modules[1].sections.cours[0].completed, true);
     assert.ok(data.modules[1].sections.cours[0].completedAt);
     await page.reload();
     assert.equal((await stored(page)).modules[1].sections.cours[0].id, firstId);
-    assert.equal(await action(page, 'toggle-task').first().isChecked(), true);
+    assert.equal(await manualAction(page, 'toggle-task').first().isChecked(), true);
 
-    await action(page, 'edit-task').first().click();
+    await manualAction(page, 'edit-task').first().click();
     const edit = page.locator('form[data-action="edit-task-submit"]');
     const hostile = '<img src=x onerror="window.S1_INJECTED=1">';
     await edit.locator('[name="title"]').fill(hostile);
@@ -133,10 +136,10 @@ test('T14–T18,T21 — add, hostile-title edit, toggle, reload and precise conf
     assert.equal(await page.evaluate(() => window.S1_INJECTED), undefined);
     assert.equal(await page.locator('img[src="x"]').count(), 0);
 
-    await action(page, 'delete-task').first().click();
+    await manualAction(page, 'delete-task').first().click();
     await action(page, 'close-modal').first().click();
     assert.equal((await stored(page)).modules[1].sections.cours.length, 1);
-    await action(page, 'delete-task').first().click();
+    await manualAction(page, 'delete-task').first().click();
     await action(page, 'confirm-delete').click();
     data = await stored(page);
     assert.equal(data.modules[1].sections.cours.length, 0);
@@ -203,7 +206,7 @@ test('E01–E03 — JSON download is complete; reset needs both confirmations an
     await addTask(page, 'À sauvegarder');
     const rawBefore = await page.evaluate(() => localStorage.getItem('s1quest_data'));
     const exported = await downloadJSON(page);
-    assert.equal(exported.schemaVersion, 2);
+    assert.equal(exported.schemaVersion, 3);
     assert.equal(exported.modules[1].sections.cours[0].title, 'À sauvegarder');
     assert.deepEqual(exported, JSON.parse(rawBefore), 'export must contain the complete current state');
 
@@ -307,11 +310,11 @@ test('T24b — tasks can be added/toggled using keyboard, and dialogs keep acces
     await input.pressSequentially('Clavier');
     await input.press('Enter');
     await page.getByText('Clavier', { exact: true }).waitFor();
-    const checkbox = action(page, 'toggle-task').first();
+    const checkbox = manualAction(page, 'toggle-task').first();
     await checkbox.focus();
     await checkbox.press('Space');
     assert.equal(await checkbox.isChecked(), true);
-    const deleteButton = action(page, 'delete-task').first();
+    const deleteButton = manualAction(page, 'delete-task').first();
     await deleteButton.focus();
     await deleteButton.press('Enter');
     const dialog = page.getByRole('dialog');
@@ -326,25 +329,45 @@ test('T24b — tasks can be added/toggled using keyboard, and dialogs keep acces
   } finally { await context.close(); }
 });
 
-const courseIds = ['a1-cours-01', 'a1-cours-02', 'a1-cours-03', 'a1-cours-04'];
-const tdIds = ['a1-td-01', 'a1-td-02', 'a1-td-03'];
-const resourceIds = [...courseIds, ...tdIds].map(id => id.replace('a1-', 'a1-resource-'));
+const courseGroups = ['analyse1-c01', 'analyse1-c02', 'analyse1-c03', 'analyse1-c04'];
+const tdGroups = ['analyse1-td01', 'analyse1-td02', 'analyse1-td03'];
+const courseIds = courseGroups.map(id => id + '-u01');
+const tdIds = tdGroups.map(id => id + '-e01');
+const resourceIds = ['a1-resource-cours-01', 'a1-resource-cours-02', 'a1-resource-cours-03', 'a1-resource-cours-04', 'a1-resource-td-01', 'a1-resource-td-02', 'a1-resource-td-03'];
 const fakeLinks = Object.fromEntries(resourceIds.map((id, index) => [id,
   `https://drive.google.com/file/d/TEST_FIXTURE_DOCUMENT_${index + 1}/view`]));
+const catalogGroup = (page, id) => page.locator(`.curriculum-group[data-group-id="${id}"]`);
+const groupPDF = (page, id) => catalogGroup(page, id).locator(':scope > .group-body > .curriculum-resources a.resource-link');
+const parentPDFs = page => page.locator('.curriculum-group > .group-body > .curriculum-resources a.resource-link');
 const catalogRow = (page, id) => page.locator(`.curriculum-task[data-curriculum-id="${id}"]`);
 const catalogCheckbox = (page, id) => catalogRow(page, id).locator('input[type="checkbox"]');
+async function expandAllGroups(page) {
+  const count = await page.locator('.curriculum-group').count();
+  for (let index = 0; index < count; index++) {
+    const details = page.locator('.curriculum-group').nth(index);
+    if (!(await details.evaluate(node => node.open))) await details.locator(':scope > summary').click();
+    await details.locator('.curriculum-task').first().waitFor();
+  }
+}
+const realCatalog = require('../curriculum.json');
+const analyseGroups = realCatalog.modules[0].sections;
+const firstPageIds = section => analyseGroups[section].flatMap(group => group.units.slice(0, 5).map(unit => unit.id));
 
 test('B01 — Analyse 1 opens four real chapters and three TD in order with safe, correctly mapped PDF links', async () => {
   const { context, page, errors } = await session({ privateLinks: fakeLinks });
   try {
     await openModule(page, 'analyse1');
-    assert.equal(await page.locator('.curriculum-task').count(), 7);
-    assert.deepEqual(await page.locator('#section-cours .curriculum-task').evaluateAll(rows => rows.map(row => row.dataset.curriculumId)), courseIds);
-    assert.deepEqual(await page.locator('#section-td .curriculum-task').evaluateAll(rows => rows.map(row => row.dataset.curriculumId)), tdIds);
+    await expandAllGroups(page);
+    assert.equal(await page.locator('.curriculum-group').count(), 7);
+    assert.equal(await page.locator('.curriculum-task').count(), 35);
+    for (const section of ['cours', 'td']) {
+      assert.deepEqual(await page.locator(`#section-${section} .curriculum-group`).evaluateAll(rows => rows.map(row => row.dataset.groupId)), section === 'cours' ? courseGroups : tdGroups);
+      assert.deepEqual(await page.locator(`#section-${section} .curriculum-task`).evaluateAll(rows => rows.map(row => row.dataset.curriculumId)), firstPageIds(section));
+    }
     assert.equal(await page.locator('form[data-action="add-task"]').count(), 2);
-    assert.equal(await page.locator('.document-parts').count(), 0, 'unknown subsections must not be invented');
-    for (const [index, id] of [...courseIds, ...tdIds].entries()) {
-      const pdf = catalogRow(page, id).locator('a.resource-link');
+    assert.equal(await page.locator('.document-parts').count(), 0, 'source micro-missions are represented directly as leaves');
+    for (const [index, id] of [...courseGroups, ...tdGroups].entries()) {
+      const pdf = groupPDF(page, id);
       assert.equal(await pdf.getAttribute('href'), fakeLinks[resourceIds[index]]);
       assert.equal(await pdf.getAttribute('target'), '_blank');
       const rel = await pdf.getAttribute('rel');
@@ -353,17 +376,17 @@ test('B01 — Analyse 1 opens four real chapters and three TD in order with safe
     }
     assert.equal(await page.locator('.relation-status.confirmed').count(), 0);
     assert.equal(await page.locator('.relation-status.proposed').count(), 4);
-    assert.equal(await catalogRow(page, courseIds[3]).locator('[data-action="go-to-td"]').count(), 0);
+    assert.equal(await catalogGroup(page, courseGroups[3]).locator('[data-action="go-to-td"]').count(), 1, 'the supplied fourth-chapter relation remains proposed');
     const before = await stored(page);
     await context.route('https://drive.google.com/**', route => route.fulfill({
       status: 200, contentType: 'text/html', body: '<title>Test document fixture</title><p>Fixture only</p>'
     }));
     const popupPromise = page.waitForEvent('popup');
-    await catalogRow(page, courseIds[0]).locator('a.resource-link').click();
+    await groupPDF(page, courseGroups[0]).click();
     const popup = await popupPromise;
     await popup.waitForLoadState();
     assert.equal(popup.url(), fakeLinks[resourceIds[0]]);
-    assert.deepEqual(await stored(page), before, 'opening a PDF must not mark the chapter complete');
+    assert.deepEqual(await stored(page), before, 'opening a PDF must not mark any leaf complete');
     await popup.close();
     const cache = await page.evaluate(() => localStorage.getItem('s1quest_curriculum_cache'));
     assert.equal(cache.includes('TEST_FIXTURE_DOCUMENT'), false, 'private overlay links must not enter the public catalog cache');
@@ -376,28 +399,28 @@ test('B02 — direct TD access, related-TD navigation, independent percentages, 
   const { context, page, errors } = await session();
   try {
     await openModule(page, 'analyse1');
-    assert.equal(await page.locator('a.resource-link').count(), 0);
-    assert.equal(await page.locator('.resource-missing').count(), 7);
-    const course2 = catalogRow(page, courseIds[1]);
-    const goTD3 = course2.locator('[data-action="go-to-td"][data-target-id="a1-td-03"]');
-    await goTD3.click();
+    await expandAllGroups(page);
+    assert.equal(await parentPDFs(page).count(), 0);
+    assert.equal(await page.locator('.curriculum-group > .group-body > .curriculum-resources .resource-missing').count(), 7);
+    const course3 = catalogGroup(page, courseGroups[2]);
+    await course3.locator('[data-action="go-to-td"][data-target-id="analyse1-td03"]').click();
     assert.equal(await catalogCheckbox(page, tdIds[2]).evaluate(node => node === document.activeElement), true);
     await catalogCheckbox(page, tdIds[2]).check();
-    assert.equal(await page.locator('#section-cours .section-stats strong').innerText(), '0 %');
-    assert.equal(await page.locator('#section-td .section-stats strong').innerText(), '33,33 %');
+    assert.equal(await page.locator('#section-cours .section-stats strong').first().innerText(), '0 %');
+    assert.equal(await page.locator('#section-td .section-stats strong').first().innerText(), '2,7 %');
     await catalogCheckbox(page, courseIds[1]).check();
-    assert.equal(await page.locator('#section-cours .section-stats strong').innerText(), '25 %');
-    assert.equal(await page.locator('#section-td .section-stats strong').innerText(), '33,33 %');
-    assert.equal(await page.locator('#section-cours .section-stats progress').getAttribute('max'), '4');
-    assert.equal(await page.locator('#section-td .section-stats progress').getAttribute('max'), '3');
-    assert.match(await course2.locator('.associated-td').innerText(), /TD terminé/);
-    assert.deepEqual(await page.locator('#section-cours .curriculum-task').evaluateAll(rows => rows.map(row => row.dataset.curriculumId)), courseIds);
+    assert.equal(await page.locator('#section-cours .section-stats strong').first().innerText(), '1,92 %');
+    assert.equal(await page.locator('#section-td .section-stats strong').first().innerText(), '2,7 %');
+    assert.equal(await page.locator('#section-cours .section-stats progress').first().getAttribute('max'), '52');
+    assert.equal(await page.locator('#section-td .section-stats progress').first().getAttribute('max'), '37');
+    assert.match(await course3.locator('.associated-td').innerText(), /1 \/ 16 exercices obligatoires terminés/);
+    assert.deepEqual(await page.locator('#section-cours .curriculum-task').evaluateAll(rows => rows.map(row => row.dataset.curriculumId)), firstPageIds('cours'));
     const before = await stored(page);
     for (let attempt = 0; attempt < 3; attempt++) {
       await page.reload();
       await curriculumLoaded(page);
-      await page.locator('.curriculum-task').first().waitFor();
-      assert.equal(await page.locator('.curriculum-task').count(), 7);
+      await expandAllGroups(page);
+      assert.equal(await page.locator('.curriculum-task').count(), 35);
       assert.equal(await catalogCheckbox(page, courseIds[1]).isChecked(), true);
       assert.equal(await catalogCheckbox(page, tdIds[2]).isChecked(), true);
       assert.deepEqual(await stored(page), before);
@@ -411,12 +434,12 @@ test('B03 — imported-title editing and confirmed hide/restore preserve academi
   try {
     await openModule(page, 'analyse1');
     await catalogCheckbox(page, courseIds[0]).check();
-    const completion = (await stored(page)).curriculumProgress[courseIds[0]].completedAt;
+    const completion = (await stored(page)).unitProgress[courseIds[0]].completedAt;
     await catalogRow(page, courseIds[0]).locator('[data-action="edit-task"]').click();
     const edit = page.locator('form[data-action="edit-task-submit"]');
     await edit.locator('[name="title"]').fill('Mon titre personnalisé');
     await edit.locator('[type="submit"]').click();
-    assert.match(await catalogRow(page, courseIds[0]).innerText(), /Titre du document : Chapitre I : Nombres réels/);
+    assert.match(await catalogRow(page, courseIds[0]).innerText(), /Titre source : Ensembles N, Z, Q et R/);
     await catalogRow(page, courseIds[0]).locator('[data-action="delete-task"]').click();
     await action(page, 'close-modal').click();
     assert.equal(await catalogRow(page, courseIds[0]).count(), 1);
@@ -426,13 +449,13 @@ test('B03 — imported-title editing and confirmed hide/restore preserve academi
     await page.reload();
     await curriculumLoaded(page);
     assert.equal(await catalogRow(page, courseIds[0]).count(), 0);
-    assert.equal((await stored(page)).curriculumProgress[courseIds[0]].hidden, true);
+    assert.equal((await stored(page)).unitProgress[courseIds[0]].hidden, true);
     await page.locator('#section-cours .hidden-curriculum summary').click();
-    await page.locator('[data-action="restore-catalog"][data-curriculum-id="a1-cours-01"]').click();
+    await page.locator('[data-action="restore-catalog"][data-curriculum-id="analyse1-c01-u01"]').click();
     assert.equal(await catalogCheckbox(page, courseIds[0]).isChecked(), true);
     assert.match(await catalogRow(page, courseIds[0]).innerText(), /Mon titre personnalisé/);
-    assert.equal((await stored(page)).curriculumProgress[courseIds[0]].completedAt, completion);
-    assert.equal(await page.locator('.curriculum-task').count(), 7);
+    assert.equal((await stored(page)).unitProgress[courseIds[0]].completedAt, completion);
+    assert.equal(await page.locator('.curriculum-task').count(), 10);
     assert.deepEqual(errors, []);
   } finally { await context.close(); }
 });
@@ -446,6 +469,7 @@ test('B04 — browser migrates existing v1 data, keeps original backup and expli
   C.customizeModule(legacy, 'analyse1', { name: 'Mon analyse', emoji: '📐', color: C.PALETTE[1].value });
   legacy.schemaVersion = 1;
   delete legacy.curriculumProgress;
+  delete legacy.unitProgress;
   const raw = JSON.stringify(legacy);
   const { context, page, errors } = await session();
   try {
@@ -453,29 +477,30 @@ test('B04 — browser migrates existing v1 data, keeps original backup and expli
     await page.reload();
     await curriculumLoaded(page);
     const migrated = await stored(page);
-    assert.equal(migrated.schemaVersion, 2);
+    assert.equal(migrated.schemaVersion, 3);
     assert.equal(migrated.profile.nickname, 'MON PROFIL');
     assert.deepEqual(migrated.modules, legacy.modules);
     const backups = await page.evaluate(() => Object.keys(localStorage)
       .filter(key => key.startsWith('s1quest_backup_')).map(key => localStorage.getItem(key)));
     assert.ok(backups.includes(raw));
     await openModule(page, 'analyse1');
-    assert.equal(await page.locator('#section-cours .task-row').count(), 5);
+    assert.equal(await page.locator('#section-cours .task-row').count(), 6);
     assert.equal(await catalogCheckbox(page, courseIds[0]).isChecked(), false, 'no automatic title matching');
+    await catalogRow(page, courseIds[0]).locator('.unit-options summary').click();
     await catalogRow(page, courseIds[0]).locator('[data-action="link-existing"]').click();
     const linkForm = page.locator('form[data-action="link-existing-submit"]');
     await linkForm.locator('[name="manualTaskId"]').selectOption(manual.id);
     await linkForm.locator('[type="submit"]').click();
-    assert.equal(await page.locator('#section-cours .task-row').count(), 4);
+    assert.equal(await page.locator('#section-cours .task-row').count(), 5);
     assert.equal(await catalogCheckbox(page, courseIds[0]).isChecked(), true);
     const linkedState = await stored(page);
     assert.deepEqual(linkedState.modules[0].sections.cours[0], manual);
-    assert.equal(linkedState.curriculumProgress[courseIds[0]].linkedTaskId, manual.id);
-    assert.equal(await page.locator('#section-cours .section-stats strong').innerText(), '25 %');
+    assert.equal(linkedState.unitProgress[courseIds[0]].linkedTaskId, manual.id);
+    assert.equal(await page.locator('#section-cours .section-stats strong').first().innerText(), '1,92 %');
     await page.reload();
     await curriculumLoaded(page);
     assert.equal(await catalogCheckbox(page, courseIds[0]).isChecked(), true);
-    assert.equal(await page.locator('#section-cours .task-row').count(), 4);
+    assert.equal(await page.locator('#section-cours .task-row').count(), 5);
     assert.deepEqual((await stored(page)).modules[0].sections.cours[0], manual);
     assert.deepEqual(errors, []);
   } finally { await context.close(); }
@@ -487,7 +512,8 @@ test('B05 — invalid private overlay is rejected as a whole and cannot turn a r
   try {
     await openModule(page, 'analyse1');
     assert.equal(await page.locator('a.resource-link').count(), 0);
-    assert.equal(await page.locator('.resource-missing').count(), 7);
+    await expandAllGroups(page);
+    assert.equal(await page.locator('.curriculum-group > .group-body > .curriculum-resources .resource-missing').count(), 7);
     assert.match(await page.locator('#curriculum-status').innerText(), /invalides|indisponibles/);
     assert.equal(await page.evaluate(() => window.S1_INJECTED), undefined);
     assert.deepEqual(errors, []);
@@ -504,7 +530,8 @@ test('B06 — Analyse 1 curriculum and controls fit mobile and keyboard navigati
     await checkbox.focus();
     await checkbox.press('Space');
     assert.equal(await checkbox.isChecked(), true);
-    const tdButton = catalogRow(page, courseIds[1]).locator('[data-action="go-to-td"][data-target-id="a1-td-03"]');
+    await expandAllGroups(page);
+    const tdButton = catalogGroup(page, courseGroups[2]).locator('[data-action="go-to-td"][data-target-id="analyse1-td03"]');
     await tdButton.focus();
     await tdButton.press('Enter');
     assert.equal(await catalogCheckbox(page, tdIds[2]).evaluate(node => node === document.activeElement), true);
@@ -559,13 +586,15 @@ test('B08 — browser-local private link import works without publishing links a
     assert.deepEqual(await stored(page), before, 'importing links must not mutate any progression or customization');
     const linksBefore = await page.evaluate(() => localStorage.getItem('s1quest_private_links'));
     await openModule(page, 'analyse1');
-    assert.equal(await page.locator('a.resource-link').count(), 7);
-    for (const [index, id] of [...courseIds, ...tdIds].entries()) {
-      assert.equal(await catalogRow(page, id).locator('a.resource-link').getAttribute('href'), fakeLinks[resourceIds[index]]);
+    await expandAllGroups(page);
+    assert.equal(await parentPDFs(page).count(), 7);
+    for (const [index, id] of [...courseGroups, ...tdGroups].entries()) {
+      assert.equal(await groupPDF(page, id).getAttribute('href'), fakeLinks[resourceIds[index]]);
     }
     await page.reload();
     await curriculumLoaded(page);
-    assert.equal(await page.locator('a.resource-link').count(), 7);
+    await expandAllGroups(page);
+    assert.equal(await parentPDFs(page).count(), 7);
     assert.equal(await page.evaluate(() => localStorage.getItem('s1quest_private_links')), linksBefore);
     assert.equal(JSON.stringify(await downloadJSON(page)).includes('TEST_FIXTURE_DOCUMENT'), false);
     const cache = await page.evaluate(() => localStorage.getItem('s1quest_curriculum_cache'));
@@ -604,7 +633,8 @@ test('B09 — malformed private-link imports cannot partially replace an existin
       assert.deepEqual(await stored(page), savedProgress);
     }
     await openModule(page, 'analyse1');
-    assert.equal(await page.locator('a.resource-link').count(), 7);
+    await expandAllGroups(page);
+    assert.equal(await parentPDFs(page).count(), 7);
     assert.equal(await page.evaluate(() => window.S1_INJECTED), undefined);
     assert.deepEqual(errors, []);
   } finally { await context.close(); }
@@ -646,9 +676,10 @@ test('B10 — an explicit private-link import stays authoritative when an older 
     release();
     await page.waitForFunction(() => window.S1_TEST_CURRICULUM_READY === true);
     await openModule(page, 'analyse1');
-    assert.equal(await page.locator('a.resource-link').count(), 4);
-    for (const [index, id] of courseIds.entries()) {
-      assert.equal(await catalogRow(page, id).locator('a.resource-link').getAttribute('href'), newLinks[sampleResources[index]]);
+    await expandAllGroups(page);
+    assert.equal(await parentPDFs(page).count(), 4);
+    for (const [index, id] of courseGroups.entries()) {
+      assert.equal(await groupPDF(page, id).getAttribute('href'), newLinks[sampleResources[index]]);
     }
     const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('s1quest_private_links')));
     assert.deepEqual(saved, { schemaVersion: 1, links: newLinks });

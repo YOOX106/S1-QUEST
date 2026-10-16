@@ -1582,3 +1582,51 @@ input[type="file"].field {
 .unsaved-links {
   color: var(--gold);
 }
+
+/* Phase B: small missions, calm hierarchy, native accessible disclosures. */
+.curriculum-groups { display: grid; gap: 14px; margin: 24px 0; }
+.curriculum-group { border: 1px solid var(--line); border-radius: 12px; min-width: 0; background: #10182b; }
+.group-heading { padding: 20px; cursor: pointer; line-height: 1.6; min-height: 54px; overflow-wrap: anywhere; }
+.group-heading strong { font-size: 15px; margin-right: 12px; }
+.group-heading .count-label { display: inline-block; white-space: normal; font-size: 11px; }
+.group-body { padding: 0 20px 20px; }
+.group-body > .progress-block { margin-bottom: 22px; }
+.group-next { font-size: 12px; color: var(--cyan); margin: 14px 0; }
+.source-confidence { color: #c5b4ff; font-size: 11px; line-height: 1.7; }
+.source-reference, .duration-hint { color: var(--muted); font-size: 11px; line-height: 1.7; overflow-wrap: anywhere; margin: 5px 0; }
+.study-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+.study-status, .bonus-badge { font-size: 11px; border: 1px solid #536080; padding: 6px 9px; border-radius: 6px; color: #d9e3fc; }
+.bonus-badge { color: #ffe0a5; border-color: #755d37; display: inline-block; margin: 8px 0; }
+.status-review { color: #ffe0a5; border-color: #755d37; }
+.status-completed { color: #b7f5d0; border-color: #41765a; }
+.mastery-label { min-width: 0; max-width: 100%; }
+.mastery-label select { font-size: 12px; padding: 9px 10px; width: 100%; min-height: 44px; }
+.unit-options { margin-top: 12px; font-size: 12px; }
+.unit-options summary { cursor: pointer; color: var(--muted); padding: 10px 0; min-height: 44px; }
+.unit-filters { display: grid; grid-template-columns: minmax(160px,1fr) minmax(180px,2fr); gap: 18px; margin: 24px 0; }
+.next-mission { margin: 24px 0 18px; border-color: #7560ba; background: linear-gradient(110deg,#201b3c,#141c31); }
+.next-mission h3 { margin: 14px 0; font-size: 21px; }
+.next-mission p { line-height: 1.8; }
+.next-mission button { margin: 16px 10px 0 0; }
+.review-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px; }
+.review-summary .panel { margin: 0; color: #d2c5ff; padding: 20px; }
+.revision-item { display: block; width: 100%; text-align: left; background: #141f35; color: var(--text); border: 1px solid var(--line); border-radius: 8px; cursor: pointer; padding: 15px; margin: 10px 0; font: inherit; font-size: 13px; line-height: 1.6; }
+.resource-module > summary { cursor: pointer; min-height: 44px; line-height: 1.8; }
+.resource-card { margin-top: 16px; padding: 16px 0; border-top: 1px solid var(--line); overflow-wrap: anywhere; }
+.resource-card h3 { font-size: 14px; }
+form[data-action="import-progress"] { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line); }
+form[data-action="import-progress"] button { margin-top: 15px; }
+.td-recommendation > .relation-status { display: inline-block; margin: 10px; }
+.td-recommendation > small { display: block; margin-bottom: 10px; }
+.notice { overflow-wrap: anywhere; }
+@media (max-width: 680px) {
+  .unit-filters, .review-summary { grid-template-columns: 1fr; }
+  .group-heading { padding: 16px 12px; }
+  .group-heading .count-label { display: block; margin: 7px 0 0 15px; }
+  .group-body { padding: 0 10px 16px; }
+  .task-main { flex-wrap: wrap; }
+  .task-main .task-check { width: 100%; }
+  .task-main .task-actions { margin-left: 0; }
+  .curriculum-task .task-title { overflow-wrap: anywhere; }
+  .next-mission h3 { font-size: 18px; }
+}
