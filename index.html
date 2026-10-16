@@ -7,6 +7,7 @@
   <meta name="description" content="S1 QUEST : votre espace personnel de progression en Mathématiques et Informatique, semestre 1.">
   <title>S1 QUEST — Tableau de bord</title>
   <link rel="stylesheet" href="./style.css">
+  <script defer src="./js/curriculum.js"></script>
   <script defer src="./script.js"></script>
 </head>
 <body>
@@ -21,6 +22,7 @@
     <div class="main-shell">
       <header class="topbar"><span class="semester-label">ESPACE PERSONNEL <span>/</span> SEMESTRE 01</span><div class="topbar-actions"><span id="save-status" class="save-status">Chargement…</span><button type="button" class="button subtle compact" data-action="export">↓ <span>Exporter JSON</span></button><a class="settings-link" href="#/settings" aria-label="Paramètres">⚙</a></div></header>
       <div id="storage-warning" class="storage-warning" role="alert" hidden></div>
+      <div id="curriculum-status" class="curriculum-banner" role="status" hidden></div>
       <main id="main" tabindex="-1"><div id="view"><p class="empty">Chargement de votre espace…</p></div></main>
       <footer>Fait pour apprendre, à ton rythme. <span aria-hidden="true">✦</span> S1 QUEST · Phase 1</footer>
     </div>

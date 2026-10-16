@@ -6,7 +6,7 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
 
-  const SCHEMA_VERSION = 1;
+  const SCHEMA_VERSION = 2;
   const STORAGE_KEY = 's1quest_data';
   const BACKUP_PREFIX = 's1quest_backup_';
   const PALETTE = Object.freeze([
@@ -48,6 +48,7 @@
     return {
       schemaVersion: SCHEMA_VERSION,
       profile: { nickname: 'AMINE' },
+      curriculumProgress: {},
       idCounter: 0,
       idNamespace: newNamespace(),
       modules: MODULES.map(definition => ({
@@ -140,9 +141,9 @@
     return Number.isFinite(date.getTime()) && date.toISOString() === value;
   }
 
-  function validateState(state) {
+  function validateCommonState(state, version) {
     if (!isObject(state)) throw new Error('Les données enregistrées ne sont pas un objet valide.');
-    if (state.schemaVersion !== SCHEMA_VERSION) throw new Error('Version de sauvegarde non prise en charge.');
+    if (state.schemaVersion !== version) throw new Error('Version de sauvegarde non prise en charge.');
     if (!isObject(state.profile) || text(state.profile.nickname, 40, 'Le pseudo') !== state.profile.nickname) {
       throw new Error('Le profil enregistré est invalide.');
     }
@@ -183,13 +184,41 @@
     return state;
   }
 
-  // No earlier S1 QUEST schema is recognised in Phase 1. A later migration must
-  // validate its source and create a verified raw backup before transforming it.
-  function migrateState(state) {
-    if (!isObject(state) || !Number.isInteger(state.schemaVersion) || state.schemaVersion !== SCHEMA_VERSION) {
-      throw new Error('Aucune migration sûre n’est disponible pour cette version.');
+  function validateLegacyState(state) {
+    return validateCommonState(state, 1);
+  }
+
+  function validateState(state) {
+    validateCommonState(state, SCHEMA_VERSION);
+    if (!isObject(state.curriculumProgress)) throw new Error('La progression du catalogue est invalide.');
+    const manualIds = new Set(state.modules.flatMap(module => Object.values(module.sections).flat()).map(task => task.id));
+    const linkedIds = new Set();
+    for (const [id, record] of Object.entries(state.curriculumProgress)) {
+      if (!/^[a-zA-Z0-9][a-zA-Z0-9-]{0,119}$/.test(id) || !isObject(record) ||
+        typeof record.completed !== 'boolean' || typeof record.hidden !== 'boolean' ||
+        !validDate(record.createdAt) || (record.completed ? !validDate(record.completedAt) : record.completedAt !== null) ||
+        !(record.titleOverride === null || (typeof record.titleOverride === 'string' && text(record.titleOverride, 120, 'Le titre') === record.titleOverride)) ||
+        !(record.linkedTaskId === null || (typeof record.linkedTaskId === 'string' && manualIds.has(record.linkedTaskId)))) {
+        throw new Error('Une progression du catalogue est invalide.');
+      }
+      if (record.linkedTaskId !== null) {
+        if (linkedIds.has(record.linkedTaskId)) throw new Error('Une tâche personnelle ne peut être liée qu’une fois au catalogue.');
+        linkedIds.add(record.linkedTaskId);
+      }
     }
-    return validateState(state);
+    return state;
+  }
+
+  // Pure conversion: persistence is performed only by Store after a verified backup.
+  function migrateState(state) {
+    if (!isObject(state)) throw new Error('La sauvegarde est invalide.');
+    if (state.schemaVersion === SCHEMA_VERSION) return validateState(state);
+    if (state.schemaVersion !== 1) throw new Error('Aucune migration sûre n’est disponible pour cette version.');
+    validateLegacyState(state);
+    const migrated = JSON.parse(JSON.stringify(state));
+    migrated.schemaVersion = SCHEMA_VERSION;
+    migrated.curriculumProgress = {};
+    return validateState(migrated);
   }
 
   function findModule(state, moduleId) {
@@ -259,6 +288,15 @@
     const tasks = findSection(state, moduleId, section);
     const index = tasks.findIndex(task => task.id === id);
     if (index < 0) throw new Error('Tâche introuvable.');
+    const removed = tasks[index];
+    for (const record of Object.values(state.curriculumProgress || {})) {
+      if (record.linkedTaskId === id) {
+        record.linkedTaskId = null;
+        record.completed = removed.completed;
+        record.createdAt = removed.createdAt;
+        record.completedAt = removed.completedAt;
+      }
+    }
     return tasks.splice(index, 1)[0];
   }
 
@@ -332,14 +370,39 @@
       let parsed;
       try { parsed = JSON.parse(result.raw); }
       catch (_) { return this.protect('corrupt', 'La sauvegarde contient un JSON illisible.'); }
-      if (isObject(parsed) && typeof parsed.schemaVersion === 'number' && parsed.schemaVersion !== SCHEMA_VERSION) {
+      if (isObject(parsed) && typeof parsed.schemaVersion === 'number' && ![1, SCHEMA_VERSION].includes(parsed.schemaVersion)) {
         return this.protect('unsupported', 'Cette sauvegarde utilise une version non prise en charge.');
       }
-      try {
-        return { state: migrateState(parsed), status: 'loaded', message: 'Sauvegarde locale chargée.' };
-      } catch (error) {
-        return this.protect('corrupt', 'La structure de la sauvegarde est invalide : ' + error.message);
+      let migrated;
+      try { migrated = migrateState(parsed); }
+      catch (error) { return this.protect('corrupt', 'La structure de la sauvegarde est invalide : ' + error.message); }
+      if (parsed.schemaVersion === SCHEMA_VERSION) return { state: migrated, status: 'loaded', message: 'Sauvegarde locale chargée.' };
+      const originalRaw = result.raw;
+      const pending = message => {
+        this.blocked = true;
+        this.blockReason = 'migration-pending';
+        return { state: migrated, status: 'migration-pending', migration: true, message: message + ' Les données v1 restent protégées ; la version v2 est utilisable en mémoire. Exporte tes changements avant de fermer cette page.' };
+      };
+      if (!this.backup(originalRaw).ok) return pending('La copie de secours avant migration a échoué. La sauvegarde originale n’a pas été remplacée.');
+      const beforeWrite = this.raw();
+      if (!beforeWrite.ok) return pending('La sauvegarde ne peut pas être relue avant migration.');
+      if (beforeWrite.raw !== originalRaw) {
+        const conflict = this.conflict();
+        return { ...conflict, state: migrated, migration: true };
       }
+      const serialized = JSON.stringify(migrated);
+      try {
+        this.storage.setItem(STORAGE_KEY, serialized);
+        const verification = this.raw();
+        if (!verification.ok) return pending('L’écriture de la migration n’a pas pu être vérifiée. La copie brute v1 est conservée.');
+        if (verification.raw !== serialized) {
+          const conflict = this.conflict();
+          return { ...conflict, state: migrated, migration: true };
+        }
+        validateState(JSON.parse(verification.raw));
+        this.lastRaw = serialized;
+        return { state: migrated, status: 'loaded', migration: true, message: 'Sauvegarde migrée en version 2 ; copie brute v1 vérifiée conservée.' };
+      } catch (_) { return pending('La migration n’a pas pu être enregistrée. La copie brute v1 est conservée.'); }
     }
 
     protect(reason, detail) {
@@ -424,7 +487,7 @@
   return Object.freeze({
     SCHEMA_VERSION, STORAGE_KEY, BACKUP_PREFIX, MODULES, PALETTE,
     createState, stats, moduleStats, semesterStats, formatPercent,
-    validateState, migrateState, addTask, editTask, toggleTask, deleteTask,
+    validateState, validateLegacyState, migrateState, addTask, editTask, toggleTask, deleteTask,
     setProfile, customizeModule, Store
   });
 });
@@ -434,6 +497,10 @@
   'use strict';
   if (typeof window === 'undefined' || typeof document === 'undefined') return;
   const C = globalThis.S1QuestCore;
+  const P = globalThis.S1Curriculum;
+  let catalog = null;
+  let catalogBase = null;
+  let privateLinksInMemory = null;
   const $ = (selector, root = document) => root.querySelector(selector);
   const view = $('#view');
   const modal = $('#modal');
@@ -526,6 +593,227 @@
   const getModule = id => state.modules.find(module => module.id === id);
   function accent(node, color) { node.style.setProperty('--accent', color); return node; }
 
+  function displayState() { return P.projectState(state, catalog); }
+  function displayModule(id) { return P.projectModule(state, id, catalog); }
+  function getViewTask(data) {
+    if (data.curriculumId) return displayModule(data.moduleId).sections[data.section]?.find(task => task.curriculumId === data.curriculumId);
+    return getModule(data.moduleId).sections[data.section]?.find(task => task.id === data.taskId);
+  }
+  function showCurriculumStatus(message, kind = 'notice') {
+    const banner = $('#curriculum-status');
+    banner.hidden = !message;
+    banner.classList.toggle('catalog-error', kind === 'error');
+    banner.textContent = message;
+  }
+  async function fetchJSON(path, optional = false) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 10000);
+    try {
+      const response = await fetch(new URL(path, document.baseURI), { signal: controller.signal, cache: 'no-store' });
+      if (optional && response.status === 404) return null;
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      return await response.json();
+    } finally { clearTimeout(timer); }
+  }
+  function applyPrivateLinks(targetCatalog, local) {
+    if (!local || typeof local !== 'object' || Array.isArray(local) || local.schemaVersion !== 1 || !local.links || typeof local.links !== 'object' || Array.isArray(local.links)) throw new Error('Format du fichier de liens privés invalide.');
+    const entries = Object.entries(local.links);
+    if (!entries.length) throw new Error('Le fichier ne contient aucun lien.');
+    for (const [id, url] of entries) {
+      const resource = targetCatalog.resources.find(item => item.id === id);
+      if (!resource || resource.access !== 'private-local' || !P.validateDriveUrl(url)) throw new Error('Un lien est invalide ou ne correspond pas à une ressource privée du catalogue.');
+    }
+    for (const [id, url] of entries) targetCatalog.resources.find(item => item.id === id).url = url;
+    P.validateCatalog(targetCatalog);
+    return entries.length;
+  }
+  async function importPrivateLinks(formNode, data) {
+    const file = data.get('linksFile');
+    if (!file || typeof file.text !== 'function' || !file.size || file.size > 65536) throw new Error('Choisis un fichier JSON de liens de moins de 64 Ko.');
+    if (!catalogBase) throw new Error('Le catalogue doit être disponible avant de charger ses liens.');
+    const local = JSON.parse(await file.text());
+    const prepared = JSON.parse(JSON.stringify(catalogBase));
+    const count = applyPrivateLinks(prepared, local);
+    let saved = false;
+    try {
+      if (!storage) throw new Error('Stockage indisponible');
+      const old = storage.getItem('s1quest_private_links');
+      if (old !== null) {
+        let backupKey = 's1quest_private_links_backup-' + Date.now();
+        while (storage.getItem(backupKey) !== null) backupKey += '-copy';
+        storage.setItem(backupKey, old);
+        if (storage.getItem(backupKey) !== old) throw new Error('Copie non vérifiable');
+      }
+      if (storage.getItem('s1quest_private_links') !== old) throw new Error('Configuration modifiée dans un autre onglet');
+      const serialized = JSON.stringify(local);
+      storage.setItem('s1quest_private_links', serialized);
+      saved = storage.getItem('s1quest_private_links') === serialized;
+    } catch { /* Les liens validés restent utilisables en mémoire. */ }
+    privateLinksInMemory = local;
+    catalog = prepared;
+    let feedback = $('.feedback', formNode);
+    if (!feedback) { feedback = el('p', 'feedback'); feedback.setAttribute('role', 'status'); formNode.append(feedback); }
+    feedback.classList.toggle('unsaved-links', !saved);
+    feedback.textContent = count + ' liens chargés. ' + (saved ? 'Conservés sur cet appareil uniquement.' : 'En mémoire uniquement : conserve le fichier JSON avant de fermer cette page.');
+    showCurriculumStatus(count + ' liens privés ' + (saved ? 'chargés depuis ce navigateur.' : 'utilisables en mémoire uniquement ; leur sauvegarde a échoué.') + ' Aucun lien n’a été publié. L’accès Drive et les associations proposées restent à vérifier.');
+    announce(feedback.textContent);
+  }
+
+  async function loadCurriculum() {
+    let publicCatalog;
+    let cached = false;
+    try {
+      publicCatalog = P.validateCatalog(await fetchJSON('./curriculum.json'));
+      // Ce cache ne reçoit que le catalogue public, jamais les liens privés locaux.
+      try { storage?.setItem('s1quest_curriculum_cache', JSON.stringify(publicCatalog)); } catch { /* Cache facultatif. */ }
+    } catch {
+      try {
+        const raw = storage?.getItem('s1quest_curriculum_cache');
+        if (!raw) throw new Error('Pas de cache');
+        publicCatalog = P.validateCatalog(JSON.parse(raw));
+        cached = true;
+      } catch {
+        showCurriculumStatus('Catalogue indisponible. Vos données sont conservées ; seules les tâches personnelles sont affichées et les pourcentages sont partiels. Lancez le site avec un serveur HTTP puis rechargez.', 'error');
+        return;
+      }
+    }
+    catalogBase = publicCatalog;
+    catalog = JSON.parse(JSON.stringify(publicCatalog));
+    let privateLinks = 0;
+    let privateError = false;
+    let local = privateLinksInMemory;
+    try {
+      if (!local) {
+        const stored = storage?.getItem('s1quest_private_links');
+        if (stored) local = JSON.parse(stored);
+      }
+    } catch { privateError = true; }
+    if (!local && !privateError) {
+      try { local = await fetchJSON('./curriculum.links.local.json', true); }
+      catch { privateError = true; }
+    }
+    // Un import explicite effectué pendant le fetch reste prioritaire.
+    if (privateLinksInMemory) { local = privateLinksInMemory; privateError = false; }
+    try {
+      if (local) privateLinks = applyPrivateLinks(catalog, local);
+    } catch { privateError = true; }
+    P.validateCatalog(catalog);
+    const notes = [];
+    if (cached) notes.push('Catalogue en cache : sa version distante n’a pas pu être vérifiée.');
+    if (privateLinks) notes.push('Liens Drive fournis pour les essais locaux. Leur accès et le contenu des PDF n’ont pas pu être vérifiés ici.');
+    else notes.push(privateError ? 'Les liens privés locaux sont indisponibles ou invalides.' : 'Les liens privés ne sont pas publiés. Les PDF restent à renseigner sur cette installation.');
+    if (catalog.relations.some(relation => relation.status === 'proposed')) notes.push('Les associations Cours–TD proposées restent à confirmer.');
+    showCurriculumStatus(notes.join(' '));
+    rerenderAt(null, { preserveModal: true });
+    document.dispatchEvent(new CustomEvent('s1quest:curriculum-ready'));
+  }
+  function renderResources(item) {
+    const box = el('div', 'curriculum-resources');
+    for (const id of item.resourceIds) {
+      const resource = catalog.resources.find(candidate => candidate.id === id);
+      if (resource?.url && P.validateDriveUrl(resource.url)) {
+        const a = link('Ouvrir le PDF', resource.url, 'button resource-link');
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.setAttribute('aria-label', 'Ouvrir le PDF : ' + resource.title + ' dans Google Drive (nouvel onglet)');
+        box.append(a);
+      } else {
+        append(box, el('span', 'resource-missing', 'PDF à renseigner · lien privé non publié'));
+      }
+    }
+    if (!item.resourceIds.length) box.append(el('span', 'resource-missing', 'PDF à renseigner'));
+    return box;
+  }
+  function goToTD(id) {
+    const item = P.getItem(catalog, id);
+    if (!item || item.section !== 'td') return;
+    const row = Array.from(view.querySelectorAll('.curriculum-task')).find(node => node.dataset.curriculumId === id);
+    if (!row) { announce('Ce TD est masqué. Réaffichez-le dans la section TD.'); return; }
+    const checkbox = $('input[type="checkbox"]', row);
+    checkbox?.focus({ preventScroll: true });
+    row.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'center' });
+    announce('Accès à ' + item.title + '. Le TD peut être travaillé indépendamment du cours.');
+  }
+  function enrichCurriculumTask(row, module, section, task) {
+    row.classList.add('curriculum-task');
+    row.dataset.curriculumId = task.curriculumId;
+    row.id = 'curriculum-' + task.curriculumId;
+    const main = el('div', 'task-main');
+    main.append(...Array.from(row.childNodes));
+    row.append(main);
+    const item = P.getItem(catalog, task.curriculumId);
+    if (!item) return row;
+    const detail = el('div', 'curriculum-detail');
+    if (task.title !== item.title) detail.append(el('p', 'canonical-title', 'Titre du document : ' + item.title));
+    append(detail, renderResources(item));
+    if (item.subsections.length) {
+      const parts = el('details', 'document-parts');
+      append(parts, el('summary', '', 'Sous-parties du document (informatives)'));
+      const list = el('ol');
+      item.subsections.slice().sort((a, b) => a.order - b.order).forEach(part => list.append(el('li', '', part.title)));
+      append(parts, list, el('p', 'muted', 'Ces sous-parties ne sont pas comptées en plus du chapitre.'));
+      detail.append(parts);
+    }
+    const record = state.curriculumProgress[task.curriculumId];
+    const available = getModule(module.id).sections[section];
+    if (record?.linkedTaskId) {
+      append(detail, append(el('div', 'catalog-binding'), el('span', '', '✓ Progression de la tâche personnelle associée'), button('Détacher', 'unlink-existing', 'button subtle compact', { curriculumId: task.curriculumId, moduleId: module.id, section })));
+    } else if (available.length) {
+      detail.append(button('Rattacher une tâche existante', 'link-existing', 'button subtle compact', { curriculumId: task.curriculumId, moduleId: module.id, section }));
+    }
+    if (section === 'cours') {
+      const associated = el('section', 'associated-td');
+      associated.setAttribute('aria-label', 'TD associés à ' + item.title);
+      const relations = catalog.relations.filter(relation => relation.chapterId === item.id);
+      append(associated, el('h3', '', 'TD associés à ce chapitre'));
+      if (!relations.length) append(associated, el('p', 'muted', 'Aucune association vérifiée ou proposée pour ce chapitre. Tous les TD restent accessibles dans leur section.'));
+      for (const relation of relations) {
+        const td = P.getItem(catalog, relation.tdId);
+        const displayed = displayModule(module.id).sections.td.find(candidate => candidate.curriculumId === relation.tdId);
+        const recommendation = el('div', 'td-recommendation');
+        const heading = el('div', 'recommendation-heading');
+        append(heading, el('strong', '', td.title), el('span', 'relation-status ' + relation.status, relation.status === 'confirmed' ? 'Association confirmée' : 'Association proposée · à confirmer'));
+        append(recommendation, heading, el('p', 'relation-reason', relation.rationale));
+        if (displayed) {
+          append(recommendation, el('span', 'td-state', displayed.completed ? '✓ TD terminé' : '○ TD à faire'), button('Aller au ' + td.title, 'go-to-td', 'button subtle compact', { targetId: td.id }));
+        } else append(recommendation, el('p', 'muted', 'Ce TD est masqué. Il peut être réaffiché dans la section TD.'));
+        associated.append(recommendation);
+      }
+      detail.append(associated);
+    }
+    row.append(detail);
+    return row;
+  }
+  function renderHidden(moduleId, section) {
+    const items = catalog?.modules.find(module => module.id === moduleId)?.sections[section] || [];
+    const hidden = items.filter(item => state.curriculumProgress[item.id]?.hidden);
+    if (!hidden.length) return null;
+    const details = el('details', 'hidden-curriculum');
+    append(details, el('summary', '', 'Éléments masqués · ' + hidden.length));
+    for (const item of hidden) append(details, append(el('div', 'hidden-item'), el('span', '', item.title), button('Réafficher', 'restore-catalog', 'button subtle compact', { curriculumId: item.id, moduleId, section })));
+    return details;
+  }
+  function showLinkExisting(data, trigger) {
+    const item = P.getItem(catalog, data.curriculumId);
+    if (!item) return;
+    const used = new Set(Object.values(state.curriculumProgress).map(record => record.linkedTaskId).filter(Boolean));
+    const tasks = getModule(item.moduleId).sections[item.section].filter(task => !used.has(task.id));
+    const box = form('link-existing-submit', { ...data });
+    append(box, modalHeading('Rattacher une tâche personnelle'), el('p', '', 'La case cochée et les dates de la tâche choisie seront utilisées pour « ' + item.title + ' ». La tâche d’origine est conservée et comptée une seule fois. Aucun rapprochement n’est automatique.'));
+    if (!tasks.length) {
+      append(box, el('p', '', 'Aucune tâche personnelle disponible dans cette section.'), button('Fermer', 'close-modal', 'button subtle'));
+    } else {
+      const label = el('label');
+      const select = el('select', 'field');
+      select.name = 'manualTaskId';
+      select.required = true;
+      tasks.forEach(task => { const option = el('option', '', (task.completed ? '✓ ' : '○ ') + task.title); option.value = task.id; select.append(option); });
+      append(label, el('span', 'field-label', 'Tâche de la même section'), select);
+      append(box, label, append(el('div', 'dialog-buttons'), button('Annuler', 'close-modal', 'button subtle'), submit('Rattacher cette tâche')));
+    }
+    openModal(box, { action: 'link-existing' }, trigger);
+  }
+
   function renderStorage() {
     const status = $('#save-status');
     const warning = $('#storage-warning');
@@ -538,7 +826,7 @@
       append(warning, el('p', '', storageResult.message || 'Vos modifications restent en mémoire. Exportez votre sauvegarde avant de fermer cette page.'));
       append(warning, el('p', '', 'Ne fermez pas cette page sans exporter vos changements. Aucune sauvegarde cloud n’est effectuée.'));
       append(warning, button('↓ Exporter les données en mémoire', 'export', 'button subtle compact'));
-      if (storageResult.status === 'corrupt' || storageResult.status === 'unsupported' || storageResult.status === 'invalid' || storageResult.status === 'conflict' || storageResult.status === 'protected') {
+      if (storageResult.status === 'corrupt' || storageResult.status === 'unsupported' || storageResult.status === 'invalid' || storageResult.status === 'conflict' || storageResult.status === 'protected' || storageResult.status === 'migration-pending') {
         append(warning, button('↓ Conserver aussi les données stockées brutes', 'export-raw', 'button subtle compact'));
       }
     }
@@ -594,7 +882,7 @@
     return stats.remaining + (stats.remaining === 1 ? ' tâche à terminer' : ' tâches à terminer');
   }
   function renderDashboard() {
-    const overall = C.semesterStats(state);
+    const overall = C.semesterStats(displayState());
     const intro = el('div', 'page-intro');
     const introduction = el('div');
     append(introduction, el('p', 'eyebrow', 'SEMESTRE 01 · MATHÉMATIQUES & INFORMATIQUE'), el('h1', '', 'Chaque tâche compte.'), el('p', 'subtitle', 'Ton parcours universitaire, un chapitre à la fois. Prends le contrôle de tes révisions.'));
@@ -624,10 +912,10 @@
       stats.append(stat);
     }
     const heading = el('div', 'section-heading');
-    append(heading, append(el('div'), el('h2', '', 'Tes modules'), el('p', '', 'Ajoute tes chapitres, TD et TP réels pour commencer.')), el('span', 'count-label', '7 MODULES'));
+    append(heading, append(el('div'), el('h2', '', 'Tes modules'), el('p', '', 'Analyse 1 est prérempli ; ajoute tes autres chapitres et séries réels.')), el('span', 'count-label', '7 MODULES'));
     const grid = el('div', 'module-grid');
     state.modules.forEach((module, position) => {
-      const summary = C.moduleStats(module);
+      const summary = C.moduleStats(displayModule(module.id));
       const card = accent(el('article', 'module-card'), module.color);
       const top = el('div', 'module-top');
       const icon = el('span', 'module-icon', module.emoji);
@@ -661,25 +949,29 @@
     checkbox.checked = task.completed;
     checkbox.dataset.action = 'toggle-task';
     Object.assign(checkbox.dataset, { moduleId: module.id, section, taskId: task.id });
+    if (task.curriculumId) checkbox.dataset.curriculumId = task.curriculumId;
     append(checkLabel, checkbox, el('span', 'task-title', task.title));
     const data = { moduleId: module.id, section, taskId: task.id };
+    if (task.curriculumId) data.curriculumId = task.curriculumId;
     const actions = el('div', 'task-actions');
     const edit = button('Modifier', 'edit-task', 'button subtle compact', data);
     edit.setAttribute('aria-label', 'Modifier : ' + task.title);
-    const remove = button('Supprimer', 'delete-task', 'button danger compact', data);
-    remove.setAttribute('aria-label', 'Supprimer : ' + task.title);
+    const remove = button(task.curriculumId ? 'Masquer' : 'Supprimer', 'delete-task', 'button danger compact', data);
+    remove.setAttribute('aria-label', (task.curriculumId ? 'Masquer : ' : 'Supprimer : ') + task.title);
     append(actions, edit, remove);
     append(row, checkLabel, actions);
+    if (task.curriculumId) return enrichCurriculumTask(row, module, section, task);
     return row;
   }
   function renderModule(module) {
+    module = displayModule(module.id);
     document.title = module.name + ' — S1 QUEST';
     const back = link('← Tous les modules', '#/', 'breadcrumb');
     const title = accent(el('div', 'module-title'), module.color);
     const icon = el('span', 'module-icon', module.emoji);
     icon.setAttribute('aria-hidden', 'true');
     append(title, icon, append(el('div'), el('p', 'eyebrow', 'MON PARCOURS · SEMESTRE 01'), el('h1', '', module.name)));
-    const summary = C.moduleStats(module);
+    const summary = C.moduleStats(displayModule(module.id));
     const overview = accent(el('section', 'panel module-overview'), module.color);
     append(overview, el('h2', '', 'Progression du module'), progressBlock(summary, 'Progression des tâches configurées'), el('p', 'module-status' + (summary.fullyCompleted ? ' complete' : ''), moduleStatus(module, summary)));
     append(view, back, title, overview);
@@ -693,23 +985,34 @@
       if (!tasks.length) {
         append(panel, append(el('div', 'empty'), el('strong', '', 'À configurer'), el('span', '', 'Ajoute ton premier chapitre ou ta première série. Aucun contenu académique n’est inventé.')));
       } else {
-        for (const completed of [false, true]) {
-          const group = tasks.filter(task => task.completed === completed);
-          const sectionGroup = el('div', 'task-group');
-          const groupTitle = (completed ? 'Terminées' : 'À faire') + ' · ' + group.length;
-          const list = el('ul', 'task-list');
-          group.forEach(task => list.append(renderTask(module, section, task)));
-          append(sectionGroup, el('h3', '', groupTitle));
-          if (group.length) sectionGroup.append(list);
-          panel.append(sectionGroup);
+        const curriculumTasks = tasks.filter(task => task.curriculumId);
+        const personalTasks = tasks.filter(task => !task.curriculumId);
+        if (curriculumTasks.length) {
+          const ordered = el('ol', 'task-list curriculum-list');
+          ordered.setAttribute('aria-label', labels[section] + ' dans l’ordre pédagogique');
+          curriculumTasks.forEach(task => ordered.append(renderTask(module, section, task)));
+          panel.append(ordered);
+        }
+        if (personalTasks.length) {
+          panel.append(el('h3', 'personal-heading', 'Mes tâches personnelles'));
+          for (const completed of [false, true]) {
+            const group = personalTasks.filter(task => task.completed === completed);
+            const sectionGroup = el('div', 'task-group');
+            const list = el('ul', 'task-list');
+            group.forEach(task => list.append(renderTask(module, section, task)));
+            append(sectionGroup, el('h3', '', (completed ? 'Terminées' : 'À faire') + ' · ' + group.length));
+            if (group.length) sectionGroup.append(list);
+            panel.append(sectionGroup);
+          }
         }
       }
+      append(panel, renderHidden(module.id, section));
       const addForm = form('add-task', { moduleId: module.id, section }, 'add-task');
       append(addForm, textField('Nouvelle tâche · ' + labels[section], 'title', '', 120, { placeholder: 'Titre du chapitre ou de la série…', autocomplete: 'off' }), submit('＋ Ajouter une tâche'));
       panel.append(addForm);
       view.append(panel);
     }
-    append(view, el('p', 'coverage-note', 'Chaque tâche a le même poids. La bibliothèque de ressources sera ajoutée en Phase 1.5. Aucune consultation de document ni mécanique RPG ne modifie cette progression.'));
+    append(view, el('p', 'coverage-note', 'Les chapitres et TD comptent chacun une seule fois. Les recommandations ne créent pas de tâches supplémentaires. Ouvrir un PDF ne coche aucune case ; les cours et TD restent indépendants.'));
   }
 
   function renderSettings() {
@@ -742,15 +1045,27 @@
     const backups = el('section', 'panel');
     const backupRow = el('div', 'export-row');
     const backupDescription = el('div');
-    append(backupDescription, el('h2', '', 'Sauvegarde JSON'), el('p', 'settings-help', 'Télécharge une copie externe de tes données actuelles. L’export ne contient que la Phase 1 ; l’import est prévu pour une phase ultérieure.'));
+    append(backupDescription, el('h2', '', 'Sauvegarde JSON'), el('p', 'settings-help', 'Télécharge une copie externe de tes tâches, de ta progression du catalogue et de tes personnalisations. Les liens privés locaux restent séparés de cet export.'));
     append(backupRow, backupDescription, button('↓ Exporter mes données', 'export', 'button primary'));
     append(backups, backupRow, el('p', 'settings-help', 'Le stockage est propre à ce navigateur et à cette adresse. Il ne synchronise pas tes appareils et peut être effacé par le navigateur. Une copie locale de secours ne remplace pas un export.'));
     const danger = el('section', 'panel danger-zone');
-    append(danger, el('h2', '', 'Réinitialisation'), el('p', 'settings-help', 'Supprime les tâches, le pseudo et la personnalisation S1 QUEST. Tu retrouveras les sept modules vides. Une copie de secours locale est requise avant de remplacer des données existantes.'), button('Réinitialiser les données', 'reset-start', 'button danger'));
-    append(view, profile, customization, backups, danger);
+    append(danger, el('h2', '', 'Réinitialisation'), el('p', 'settings-help', 'Efface les tâches personnelles, les cases cochées, les éléments masqués, le pseudo et les personnalisations. Les sept modules et le catalogue pédagogique restent disponibles. Une copie de secours locale vérifiée est obligatoire avant remplacement.'), button('Réinitialiser les données', 'reset-start', 'button danger'));
+    const privatePanel = el('section', 'panel');
+    append(privatePanel, el('h2', '', 'Mes liens privés Google Drive'), el('p', 'settings-help', 'Sur GitHub Pages, charge ton fichier JSON de liens dans ce navigateur. Il reste sur ton appareil : aucun PDF ni lien privé n’est ajouté au dépôt, au catalogue public ou à l’export de progression. Conserve le fichier source comme sauvegarde.'));
+    const privateForm = form('import-private-links');
+    const privateLabel = el('label');
+    const privateInput = el('input', 'field');
+    privateInput.type = 'file';
+    privateInput.name = 'linksFile';
+    privateInput.accept = '.json,application/json';
+    privateInput.required = true;
+    append(privateLabel, el('span', 'field-label', 'Fichier JSON de liens privés (64 Ko maximum)'), privateInput);
+    append(privateForm, privateLabel, submit('Charger mes liens privés'));
+    append(privatePanel, privateForm);
+    append(view, profile, privatePanel, customization, backups, danger);
   }
-  function route({ focus = true } = {}) {
-    if (modal.open) closeModal(false);
+  function route({ focus = true, preserveModal = false } = {}) {
+    if (modal.open && !preserveModal) closeModal(false);
     view.replaceChildren();
     const hash = window.location.hash || '#/';
     document.title = 'S1 QUEST — Tableau de bord';
@@ -770,7 +1085,12 @@
     }
     if (focus) { $('#main').focus({ preventScroll: true }); window.scrollTo(0, 0); }
   }
-  function rerenderAt(target, { resetForm = null } = {}) {
+  function rerenderAt(target, { resetForm = null, preserveModal = false } = {}) {
+    const active = document.activeElement;
+    const activeForm = active?.closest('form');
+    const focusWasInView = activeForm && view.contains(activeForm);
+    const focusedName = active?.name;
+    const selection = active?.tagName === 'INPUT' && typeof active.selectionStart === 'number' ? [active.selectionStart, active.selectionEnd] : null;
     // Une action sur une tâche ne doit pas effacer un titre non soumis ailleurs.
     const key = node => [node.dataset.action, node.dataset.moduleId || '', node.dataset.section || ''].join(':');
     const drafts = new Map();
@@ -778,21 +1098,28 @@
       if (current === resetForm) continue;
       drafts.set(key(current), Array.from(current.elements)
         .filter(field => field.name && !['submit', 'button'].includes(field.type))
-        .map(field => ({ name: field.name, value: field.value })));
+        .map(field => ({ name: field.name, value: field.value, fileControl: field.type === 'file' ? field : null })));
     }
     const scroll = window.scrollY;
-    route({ focus: false });
+    route({ focus: false, preserveModal });
     for (const current of view.querySelectorAll('form')) {
       for (const draft of drafts.get(key(current)) || []) {
         const field = current.elements.namedItem(draft.name);
-        if (field) field.value = draft.value;
+        if (field && draft.fileControl) field.replaceWith(draft.fileControl);
+        else if (field) field.value = draft.value;
       }
     }
     if (target) {
       const nodes = Array.from(view.querySelectorAll('[data-action]'));
-      const match = nodes.find(node => node.dataset.action === target.action && (!target.moduleId || node.dataset.moduleId === target.moduleId) && (!target.section || node.dataset.section === target.section) && (!target.taskId || node.dataset.taskId === target.taskId));
+      const match = nodes.find(node => node.dataset.action === target.action && (!target.moduleId || node.dataset.moduleId === target.moduleId) && (!target.section || node.dataset.section === target.section) && (!target.taskId || node.dataset.taskId === target.taskId) && (!target.curriculumId || node.dataset.curriculumId === target.curriculumId));
       const focusNode = match?.tagName === 'FORM' ? match.elements.namedItem(target.field || 'title') : match;
       (focusNode || $('#main')).focus({ preventScroll: true });
+    }
+    if (!target && focusWasInView && focusedName) {
+      const replacementForm = Array.from(view.querySelectorAll('form')).find(node => key(node) === key(activeForm));
+      const field = replacementForm?.elements.namedItem(focusedName);
+      field?.focus({ preventScroll: true });
+      if (field && selection) field.setSelectionRange(...selection);
     }
     window.scrollTo(0, scroll);
   }
@@ -818,7 +1145,7 @@
   }
   function showEdit(data, trigger) {
     const module = getModule(data.moduleId);
-    const task = module?.sections[data.section]?.find(item => item.id === data.taskId);
+    const task = getViewTask(data);
     if (!task) return;
     const editor = form('edit-task-submit', data);
     append(editor, modalHeading('Modifier la tâche'), textField('Titre de la tâche', 'title', task.title, 120), append(el('div', 'dialog-buttons'), button('Annuler', 'close-modal', 'button subtle'), submit('Enregistrer')));
@@ -826,19 +1153,19 @@
     requestAnimationFrame(() => { const field = editor.elements.namedItem('title'); field.focus(); field.select(); });
   }
   function showDelete(data, trigger) {
-    const task = getModule(data.moduleId)?.sections[data.section]?.find(item => item.id === data.taskId);
+    const task = getViewTask(data);
     if (!task) return;
     const box = el('div');
     const cancel = button('Annuler', 'close-modal', 'button subtle');
     cancel.autofocus = true;
-    append(box, modalHeading('Supprimer cette tâche ?'), el('p', '', 'La tâche « ' + task.title + ' » sera supprimée. Cette action est irréversible et modifiera les compteurs de progression.'), append(el('div', 'dialog-buttons'), cancel, button('Supprimer cette tâche', 'confirm-delete', 'button danger')));
+    append(box, modalHeading(task.curriculumId ? 'Masquer cet élément du parcours ?' : 'Supprimer cette tâche ?'), el('p', '', task.curriculumId ? 'L’élément « ' + task.title + ' » sera masqué et exclu du calcul. Sa progression est conservée et il pourra être réaffiché. Une tâche personnelle associée reste disponible.' : 'La tâche « ' + task.title + ' » sera supprimée. Cette action est irréversible et modifiera les compteurs de progression.'), append(el('div', 'dialog-buttons'), cancel, button(task.curriculumId ? 'Masquer cet élément' : 'Supprimer cette tâche', 'confirm-delete', 'button danger')));
     openModal(box, { action: 'delete', ...data }, trigger);
   }
   function resetStart(trigger) {
     const box = el('div');
     const cancel = button('Annuler', 'close-modal', 'button subtle');
     cancel.autofocus = true;
-    append(box, modalHeading('Réinitialiser ton espace ?'), el('p', '', 'Toutes tes tâches S1 QUEST, ton pseudo et la personnalisation seront remplacés par les valeurs initiales. Les données de l’ancien site Déclic ne sont pas concernées.'), el('div', 'notice', 'Exporte d’abord ton JSON pour conserver une copie externe. Une seconde confirmation sera nécessaire.'), button('↓ Exporter avant de continuer', 'export', 'button subtle'), append(el('div', 'dialog-buttons'), cancel, button('Continuer', 'reset-continue', 'button danger')));
+    append(box, modalHeading('Réinitialiser ton espace ?'), el('p', '', 'Tes tâches personnelles, ta progression du catalogue, ton pseudo et les personnalisations seront réinitialisés. Les chapitres et TD du catalogue restent disponibles. Les autres applications ne sont pas concernées.'), el('div', 'notice', 'Exporte d’abord ton JSON pour conserver une copie externe. Une seconde confirmation sera nécessaire.'), button('↓ Exporter avant de continuer', 'export', 'button subtle'), append(el('div', 'dialog-buttons'), cancel, button('Continuer', 'reset-continue', 'button danger')));
     if (store.blocked && ['corrupt', 'unsupported', 'protected', 'conflict'].includes(storageResult.status)) {
       box.insertBefore(button('↓ Conserver la sauvegarde originale brute', 'export-raw', 'button subtle'), box.lastElementChild);
     }
@@ -874,6 +1201,7 @@
     const target = event.target.closest('[data-action]');
     if (!target || target.tagName === 'FORM' || target.type === 'submit') return;
     const data = { moduleId: target.dataset.moduleId, section: target.dataset.section, taskId: target.dataset.taskId };
+    if (target.dataset.curriculumId) data.curriculumId = target.dataset.curriculumId;
     switch (target.dataset.action) {
       case 'skip-main':
         event.preventDefault();
@@ -886,13 +1214,28 @@
       case 'confirm-delete': {
         if (modalContext?.action !== 'delete') return;
         const context = { ...modalContext };
-        C.deleteTask(state, context.moduleId, context.section, context.taskId);
+        if (context.curriculumId) P.hideCatalog(state, context.curriculumId);
+        else C.deleteTask(state, context.moduleId, context.section, context.taskId);
         const saved = persist();
         closeModal(false);
         rerenderAt({ action: 'add-task', moduleId: context.moduleId, section: context.section });
-        announce('Tâche supprimée.' + (saved ? '' : ' Attention : sauvegarde non confirmée.'));
+        announce((context.curriculumId ? 'Élément masqué, progression conservée.' : 'Tâche supprimée.') + (saved ? '' : ' Attention : sauvegarde non confirmée.'));
         break;
       }
+      case 'go-to-td': goToTD(target.dataset.targetId); break;
+      case 'link-existing': showLinkExisting(data, target); break;
+      case 'unlink-existing':
+        P.unlinkCatalogTask(state, catalog, data.curriculumId);
+        persist();
+        rerenderAt({ action: 'toggle-task', ...data });
+        announce('Association détachée. La tâche personnelle et la progression sont conservées.');
+        break;
+      case 'restore-catalog':
+        P.hideCatalog(state, data.curriculumId, false);
+        persist();
+        rerenderAt({ action: 'toggle-task', ...data });
+        announce('Élément réaffiché avec sa progression.');
+        break;
       case 'reset-start': resetStart(target); break;
       case 'reset-continue': resetContinue(); break;
       case 'export': exportData(); break;
@@ -913,16 +1256,17 @@
     const checkbox = event.target;
     if (checkbox.dataset.action !== 'toggle-task') return;
     const { moduleId, section, taskId } = checkbox.dataset;
-    C.toggleTask(state, moduleId, section, taskId, checkbox.checked);
+    if (checkbox.dataset.curriculumId) P.toggleCatalog(state, checkbox.dataset.curriculumId, checkbox.checked);
+    else C.toggleTask(state, moduleId, section, taskId, checkbox.checked);
     const saved = persist();
-    rerenderAt({ action: 'toggle-task', moduleId, section, taskId });
+    rerenderAt({ action: 'toggle-task', moduleId, section, taskId, curriculumId: checkbox.dataset.curriculumId });
     announce('Tâche ' + (checkbox.checked ? 'terminée' : 'à faire') + '. Progression recalculée.' + (saved ? '' : ' Sauvegarde non confirmée.'));
   });
   document.addEventListener('input', event => {
     const formNode = event.target.closest('form');
     if (formNode) clearFormError(formNode);
   });
-  document.addEventListener('submit', event => {
+  document.addEventListener('submit', async event => {
     const formNode = event.target;
     const action = formNode.dataset.action;
     if (!action) return;
@@ -931,17 +1275,26 @@
     const data = new FormData(formNode);
     const { moduleId, section, taskId } = formNode.dataset;
     try {
-      if (action === 'add-task') {
+      if (action === 'import-private-links') {
+        await importPrivateLinks(formNode, data);
+      } else if (action === 'add-task') {
         C.addTask(state, moduleId, section, String(data.get('title')));
         const saved = persist();
         rerenderAt({ action, moduleId, section }, { resetForm: formNode });
         announce('Tâche ajoutée.' + (saved ? '' : ' Sauvegarde non confirmée.'));
       } else if (action === 'edit-task-submit') {
-        C.editTask(state, moduleId, section, taskId, String(data.get('title')));
+        if (formNode.dataset.curriculumId) P.editCatalogTitle(state, formNode.dataset.curriculumId, String(data.get('title')));
+        else C.editTask(state, moduleId, section, taskId, String(data.get('title')));
         const saved = persist();
         closeModal(false);
-        rerenderAt({ action: 'edit-task', moduleId, section, taskId });
+        rerenderAt({ action: 'edit-task', moduleId, section, taskId, curriculumId: formNode.dataset.curriculumId });
         announce('Titre modifié.' + (saved ? '' : ' Sauvegarde non confirmée.'));
+      } else if (action === 'link-existing-submit') {
+        P.linkCatalogTask(state, catalog, formNode.dataset.curriculumId, String(data.get('manualTaskId')));
+        const saved = persist();
+        closeModal(false);
+        rerenderAt({ action: 'toggle-task', moduleId, section, curriculumId: formNode.dataset.curriculumId });
+        announce('Tâche existante rattachée sans doublon.' + (saved ? '' : ' Sauvegarde non confirmée.'));
       } else if (action === 'profile') {
         C.setProfile(state, String(data.get('nickname')));
         const saved = persist();
@@ -969,10 +1322,10 @@
         renderStorage();
         if (window.location.hash !== '#/') window.location.hash = '#/';
         else route();
-        announce('Réinitialisation terminée. Les sept modules sont vides.');
+        announce('Réinitialisation terminée. Les sept modules et le catalogue sont conservés ; toutes les cases sont décochées.');
       }
     } catch (error) {
-      setFormError(formNode, error.message || 'Cette modification est impossible.', action === 'profile' ? 'nickname' : action === 'customize' ? 'name' : 'title');
+      setFormError(formNode, error.message || 'Cette modification est impossible.', action === 'profile' ? 'nickname' : action === 'customize' ? 'name' : action === 'import-private-links' ? 'linksFile' : 'title');
     }
   });
   modal.addEventListener('cancel', event => { event.preventDefault(); closeModal(); });
@@ -987,4 +1340,6 @@
   if (loaded.status === 'new') persist();
   else renderStorage();
   route({ focus: false });
+  showCurriculumStatus('Chargement du parcours pédagogique…');
+  loadCurriculum().catch(() => { showCurriculumStatus('Le catalogue ne peut pas être affiché. Vos données sont conservées et les tâches personnelles restent accessibles.', 'error'); });
 })();
