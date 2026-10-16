@@ -7,6 +7,8 @@
   <meta name="description" content="S1 QUEST : votre espace personnel de progression en Mathématiques et Informatique, semestre 1.">
   <title>S1 QUEST — Tableau de bord</title>
   <link rel="stylesheet" href="./style.css">
+  <script defer src="./js/curriculum.js"></script>
+  <script defer src="./js/microcurriculum.js"></script>
   <script defer src="./script.js"></script>
 </head>
 <body>
@@ -15,14 +17,15 @@
     <aside class="sidebar" aria-label="Espace étudiant">
       <a href="#/" class="brand" aria-label="S1 QUEST — Tableau de bord"><span class="brand-mark" aria-hidden="true">✦</span><span>S1 <strong>QUEST</strong><small>UNE TÂCHE. UN PAS DE PLUS.</small></span></a>
       <nav aria-label="Navigation principale" id="navigation"></nav>
-      <div class="sidebar-note"><span aria-hidden="true">✧</span><strong>Construis ta progression.</strong><p>Ajoute tes vrais chapitres et avance à ton rythme.</p></div>
+      <div class="sidebar-note"><span aria-hidden="true">✧</span><strong>Construis ta progression.</strong><p>Une petite mission, puis une autre. Avance à ton rythme.</p></div>
       <div class="student"><span class="avatar small" aria-hidden="true">A</span><div><strong id="sidebar-nickname">AMINE</strong><small>Étudiant S1 · FSR</small></div></div>
     </aside>
     <div class="main-shell">
       <header class="topbar"><span class="semester-label">ESPACE PERSONNEL <span>/</span> SEMESTRE 01</span><div class="topbar-actions"><span id="save-status" class="save-status">Chargement…</span><button type="button" class="button subtle compact" data-action="export">↓ <span>Exporter JSON</span></button><a class="settings-link" href="#/settings" aria-label="Paramètres">⚙</a></div></header>
       <div id="storage-warning" class="storage-warning" role="alert" hidden></div>
+      <div id="curriculum-status" class="curriculum-banner" role="status" hidden></div>
       <main id="main" tabindex="-1"><div id="view"><p class="empty">Chargement de votre espace…</p></div></main>
-      <footer>Fait pour apprendre, à ton rythme. <span aria-hidden="true">✦</span> S1 QUEST · Phase 1</footer>
+      <footer>Fait pour apprendre, à ton rythme. <span aria-hidden="true">✦</span> S1 QUEST · Parcours S1 MI</footer>
     </div>
   </div>
   <div id="announcer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
