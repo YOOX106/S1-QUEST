@@ -1,6 +1,6 @@
 # Livraison des phases A et B
 
-Branche locale : `feature/s1-quest-study-rpg`. La référence `main` reste inchangée. Aucun push, fusion, déploiement, envoi de PDF à un fournisseur ou activation payante.
+Livraison initiale sur la branche locale `feature/s1-quest-study-rpg`, sans push à ce stade. Sur demande explicite ultérieure, la branche a été envoyée sur `YOOX106/S1-QUEST` ; [statut GitHub et PR préparée](publication-github.md). La référence `main` reste inchangée. Aucune fusion, aucun déploiement, envoi de PDF à un fournisseur ou activation payante.
 
 ## Phase A livrée
 

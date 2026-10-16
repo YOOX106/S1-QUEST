@@ -49,6 +49,10 @@ Observation indicative de performance sur cette machine : Dashboard prêt en 624
 | Audit automatique complet de contraste WCAG | NON EXÉCUTÉ | Style sombre et focus conservés, inspection visuelle réalisée. |
 | XP, quêtes et succès Phase C | NON EXÉCUTÉS | Non implémentés dans les phases A/B. |
 | IA, OCR, indexation, authentification backend | NON EXÉCUTÉS | Phases ultérieures, aucun service externe activé. |
-| Déploiement, push, fusion dans `main` | NON EXÉCUTÉS | Hors autorisation actuelle. |
+| Déploiement et fusion dans `main` | NON EXÉCUTÉS | Soumis à une autorisation distincte. |
 
 Les tests ne modifient ni les permissions Drive ni un compte externe. Chaque contexte navigateur est isolé. Le serveur de test refuse explicitement le fichier de liens privé avant toute lecture.
+
+## Contrôle avant envoi GitHub
+
+Sur demande explicite ultérieure, les mêmes 112 tests ont été relancés : **112 PASS, 0 FAIL, 0 ignoré**, 24,31 s. La branche de travail a ensuite été poussée. La création automatique de PR est bloquée par le proxy vers l’API GitHub ; aucun déploiement ni fusion n’a eu lieu. Voir [publication-github.md](docs/publication-github.md).
