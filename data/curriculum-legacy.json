@@ -1,0 +1,212 @@
+{
+  "schemaVersion": 1,
+  "catalogVersion": 1,
+  "description": "Programme Analyse 1 : titres transmis par l’utilisateur. Liens privés fournis séparément, contenu et associations restant à vérifier dans les PDF.",
+  "modules": [
+    {
+      "id": "analyse1",
+      "sections": {
+        "cours": [
+          {
+            "id": "a1-cours-01",
+            "title": "Chapitre I : Nombres réels",
+            "order": 1,
+            "resourceIds": [
+              "a1-resource-cours-01"
+            ],
+            "subsections": [],
+            "source": {
+              "type": "user-provided-title",
+              "verifiedInDocument": false
+            }
+          },
+          {
+            "id": "a1-cours-02",
+            "title": "Chapitre II : Suites numériques",
+            "order": 2,
+            "resourceIds": [
+              "a1-resource-cours-02"
+            ],
+            "subsections": [],
+            "source": {
+              "type": "user-provided-title",
+              "verifiedInDocument": false
+            }
+          },
+          {
+            "id": "a1-cours-03",
+            "title": "Chapitre III : Fonctions réelles d'une variable réelle",
+            "order": 3,
+            "resourceIds": [
+              "a1-resource-cours-03"
+            ],
+            "subsections": [],
+            "source": {
+              "type": "user-provided-title",
+              "verifiedInDocument": false
+            }
+          },
+          {
+            "id": "a1-cours-04",
+            "title": "Chapitre IV : Fonctions dérivables",
+            "order": 4,
+            "resourceIds": [
+              "a1-resource-cours-04"
+            ],
+            "subsections": [],
+            "source": {
+              "type": "user-provided-title",
+              "verifiedInDocument": false
+            }
+          }
+        ],
+        "td": [
+          {
+            "id": "a1-td-01",
+            "title": "TD Série 1",
+            "order": 1,
+            "resourceIds": [
+              "a1-resource-td-01"
+            ],
+            "subsections": [],
+            "source": {
+              "type": "user-provided-title",
+              "verifiedInDocument": false
+            }
+          },
+          {
+            "id": "a1-td-02",
+            "title": "TD Série 2",
+            "order": 2,
+            "resourceIds": [
+              "a1-resource-td-02"
+            ],
+            "subsections": [],
+            "source": {
+              "type": "user-provided-title",
+              "verifiedInDocument": false
+            }
+          },
+          {
+            "id": "a1-td-03",
+            "title": "TD Série 3",
+            "order": 3,
+            "resourceIds": [
+              "a1-resource-td-03"
+            ],
+            "subsections": [],
+            "source": {
+              "type": "user-provided-title",
+              "verifiedInDocument": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "resources": [
+    {
+      "id": "a1-resource-cours-01",
+      "title": "Chapitre I : Nombres réels",
+      "kind": "pdf",
+      "provider": "google-drive",
+      "access": "private-local",
+      "verification": {
+        "status": "provided-by-user",
+        "documentContentVerified": false
+      }
+    },
+    {
+      "id": "a1-resource-cours-02",
+      "title": "Chapitre II : Suites numériques",
+      "kind": "pdf",
+      "provider": "google-drive",
+      "access": "private-local",
+      "verification": {
+        "status": "provided-by-user",
+        "documentContentVerified": false
+      }
+    },
+    {
+      "id": "a1-resource-cours-03",
+      "title": "Chapitre III : Fonctions réelles d'une variable réelle",
+      "kind": "pdf",
+      "provider": "google-drive",
+      "access": "private-local",
+      "verification": {
+        "status": "provided-by-user",
+        "documentContentVerified": false
+      }
+    },
+    {
+      "id": "a1-resource-cours-04",
+      "title": "Chapitre IV : Fonctions dérivables",
+      "kind": "pdf",
+      "provider": "google-drive",
+      "access": "private-local",
+      "verification": {
+        "status": "provided-by-user",
+        "documentContentVerified": false
+      }
+    },
+    {
+      "id": "a1-resource-td-01",
+      "title": "TD Série 1",
+      "kind": "pdf",
+      "provider": "google-drive",
+      "access": "private-local",
+      "verification": {
+        "status": "provided-by-user",
+        "documentContentVerified": false
+      }
+    },
+    {
+      "id": "a1-resource-td-02",
+      "title": "TD Série 2",
+      "kind": "pdf",
+      "provider": "google-drive",
+      "access": "private-local",
+      "verification": {
+        "status": "provided-by-user",
+        "documentContentVerified": false
+      }
+    },
+    {
+      "id": "a1-resource-td-03",
+      "title": "TD Série 3",
+      "kind": "pdf",
+      "provider": "google-drive",
+      "access": "private-local",
+      "verification": {
+        "status": "provided-by-user",
+        "documentContentVerified": false
+      }
+    }
+  ],
+  "relations": [
+    {
+      "chapterId": "a1-cours-01",
+      "tdId": "a1-td-01",
+      "status": "proposed",
+      "rationale": "Observation communiquée par l’utilisateur : la série TD 1 porte sur la récurrence, les inégalités et les sommes. Contenu des PDF et correspondance à confirmer."
+    },
+    {
+      "chapterId": "a1-cours-02",
+      "tdId": "a1-td-02",
+      "status": "proposed",
+      "rationale": "Observation communiquée par l’utilisateur : la série TD 2 porte sur les suites. Contenu des PDF et correspondance à confirmer."
+    },
+    {
+      "chapterId": "a1-cours-02",
+      "tdId": "a1-td-03",
+      "status": "proposed",
+      "rationale": "Observation communiquée par l’utilisateur : la série TD 3 contient aussi des questions sur les suites. Contenu des PDF et correspondance à confirmer."
+    },
+    {
+      "chapterId": "a1-cours-03",
+      "tdId": "a1-td-03",
+      "status": "proposed",
+      "rationale": "Observation communiquée par l’utilisateur : la série TD 3 porte sur les limites et la continuité des fonctions. Contenu des PDF et correspondance à confirmer."
+    }
+  ]
+}

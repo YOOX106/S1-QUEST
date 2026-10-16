@@ -1,0 +1,5394 @@
+{
+  "format": "s1quest_curriculum_microtasks",
+  "version": 1,
+  "created": "2026-10-16",
+  "purpose": "Catalogue de micro-missions du semestre 1 MI basé sur les PDF de si/S1, à vérifier avant intégration définitive.",
+  "privacy": {
+    "contains_private_urls": false,
+    "drive_links_excluded_intentionally": true,
+    "no_public_repo_private_file_ids": true
+  },
+  "rules": {
+    "no_precompleted_tasks": true,
+    "status_storage": "Separate personal-progress state, versioned migration required",
+    "progress_cours": "completed leaf course units / total configured leaf course units",
+    "progress_td": "completed distinct required exercises / total configured required TD exercises; optional exercises counted separately",
+    "progress_tp": "completed distinct TP exercises / total configured TP exercises",
+    "chapter_progress": "course leaf units only; parent chapter never counts twice",
+    "cross_chapter_td": "One canonical exercise ID regardless of how many chapters link to it",
+    "recommended_states": [
+      "non_commencé",
+      "en_cours",
+      "à_revoir",
+      "maîtrisé"
+    ],
+    "empty_module": "À configurer; excluded from whole semester percentage",
+    "source_link_policy": "Link only when the owner explicitly authorizes publication; private resources require authenticated backend."
+  },
+  "sources": {
+    "analyse1:cours:1": {
+      "filename": "analyse chapter 1.pdf",
+      "module": "analyse1",
+      "section": "cours",
+      "pdf_pages": 54,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "analyse1:cours:2": {
+      "filename": "analyse chapter 2.pdf",
+      "module": "analyse1",
+      "section": "cours",
+      "pdf_pages": 69,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "analyse1:cours:3": {
+      "filename": "analyse chapter 3.pdf",
+      "module": "analyse1",
+      "section": "cours",
+      "pdf_pages": 74,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "analyse1:cours:4": {
+      "filename": "analyse chapter 4.pdf",
+      "module": "analyse1",
+      "section": "cours",
+      "pdf_pages": 63,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "analyse1:td:1": {
+      "filename": "analyse TD1 .pdf",
+      "module": "analyse1",
+      "section": "td",
+      "pdf_pages": 18,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null,
+      "notes": "TD1 contains optional exercises 11-17"
+    },
+    "analyse1:td:2": {
+      "filename": "analyse TD2.pdf",
+      "module": "analyse1",
+      "section": "td",
+      "pdf_pages": 20,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "analyse1:td:3": {
+      "filename": "analyse TD3.pdf",
+      "module": "analyse1",
+      "section": "td",
+      "pdf_pages": 6,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "algebre1:cours:1": {
+      "filename": "chapitre 1.pdf",
+      "module": "algebre1",
+      "section": "cours",
+      "pdf_pages": 13,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "algebre1:cours:2": {
+      "filename": "chapitre 2.pdf",
+      "module": "algebre1",
+      "section": "cours",
+      "pdf_pages": 24,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "algebre1:cours:3": {
+      "filename": "chapitre 3.pdf",
+      "module": "algebre1",
+      "section": "cours",
+      "pdf_pages": 20,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "algebre1:td:1": {
+      "filename": "TD 1.pdf",
+      "module": "algebre1",
+      "section": "td",
+      "pdf_pages": 2,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "algebre1:td:2": {
+      "filename": "TD 2.pdf",
+      "module": "algebre1",
+      "section": "td",
+      "pdf_pages": 3,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "algebre1:td:3": {
+      "filename": "TD 3.pdf",
+      "module": "algebre1",
+      "section": "td",
+      "pdf_pages": 2,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "algebre1:td:4": {
+      "filename": "TD 4.pdf",
+      "module": "algebre1",
+      "section": "td",
+      "pdf_pages": 2,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "algebre2:cours:1": {
+      "filename": "1. Cours Algebre 2 (complet).pdf",
+      "module": "algebre2",
+      "section": "cours",
+      "pdf_pages": 56,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "algebre2:cours:2": {
+      "filename": "1. Cours Algebre 2 (complet).pdf",
+      "module": "algebre2",
+      "section": "cours",
+      "pdf_pages": 56,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "algebre2:cours:3": {
+      "filename": "1. Cours Algebre 2 (complet).pdf",
+      "module": "algebre2",
+      "section": "cours",
+      "pdf_pages": 56,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "algebre2:td:1": {
+      "filename": "TD1.pdf",
+      "module": "algebre2",
+      "section": "td",
+      "pdf_pages": 2,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null,
+      "notes": "Photographed exercise series; numbering read from rendered pages"
+    },
+    "algebre2:td:2": {
+      "filename": "TD2.pdf",
+      "module": "algebre2",
+      "section": "td",
+      "pdf_pages": 2,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null,
+      "notes": "Photographed exercise series; numbering read from rendered pages"
+    },
+    "algebre2:td:3": {
+      "filename": "TD3.pdf",
+      "module": "algebre2",
+      "section": "td",
+      "pdf_pages": 2,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null,
+      "notes": "Photographed exercise series; numbering read from rendered pages"
+    },
+    "mecanique:cours:1": {
+      "filename": "MDPM-chapitre1.pdf",
+      "module": "mecanique",
+      "section": "cours",
+      "pdf_pages": 19,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "mecanique:cours:2": {
+      "filename": "MDPM-chapitre2-chapitre3.pdf",
+      "module": "mecanique",
+      "section": "cours",
+      "pdf_pages": 22,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "mecanique:cours:3": {
+      "filename": "MDPM-chapitre2-chapitre3.pdf",
+      "module": "mecanique",
+      "section": "cours",
+      "pdf_pages": 22,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "mecanique:cours:4": {
+      "filename": "MDPM-chapitre4.pdf",
+      "module": "mecanique",
+      "section": "cours",
+      "pdf_pages": 14,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "mecanique:cours:5": {
+      "filename": "MDPM-chapitre5.pdf",
+      "module": "mecanique",
+      "section": "cours",
+      "pdf_pages": 6,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null,
+      "notes": "IMPORTANT: The actual PDF says CHAPITRE 6 although the file is named chapitre5.pdf"
+    },
+    "mecanique:td:1": {
+      "filename": "MDPM-serie1.pdf",
+      "module": "mecanique",
+      "section": "td",
+      "pdf_pages": 9,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "mecanique:td:2": {
+      "filename": "MDPM-serie2.pdf",
+      "module": "mecanique",
+      "section": "td",
+      "pdf_pages": 10,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "mecanique:td:3": {
+      "filename": "MDPM-serie3.pdf",
+      "module": "mecanique",
+      "section": "td",
+      "pdf_pages": 6,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "mecanique:td:4": {
+      "filename": "MDPM-serie4.pdf",
+      "module": "mecanique",
+      "section": "td",
+      "pdf_pages": 12,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "mecanique:td:5": {
+      "filename": "MDPM-serie5.pdf",
+      "module": "mecanique",
+      "section": "td",
+      "pdf_pages": 8,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "informatique1:cours:1": {
+      "filename": "PART1.pdf",
+      "module": "informatique1",
+      "section": "cours",
+      "pdf_pages": 29,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "informatique1:cours:2": {
+      "filename": "PART2.pdf",
+      "module": "informatique1",
+      "section": "cours",
+      "pdf_pages": 15,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "informatique1:cours:3": {
+      "filename": "PART3.pdf",
+      "module": "informatique1",
+      "section": "cours",
+      "pdf_pages": 17,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "informatique1:cours:4": {
+      "filename": "PART4.pdf",
+      "module": "informatique1",
+      "section": "cours",
+      "pdf_pages": 11,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "informatique1:cours:5": {
+      "filename": "PART5.pdf",
+      "module": "informatique1",
+      "section": "cours",
+      "pdf_pages": 8,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "informatique1:cours:6": {
+      "filename": "PART6.pdf",
+      "module": "informatique1",
+      "section": "cours",
+      "pdf_pages": 30,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "informatique1:cours:7": {
+      "filename": "PART7.pdf",
+      "module": "informatique1",
+      "section": "cours",
+      "pdf_pages": 13,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "informatique1:cours:8": {
+      "filename": "PART8.pdf",
+      "module": "informatique1",
+      "section": "cours",
+      "pdf_pages": 11,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "informatique1:td:1": {
+      "filename": "TD1.pdf",
+      "module": "informatique1",
+      "section": "td",
+      "pdf_pages": 2,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "informatique1:td:2": {
+      "filename": "TD2.pdf",
+      "module": "informatique1",
+      "section": "td",
+      "pdf_pages": 1,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "informatique1:td:3": {
+      "filename": "TD3.pdf",
+      "module": "informatique1",
+      "section": "td",
+      "pdf_pages": 2,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "informatique1:td:4": {
+      "filename": "TD4.pdf",
+      "module": "informatique1",
+      "section": "td",
+      "pdf_pages": 2,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "informatique1:td:5": {
+      "filename": "TD5.pdf",
+      "module": "informatique1",
+      "section": "td",
+      "pdf_pages": 1,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "informatique1:tp:1": {
+      "filename": "TP1.pdf",
+      "module": "informatique1",
+      "section": "tp",
+      "pdf_pages": 1,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "informatique1:tp:2": {
+      "filename": "TP2.pdf",
+      "module": "informatique1",
+      "section": "tp",
+      "pdf_pages": 1,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "informatique1:tp:3": {
+      "filename": "TP3.pdf",
+      "module": "informatique1",
+      "section": "tp",
+      "pdf_pages": 1,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "informatique1:tp:4": {
+      "filename": "TP4.pdf",
+      "module": "informatique1",
+      "section": "tp",
+      "pdf_pages": 1,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "informatique1:tp:5": {
+      "filename": "TP5.pdf",
+      "module": "informatique1",
+      "section": "tp",
+      "pdf_pages": 1,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "informatique1:tp:6": {
+      "filename": "TP6.pdf",
+      "module": "informatique1",
+      "section": "tp",
+      "pdf_pages": 3,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "informatique1:tp:bonus": {
+      "filename": "EXERCICE_PRATIQUE.pdf",
+      "module": "informatique1",
+      "section": "tp",
+      "pdf_pages": 1,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "thermodynamique:cours:1": {
+      "filename": "chapitre 1.pdf",
+      "module": "thermodynamique",
+      "section": "cours",
+      "pdf_pages": 4,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null,
+      "notes": "Handwritten scanned PDF. Splits by 3 physical pages, not confirmed named subsections."
+    },
+    "thermodynamique:cours:2": {
+      "filename": "chapitre 2.pdf",
+      "module": "thermodynamique",
+      "section": "cours",
+      "pdf_pages": 13,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null,
+      "notes": "Handwritten scanned PDF. Splits by 3 physical pages, not confirmed named subsections."
+    },
+    "thermodynamique:cours:3": {
+      "filename": "chapitre 3.pdf",
+      "module": "thermodynamique",
+      "section": "cours",
+      "pdf_pages": 13,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null,
+      "notes": "Handwritten scanned PDF. Splits by 3 physical pages, not confirmed named subsections."
+    },
+    "thermodynamique:cours:4": {
+      "filename": "chapitre 4.pdf",
+      "module": "thermodynamique",
+      "section": "cours",
+      "pdf_pages": 32,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null,
+      "notes": "Handwritten scanned PDF. Splits by 3 physical pages, not confirmed named subsections."
+    },
+    "thermodynamique:cours:5": {
+      "filename": "chapitre 5.pdf",
+      "module": "thermodynamique",
+      "section": "cours",
+      "pdf_pages": 11,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null,
+      "notes": "Handwritten scanned PDF. Splits by 3 physical pages, not confirmed named subsections."
+    },
+    "thermodynamique:cours:6": {
+      "filename": "chapitre 6.pdf",
+      "module": "thermodynamique",
+      "section": "cours",
+      "pdf_pages": 18,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null,
+      "notes": "Handwritten scanned PDF. Splits by 3 physical pages, not confirmed named subsections."
+    },
+    "thermodynamique:cours:7": {
+      "filename": "chapitre 7.pdf",
+      "module": "thermodynamique",
+      "section": "cours",
+      "pdf_pages": 9,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null,
+      "notes": "Handwritten scanned PDF. Splits by 3 physical pages, not confirmed named subsections."
+    },
+    "thermodynamique:cours:8": {
+      "filename": "chapitre 8.pdf",
+      "module": "thermodynamique",
+      "section": "cours",
+      "pdf_pages": 22,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null,
+      "notes": "Handwritten scanned PDF. Splits by 3 physical pages, not confirmed named subsections."
+    },
+    "thermodynamique:td:1": {
+      "filename": "TD1.pdf",
+      "module": "thermodynamique",
+      "section": "td",
+      "pdf_pages": 2,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "thermodynamique:td:2": {
+      "filename": "TD2.pdf",
+      "module": "thermodynamique",
+      "section": "td",
+      "pdf_pages": 2,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "thermodynamique:td:3": {
+      "filename": "TD3.pdf",
+      "module": "thermodynamique",
+      "section": "td",
+      "pdf_pages": 2,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "thermodynamique:td:4": {
+      "filename": "TD4.pdf",
+      "module": "thermodynamique",
+      "section": "td",
+      "pdf_pages": 4,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null
+    },
+    "informatique1:cours:extra": {
+      "filename": "PART2 (supplementaire).pdf",
+      "module": "informatique1",
+      "section": "cours",
+      "pdf_pages": 9,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null,
+      "supplementary": true
+    },
+    "algebre2:cours:alternative": {
+      "filename": "2. un autre cours.pdf",
+      "module": "algebre2",
+      "section": "cours",
+      "pdf_pages": 110,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null,
+      "supplementary": true
+    },
+    "mecanique:cours:resume": {
+      "filename": "resume MDPM.pdf",
+      "module": "mecanique",
+      "section": "cours",
+      "pdf_pages": null,
+      "content_inspected": false,
+      "visibility": "private_by_default",
+      "drive_url": null,
+      "supplementary": true
+    },
+    "thermodynamique:cours:extra2": {
+      "filename": "important (demo chptr2).pdf",
+      "module": "thermodynamique",
+      "section": "cours",
+      "pdf_pages": 1,
+      "content_inspected": true,
+      "visibility": "private_by_default",
+      "drive_url": null,
+      "supplementary": true
+    }
+  },
+  "modules": [
+    {
+      "id": "analyse1",
+      "name": "Analyse 1",
+      "status": "verified_partial",
+      "sections": {
+        "cours": [
+          {
+            "id": "analyse1-c01",
+            "title": "Chapitre I : Nombres réels",
+            "source_id": "analyse1:cours:1",
+            "units": [
+              {
+                "id": "analyse1-c01-u01",
+                "title": "Ensembles N, Z, Q et R",
+                "type": "cours",
+                "source_id": "analyse1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c01-u02",
+                "title": "Propriétés élémentaires de R",
+                "type": "cours",
+                "source_id": "analyse1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c01-u03",
+                "title": "Ordre dans R et règles de calcul",
+                "type": "cours",
+                "source_id": "analyse1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c01-u04",
+                "title": "Valeur absolue et inégalités",
+                "type": "cours",
+                "source_id": "analyse1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c01-u05",
+                "title": "Majorants et minorants",
+                "type": "cours",
+                "source_id": "analyse1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c01-u06",
+                "title": "Bornes supérieure et inférieure",
+                "type": "cours",
+                "source_id": "analyse1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c01-u07",
+                "title": "Caractérisation par la borne supérieure",
+                "type": "cours",
+                "source_id": "analyse1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c01-u08",
+                "title": "Propriété d’Archimède",
+                "type": "cours",
+                "source_id": "analyse1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c01-u09",
+                "title": "Partie entière",
+                "type": "cours",
+                "source_id": "analyse1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c01-u10",
+                "title": "Approximations décimales",
+                "type": "cours",
+                "source_id": "analyse1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c01-u11",
+                "title": "Densité de Q dans R",
+                "type": "cours",
+                "source_id": "analyse1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              }
+            ],
+            "source_confidence": "topics_identified_in_pdf"
+          },
+          {
+            "id": "analyse1-c02",
+            "title": "Chapitre II : Suites numériques",
+            "source_id": "analyse1:cours:2",
+            "units": [
+              {
+                "id": "analyse1-c02-u01",
+                "title": "Définition et notation des suites",
+                "type": "cours",
+                "source_id": "analyse1:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c02-u02",
+                "title": "Opérations sur les suites",
+                "type": "cours",
+                "source_id": "analyse1:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c02-u03",
+                "title": "Suites arithmétiques et géométriques",
+                "type": "cours",
+                "source_id": "analyse1:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c02-u04",
+                "title": "Suites bornées, majorées, minorées",
+                "type": "cours",
+                "source_id": "analyse1:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c02-u05",
+                "title": "Suites monotones",
+                "type": "cours",
+                "source_id": "analyse1:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c02-u06",
+                "title": "Limite et convergence",
+                "type": "cours",
+                "source_id": "analyse1:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c02-u07",
+                "title": "Limites infinies et divergence",
+                "type": "cours",
+                "source_id": "analyse1:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c02-u08",
+                "title": "Suites de Cauchy",
+                "type": "cours",
+                "source_id": "analyse1:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c02-u09",
+                "title": "Théorèmes de convergence monotone",
+                "type": "cours",
+                "source_id": "analyse1:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c02-u10",
+                "title": "Opérations sur les limites",
+                "type": "cours",
+                "source_id": "analyse1:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c02-u11",
+                "title": "Comparaisons et formes indéterminées",
+                "type": "cours",
+                "source_id": "analyse1:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c02-u12",
+                "title": "Suites adjacentes",
+                "type": "cours",
+                "source_id": "analyse1:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c02-u13",
+                "title": "Sous-suites et extractions",
+                "type": "cours",
+                "source_id": "analyse1:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c02-u14",
+                "title": "Théorème de Bolzano-Weierstrass",
+                "type": "cours",
+                "source_id": "analyse1:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c02-u15",
+                "title": "Suites récurrentes et fonctions",
+                "type": "cours",
+                "source_id": "analyse1:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              }
+            ],
+            "source_confidence": "topics_identified_in_pdf"
+          },
+          {
+            "id": "analyse1-c03",
+            "title": "Chapitre III : Fonctions réelles d’une variable réelle",
+            "source_id": "analyse1:cours:3",
+            "units": [
+              {
+                "id": "analyse1-c03-u01",
+                "title": "Définition, domaine et graphe",
+                "type": "cours",
+                "source_id": "analyse1:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c03-u02",
+                "title": "Injection, surjection et bijection",
+                "type": "cours",
+                "source_id": "analyse1:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c03-u03",
+                "title": "Opérations et composition de fonctions",
+                "type": "cours",
+                "source_id": "analyse1:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c03-u04",
+                "title": "Monotonie et extrema",
+                "type": "cours",
+                "source_id": "analyse1:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c03-u05",
+                "title": "Fonctions paires, impaires et périodiques",
+                "type": "cours",
+                "source_id": "analyse1:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c03-u06",
+                "title": "Limites en un point",
+                "type": "cours",
+                "source_id": "analyse1:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c03-u07",
+                "title": "Limites infinies et à l’infini",
+                "type": "cours",
+                "source_id": "analyse1:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c03-u08",
+                "title": "Propriétés et opérations sur les limites",
+                "type": "cours",
+                "source_id": "analyse1:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c03-u09",
+                "title": "Continuité en un point",
+                "type": "cours",
+                "source_id": "analyse1:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c03-u10",
+                "title": "Continuité et suites",
+                "type": "cours",
+                "source_id": "analyse1:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c03-u11",
+                "title": "Théorème des valeurs intermédiaires",
+                "type": "cours",
+                "source_id": "analyse1:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c03-u12",
+                "title": "Fonctions continues sur un segment",
+                "type": "cours",
+                "source_id": "analyse1:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c03-u13",
+                "title": "Fonction réciproque et continuité",
+                "type": "cours",
+                "source_id": "analyse1:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c03-u14",
+                "title": "Continuité uniforme et théorème de Heine",
+                "type": "cours",
+                "source_id": "analyse1:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              }
+            ],
+            "source_confidence": "topics_identified_in_pdf"
+          },
+          {
+            "id": "analyse1-c04",
+            "title": "Chapitre IV : Fonctions dérivables",
+            "source_id": "analyse1:cours:4",
+            "units": [
+              {
+                "id": "analyse1-c04-u01",
+                "title": "Définition de la dérivée et dérivabilité",
+                "type": "cours",
+                "source_id": "analyse1:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c04-u02",
+                "title": "Dérivabilité et continuité",
+                "type": "cours",
+                "source_id": "analyse1:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c04-u03",
+                "title": "Approximation affine et tangente",
+                "type": "cours",
+                "source_id": "analyse1:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c04-u04",
+                "title": "Dérivées usuelles",
+                "type": "cours",
+                "source_id": "analyse1:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c04-u05",
+                "title": "Opérations sur les dérivées",
+                "type": "cours",
+                "source_id": "analyse1:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c04-u06",
+                "title": "Dérivée d’une composée et d’une réciproque",
+                "type": "cours",
+                "source_id": "analyse1:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c04-u07",
+                "title": "Dérivées successives",
+                "type": "cours",
+                "source_id": "analyse1:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c04-u08",
+                "title": "Extrema locaux",
+                "type": "cours",
+                "source_id": "analyse1:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c04-u09",
+                "title": "Théorème de Rolle",
+                "type": "cours",
+                "source_id": "analyse1:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c04-u10",
+                "title": "Théorème des accroissements finis",
+                "type": "cours",
+                "source_id": "analyse1:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c04-u11",
+                "title": "Inégalité des accroissements finis",
+                "type": "cours",
+                "source_id": "analyse1:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              },
+              {
+                "id": "analyse1-c04-u12",
+                "title": "Applications à la monotonie et aux variations",
+                "type": "cours",
+                "source_id": "analyse1:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "source_grounded_editorial_microtopic"
+              }
+            ],
+            "source_confidence": "topics_identified_in_pdf"
+          }
+        ],
+        "td": [
+          {
+            "id": "analyse1-td01",
+            "title": "TD Série 1",
+            "source_id": "analyse1:td:1",
+            "units": [
+              {
+                "id": "analyse1-td01-e01",
+                "title": "Exercice 1",
+                "type": "td",
+                "source_id": "analyse1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "analyse1-td01-e02",
+                "title": "Exercice 2",
+                "type": "td",
+                "source_id": "analyse1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 3
+              },
+              {
+                "id": "analyse1-td01-e03",
+                "title": "Exercice 3",
+                "type": "td",
+                "source_id": "analyse1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 4
+              },
+              {
+                "id": "analyse1-td01-e04",
+                "title": "Exercice 4",
+                "type": "td",
+                "source_id": "analyse1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 5
+              },
+              {
+                "id": "analyse1-td01-e05",
+                "title": "Exercice 5",
+                "type": "td",
+                "source_id": "analyse1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 6
+              },
+              {
+                "id": "analyse1-td01-e06",
+                "title": "Exercice 6",
+                "type": "td",
+                "source_id": "analyse1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 10
+              },
+              {
+                "id": "analyse1-td01-e07",
+                "title": "Exercice 7",
+                "type": "td",
+                "source_id": "analyse1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 11
+              },
+              {
+                "id": "analyse1-td01-e08",
+                "title": "Exercice 8",
+                "type": "td",
+                "source_id": "analyse1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 12
+              },
+              {
+                "id": "analyse1-td01-e09",
+                "title": "Exercice 9",
+                "type": "td",
+                "source_id": "analyse1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 13
+              },
+              {
+                "id": "analyse1-td01-e10",
+                "title": "Exercice 10",
+                "type": "td",
+                "source_id": "analyse1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 15
+              },
+              {
+                "id": "analyse1-td01-e11",
+                "title": "Exercice 11",
+                "type": "td",
+                "source_id": "analyse1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "optional": true,
+                "pdf_page": 17
+              },
+              {
+                "id": "analyse1-td01-e12",
+                "title": "Exercice 12",
+                "type": "td",
+                "source_id": "analyse1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "optional": true,
+                "pdf_page": 17
+              },
+              {
+                "id": "analyse1-td01-e13",
+                "title": "Exercice 13",
+                "type": "td",
+                "source_id": "analyse1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "optional": true,
+                "pdf_page": 18
+              },
+              {
+                "id": "analyse1-td01-e14",
+                "title": "Exercice 14",
+                "type": "td",
+                "source_id": "analyse1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "optional": true,
+                "pdf_page": 18
+              },
+              {
+                "id": "analyse1-td01-e15",
+                "title": "Exercice 15",
+                "type": "td",
+                "source_id": "analyse1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "optional": true,
+                "pdf_page": 18
+              },
+              {
+                "id": "analyse1-td01-e16",
+                "title": "Exercice 16",
+                "type": "td",
+                "source_id": "analyse1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "optional": true,
+                "pdf_page": 18
+              },
+              {
+                "id": "analyse1-td01-e17",
+                "title": "Exercice 17",
+                "type": "td",
+                "source_id": "analyse1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "optional": true,
+                "pdf_page": 18
+              }
+            ]
+          },
+          {
+            "id": "analyse1-td02",
+            "title": "TD Série 2",
+            "source_id": "analyse1:td:2",
+            "units": [
+              {
+                "id": "analyse1-td02-e01",
+                "title": "Exercice 1",
+                "type": "td",
+                "source_id": "analyse1:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "analyse1-td02-e02",
+                "title": "Exercice 2",
+                "type": "td",
+                "source_id": "analyse1:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 3
+              },
+              {
+                "id": "analyse1-td02-e03",
+                "title": "Exercice 3",
+                "type": "td",
+                "source_id": "analyse1:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 5
+              },
+              {
+                "id": "analyse1-td02-e04",
+                "title": "Exercice 4",
+                "type": "td",
+                "source_id": "analyse1:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 7
+              },
+              {
+                "id": "analyse1-td02-e05",
+                "title": "Exercice 5",
+                "type": "td",
+                "source_id": "analyse1:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 10
+              },
+              {
+                "id": "analyse1-td02-e06",
+                "title": "Exercice 6",
+                "type": "td",
+                "source_id": "analyse1:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 12
+              },
+              {
+                "id": "analyse1-td02-e07",
+                "title": "Exercice 7",
+                "type": "td",
+                "source_id": "analyse1:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 15
+              },
+              {
+                "id": "analyse1-td02-e08",
+                "title": "Exercice 8",
+                "type": "td",
+                "source_id": "analyse1:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 16
+              },
+              {
+                "id": "analyse1-td02-e09",
+                "title": "Exercice 9",
+                "type": "td",
+                "source_id": "analyse1:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 18
+              },
+              {
+                "id": "analyse1-td02-e10",
+                "title": "Exercice 10",
+                "type": "td",
+                "source_id": "analyse1:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 19
+              },
+              {
+                "id": "analyse1-td02-e11",
+                "title": "Exercice 11",
+                "type": "td",
+                "source_id": "analyse1:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 20
+              }
+            ]
+          },
+          {
+            "id": "analyse1-td03",
+            "title": "TD Série 3",
+            "source_id": "analyse1:td:3",
+            "units": [
+              {
+                "id": "analyse1-td03-e01",
+                "title": "Exercice 1",
+                "type": "td",
+                "source_id": "analyse1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "analyse1-td03-e02",
+                "title": "Exercice 2",
+                "type": "td",
+                "source_id": "analyse1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "analyse1-td03-e03",
+                "title": "Exercice 3",
+                "type": "td",
+                "source_id": "analyse1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "analyse1-td03-e04",
+                "title": "Exercice 4",
+                "type": "td",
+                "source_id": "analyse1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "analyse1-td03-e05",
+                "title": "Exercice 5",
+                "type": "td",
+                "source_id": "analyse1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "analyse1-td03-e06",
+                "title": "Exercice 6",
+                "type": "td",
+                "source_id": "analyse1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              },
+              {
+                "id": "analyse1-td03-e07",
+                "title": "Exercice 7",
+                "type": "td",
+                "source_id": "analyse1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              },
+              {
+                "id": "analyse1-td03-e08",
+                "title": "Exercice 8",
+                "type": "td",
+                "source_id": "analyse1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              },
+              {
+                "id": "analyse1-td03-e09",
+                "title": "Exercice 9",
+                "type": "td",
+                "source_id": "analyse1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              },
+              {
+                "id": "analyse1-td03-e10",
+                "title": "Exercice 10",
+                "type": "td",
+                "source_id": "analyse1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              },
+              {
+                "id": "analyse1-td03-e11",
+                "title": "Exercice 11",
+                "type": "td",
+                "source_id": "analyse1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              },
+              {
+                "id": "analyse1-td03-e12",
+                "title": "Exercice 12",
+                "type": "td",
+                "source_id": "analyse1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 3
+              },
+              {
+                "id": "analyse1-td03-e13",
+                "title": "Exercice 13",
+                "type": "td",
+                "source_id": "analyse1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 3
+              },
+              {
+                "id": "analyse1-td03-e14",
+                "title": "Exercice 14",
+                "type": "td",
+                "source_id": "analyse1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 4
+              },
+              {
+                "id": "analyse1-td03-e15",
+                "title": "Exercice 15",
+                "type": "td",
+                "source_id": "analyse1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 4
+              },
+              {
+                "id": "analyse1-td03-e16",
+                "title": "Exercice 16",
+                "type": "td",
+                "source_id": "analyse1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 4
+              }
+            ]
+          }
+        ],
+        "tp": []
+      }
+    },
+    {
+      "id": "algebre1",
+      "name": "Algèbre 1",
+      "status": "verified_partial",
+      "sections": {
+        "cours": [
+          {
+            "id": "algebre1-c01",
+            "title": "Chapitre 1 : Logique et théorie des ensembles",
+            "source_id": "algebre1:cours:1",
+            "units": [
+              {
+                "id": "algebre1-c01-u01",
+                "title": "1.1 Ensembles",
+                "type": "cours",
+                "source_id": "algebre1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre1-c01-u02",
+                "title": "1.2 Arithmétique basique",
+                "type": "cours",
+                "source_id": "algebre1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre1-c01-u03",
+                "title": "2.1 Propositions",
+                "type": "cours",
+                "source_id": "algebre1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre1-c01-u04",
+                "title": "2.2 Connecteurs logiques",
+                "type": "cours",
+                "source_id": "algebre1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre1-c01-u05",
+                "title": "2.3 Équivalences logiques",
+                "type": "cours",
+                "source_id": "algebre1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre1-c01-u06",
+                "title": "2.4 Quantificateurs",
+                "type": "cours",
+                "source_id": "algebre1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre1-c01-u07",
+                "title": "3.1 Preuve par contraposition",
+                "type": "cours",
+                "source_id": "algebre1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre1-c01-u08",
+                "title": "3.2 Équivalence et double implication",
+                "type": "cours",
+                "source_id": "algebre1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre1-c01-u09",
+                "title": "3.3 Preuve par l’absurde",
+                "type": "cours",
+                "source_id": "algebre1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre1-c01-u10",
+                "title": "3.4 Preuve par récurrence",
+                "type": "cours",
+                "source_id": "algebre1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre1-c01-u11",
+                "title": "4 Opérations sur les ensembles",
+                "type": "cours",
+                "source_id": "algebre1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre1-c01-u12",
+                "title": "5 Recouvrements et partitions",
+                "type": "cours",
+                "source_id": "algebre1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre1-c01-u13",
+                "title": "7 Exercices du cours",
+                "type": "cours",
+                "source_id": "algebre1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              }
+            ],
+            "source_confidence": "verified_table_of_contents"
+          },
+          {
+            "id": "algebre1-c02",
+            "title": "Chapitre 2 : Relations binaires et applications",
+            "source_id": "algebre1:cours:2",
+            "units": [
+              {
+                "id": "algebre1-c02-u01",
+                "title": "1.1 Relations binaires : cas général",
+                "type": "cours",
+                "source_id": "algebre1:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre1-c02-u02",
+                "title": "1.2 Relations d’équivalence",
+                "type": "cours",
+                "source_id": "algebre1:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre1-c02-u03",
+                "title": "1.3 Relations d’ordre",
+                "type": "cours",
+                "source_id": "algebre1:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre1-c02-u04",
+                "title": "1.3.1 Application à l’arithmétique",
+                "type": "cours",
+                "source_id": "algebre1:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre1-c02-u05",
+                "title": "2.1 Applications : définitions basiques",
+                "type": "cours",
+                "source_id": "algebre1:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre1-c02-u06",
+                "title": "2.2 Bijections et composition",
+                "type": "cours",
+                "source_id": "algebre1:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre1-c02-u07",
+                "title": "2.3 Cardinal d’un ensemble",
+                "type": "cours",
+                "source_id": "algebre1:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre1-c02-u08",
+                "title": "3 Construction de Z",
+                "type": "cours",
+                "source_id": "algebre1:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre1-c02-u09",
+                "title": "4 Fonction indicatrice",
+                "type": "cours",
+                "source_id": "algebre1:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              }
+            ],
+            "source_confidence": "verified_table_of_contents"
+          },
+          {
+            "id": "algebre1-c03",
+            "title": "Chapitre 3 : Arithmétique",
+            "source_id": "algebre1:cours:3",
+            "units": [
+              {
+                "id": "algebre1-c03-u01",
+                "title": "1.1 Division euclidienne",
+                "type": "cours",
+                "source_id": "algebre1:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre1-c03-u02",
+                "title": "1.2 Divisibilité dans Z",
+                "type": "cours",
+                "source_id": "algebre1:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre1-c03-u03",
+                "title": "1.3 Algorithme d’Euclide",
+                "type": "cours",
+                "source_id": "algebre1:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre1-c03-u04",
+                "title": "2 Théorème fondamental de l’arithmétique",
+                "type": "cours",
+                "source_id": "algebre1:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre1-c03-u05",
+                "title": "3 Congruences",
+                "type": "cours",
+                "source_id": "algebre1:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre1-c03-u06",
+                "title": "4 Systèmes de numération en base b",
+                "type": "cours",
+                "source_id": "algebre1:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre1-c03-u07",
+                "title": "5.1 Nombres premiers",
+                "type": "cours",
+                "source_id": "algebre1:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre1-c03-u08",
+                "title": "5.2 Indicatrice d’Euler",
+                "type": "cours",
+                "source_id": "algebre1:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              }
+            ],
+            "source_confidence": "verified_table_of_contents"
+          }
+        ],
+        "td": [
+          {
+            "id": "algebre1-td01",
+            "title": "TD Série 1",
+            "source_id": "algebre1:td:1",
+            "units": [
+              {
+                "id": "algebre1-td01-e01",
+                "title": "Exercice 1",
+                "type": "td",
+                "source_id": "algebre1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre1-td01-e02",
+                "title": "Exercice 2",
+                "type": "td",
+                "source_id": "algebre1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre1-td01-e03",
+                "title": "Exercice 3",
+                "type": "td",
+                "source_id": "algebre1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre1-td01-e04",
+                "title": "Exercice 4",
+                "type": "td",
+                "source_id": "algebre1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre1-td01-e05",
+                "title": "Exercice 5",
+                "type": "td",
+                "source_id": "algebre1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre1-td01-e06",
+                "title": "Exercice 6",
+                "type": "td",
+                "source_id": "algebre1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              }
+            ]
+          },
+          {
+            "id": "algebre1-td02",
+            "title": "TD Série 2",
+            "source_id": "algebre1:td:2",
+            "units": [
+              {
+                "id": "algebre1-td02-e01",
+                "title": "Exercice 1",
+                "type": "td",
+                "source_id": "algebre1:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre1-td02-e02",
+                "title": "Exercice 2",
+                "type": "td",
+                "source_id": "algebre1:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre1-td02-e03",
+                "title": "Exercice 3",
+                "type": "td",
+                "source_id": "algebre1:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre1-td02-e04",
+                "title": "Exercice 4",
+                "type": "td",
+                "source_id": "algebre1:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              },
+              {
+                "id": "algebre1-td02-e05",
+                "title": "Exercice 5",
+                "type": "td",
+                "source_id": "algebre1:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              },
+              {
+                "id": "algebre1-td02-e06",
+                "title": "Exercice 6",
+                "type": "td",
+                "source_id": "algebre1:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              },
+              {
+                "id": "algebre1-td02-e07",
+                "title": "Exercice 7",
+                "type": "td",
+                "source_id": "algebre1:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 3
+              },
+              {
+                "id": "algebre1-td02-e08",
+                "title": "Exercice 8",
+                "type": "td",
+                "source_id": "algebre1:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 3
+              }
+            ]
+          },
+          {
+            "id": "algebre1-td03",
+            "title": "TD Série 3",
+            "source_id": "algebre1:td:3",
+            "units": [
+              {
+                "id": "algebre1-td03-e01",
+                "title": "Exercice 1",
+                "type": "td",
+                "source_id": "algebre1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre1-td03-e02",
+                "title": "Exercice 2",
+                "type": "td",
+                "source_id": "algebre1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre1-td03-e03",
+                "title": "Exercice 3",
+                "type": "td",
+                "source_id": "algebre1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre1-td03-e04",
+                "title": "Exercice 4",
+                "type": "td",
+                "source_id": "algebre1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              },
+              {
+                "id": "algebre1-td03-e05",
+                "title": "Exercice 5",
+                "type": "td",
+                "source_id": "algebre1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              },
+              {
+                "id": "algebre1-td03-e06",
+                "title": "Exercice 6",
+                "type": "td",
+                "source_id": "algebre1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              },
+              {
+                "id": "algebre1-td03-e07",
+                "title": "Exercice 7",
+                "type": "td",
+                "source_id": "algebre1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              }
+            ]
+          },
+          {
+            "id": "algebre1-td04",
+            "title": "TD Série 4",
+            "source_id": "algebre1:td:4",
+            "units": [
+              {
+                "id": "algebre1-td04-e01",
+                "title": "Exercice 1",
+                "type": "td",
+                "source_id": "algebre1:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre1-td04-e02",
+                "title": "Exercice 2",
+                "type": "td",
+                "source_id": "algebre1:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre1-td04-e03",
+                "title": "Exercice 3",
+                "type": "td",
+                "source_id": "algebre1:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre1-td04-e04",
+                "title": "Exercice 4",
+                "type": "td",
+                "source_id": "algebre1:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre1-td04-e05",
+                "title": "Exercice 5",
+                "type": "td",
+                "source_id": "algebre1:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre1-td04-e06",
+                "title": "Exercice 6",
+                "type": "td",
+                "source_id": "algebre1:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre1-td04-e07",
+                "title": "Exercice 7",
+                "type": "td",
+                "source_id": "algebre1:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre1-td04-e08",
+                "title": "Exercice 8",
+                "type": "td",
+                "source_id": "algebre1:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre1-td04-e09",
+                "title": "Exercice 9",
+                "type": "td",
+                "source_id": "algebre1:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              },
+              {
+                "id": "algebre1-td04-e10",
+                "title": "Exercice 10",
+                "type": "td",
+                "source_id": "algebre1:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              },
+              {
+                "id": "algebre1-td04-e11",
+                "title": "Exercice 11",
+                "type": "td",
+                "source_id": "algebre1:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              },
+              {
+                "id": "algebre1-td04-e12",
+                "title": "Exercice 12",
+                "type": "td",
+                "source_id": "algebre1:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              }
+            ]
+          }
+        ],
+        "tp": []
+      }
+    },
+    {
+      "id": "algebre2",
+      "name": "Algèbre 2",
+      "status": "verified_partial",
+      "sections": {
+        "cours": [
+          {
+            "id": "algebre2-c01",
+            "title": "Chapitre 1 : Structures algébriques",
+            "source_id": "algebre2:cours:1",
+            "units": [
+              {
+                "id": "algebre2-c01-u01",
+                "title": "1.1.1 Lois de composition interne : définitions",
+                "type": "cours",
+                "source_id": "algebre2:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre2-c01-u02",
+                "title": "1.1.2 Parties stables",
+                "type": "cours",
+                "source_id": "algebre2:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre2-c01-u03",
+                "title": "1.1.3 Associativité",
+                "type": "cours",
+                "source_id": "algebre2:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre2-c01-u04",
+                "title": "1.1.4 Élément neutre",
+                "type": "cours",
+                "source_id": "algebre2:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre2-c01-u05",
+                "title": "1.1.5 Éléments symétrisables",
+                "type": "cours",
+                "source_id": "algebre2:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre2-c01-u06",
+                "title": "1.1.6 Commutativité",
+                "type": "cours",
+                "source_id": "algebre2:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre2-c01-u07",
+                "title": "1.2 Groupes",
+                "type": "cours",
+                "source_id": "algebre2:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre2-c01-u08",
+                "title": "1.2.1 Sous-groupes",
+                "type": "cours",
+                "source_id": "algebre2:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre2-c01-u09",
+                "title": "1.2.2 Morphismes de groupes",
+                "type": "cours",
+                "source_id": "algebre2:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre2-c01-u10",
+                "title": "1.2.3 Noyau et image",
+                "type": "cours",
+                "source_id": "algebre2:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre2-c01-u11",
+                "title": "1.2.4 Groupes produits",
+                "type": "cours",
+                "source_id": "algebre2:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre2-c01-u12",
+                "title": "1.2.5 Groupe Z/nZ",
+                "type": "cours",
+                "source_id": "algebre2:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre2-c01-u13",
+                "title": "1.2.6 Groupes symétriques",
+                "type": "cours",
+                "source_id": "algebre2:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre2-c01-u14",
+                "title": "1.3 Anneaux",
+                "type": "cours",
+                "source_id": "algebre2:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre2-c01-u15",
+                "title": "1.3.1 Sous-anneaux",
+                "type": "cours",
+                "source_id": "algebre2:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre2-c01-u16",
+                "title": "1.3.2 Morphismes d’anneaux",
+                "type": "cours",
+                "source_id": "algebre2:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre2-c01-u17",
+                "title": "1.3.3 Idéaux",
+                "type": "cours",
+                "source_id": "algebre2:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre2-c01-u18",
+                "title": "1.3.4 Anneaux quotients",
+                "type": "cours",
+                "source_id": "algebre2:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre2-c01-u19",
+                "title": "1.3.5 Idéaux premiers et maximaux",
+                "type": "cours",
+                "source_id": "algebre2:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre2-c01-u20",
+                "title": "1.4 Corps",
+                "type": "cours",
+                "source_id": "algebre2:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              }
+            ],
+            "source_confidence": "verified_table_of_contents"
+          },
+          {
+            "id": "algebre2-c02",
+            "title": "Chapitre 2 : Polynômes dans R[X] et C[X]",
+            "source_id": "algebre2:cours:2",
+            "units": [
+              {
+                "id": "algebre2-c02-u01",
+                "title": "2.1 Définitions et propriétés",
+                "type": "cours",
+                "source_id": "algebre2:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre2-c02-u02",
+                "title": "2.2 Arithmétique des polynômes",
+                "type": "cours",
+                "source_id": "algebre2:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre2-c02-u03",
+                "title": "2.3 PGCD de deux polynômes",
+                "type": "cours",
+                "source_id": "algebre2:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre2-c02-u04",
+                "title": "2.4 Racines de polynômes",
+                "type": "cours",
+                "source_id": "algebre2:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre2-c02-u05",
+                "title": "2.5 Relations coefficients-racines",
+                "type": "cours",
+                "source_id": "algebre2:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre2-c02-u06",
+                "title": "2.6 Factorisation dans C[X]",
+                "type": "cours",
+                "source_id": "algebre2:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre2-c02-u07",
+                "title": "2.7 Factorisation dans R[X]",
+                "type": "cours",
+                "source_id": "algebre2:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              }
+            ],
+            "source_confidence": "verified_table_of_contents"
+          },
+          {
+            "id": "algebre2-c03",
+            "title": "Chapitre 3 : Fractions rationnelles",
+            "source_id": "algebre2:cours:3",
+            "units": [
+              {
+                "id": "algebre2-c03-u01",
+                "title": "3.1 Décomposition en éléments simples dans C(X)",
+                "type": "cours",
+                "source_id": "algebre2:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "algebre2-c03-u02",
+                "title": "3.2 Décomposition en éléments simples dans R(X)",
+                "type": "cours",
+                "source_id": "algebre2:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              }
+            ],
+            "source_confidence": "verified_table_of_contents"
+          }
+        ],
+        "td": [
+          {
+            "id": "algebre2-td01",
+            "title": "TD Série 1",
+            "source_id": "algebre2:td:1",
+            "units": [
+              {
+                "id": "algebre2-td01-e01",
+                "title": "Exercice 1",
+                "type": "td",
+                "source_id": "algebre2:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre2-td01-e02",
+                "title": "Exercice 2",
+                "type": "td",
+                "source_id": "algebre2:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre2-td01-e03",
+                "title": "Exercice 3",
+                "type": "td",
+                "source_id": "algebre2:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre2-td01-e04",
+                "title": "Exercice 4",
+                "type": "td",
+                "source_id": "algebre2:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre2-td01-e05",
+                "title": "Exercice 5",
+                "type": "td",
+                "source_id": "algebre2:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre2-td01-e06",
+                "title": "Exercice 6",
+                "type": "td",
+                "source_id": "algebre2:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre2-td01-e07",
+                "title": "Exercice 7",
+                "type": "td",
+                "source_id": "algebre2:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre2-td01-e08",
+                "title": "Exercice 8",
+                "type": "td",
+                "source_id": "algebre2:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 2
+              },
+              {
+                "id": "algebre2-td01-e09",
+                "title": "Exercice 9",
+                "type": "td",
+                "source_id": "algebre2:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 2
+              }
+            ]
+          },
+          {
+            "id": "algebre2-td02",
+            "title": "TD Série 2",
+            "source_id": "algebre2:td:2",
+            "units": [
+              {
+                "id": "algebre2-td02-e01",
+                "title": "Exercice 1",
+                "type": "td",
+                "source_id": "algebre2:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre2-td02-e02",
+                "title": "Exercice 2",
+                "type": "td",
+                "source_id": "algebre2:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre2-td02-e03",
+                "title": "Exercice 3",
+                "type": "td",
+                "source_id": "algebre2:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre2-td02-e04",
+                "title": "Exercice 4",
+                "type": "td",
+                "source_id": "algebre2:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre2-td02-e05",
+                "title": "Exercice 5",
+                "type": "td",
+                "source_id": "algebre2:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre2-td02-e06",
+                "title": "Exercice 6",
+                "type": "td",
+                "source_id": "algebre2:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre2-td02-e07",
+                "title": "Exercice 7",
+                "type": "td",
+                "source_id": "algebre2:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre2-td02-e08",
+                "title": "Exercice 8",
+                "type": "td",
+                "source_id": "algebre2:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre2-td02-e09",
+                "title": "Exercice 9",
+                "type": "td",
+                "source_id": "algebre2:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre2-td02-e10",
+                "title": "Exercice 10",
+                "type": "td",
+                "source_id": "algebre2:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 2
+              },
+              {
+                "id": "algebre2-td02-e11",
+                "title": "Exercice 11",
+                "type": "td",
+                "source_id": "algebre2:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 2
+              },
+              {
+                "id": "algebre2-td02-e12",
+                "title": "Exercice 12",
+                "type": "td",
+                "source_id": "algebre2:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 2
+              },
+              {
+                "id": "algebre2-td02-e13",
+                "title": "Exercice 13",
+                "type": "td",
+                "source_id": "algebre2:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 2
+              }
+            ]
+          },
+          {
+            "id": "algebre2-td03",
+            "title": "TD Série 3",
+            "source_id": "algebre2:td:3",
+            "units": [
+              {
+                "id": "algebre2-td03-e01",
+                "title": "Exercice 1",
+                "type": "td",
+                "source_id": "algebre2:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre2-td03-e02",
+                "title": "Exercice 2",
+                "type": "td",
+                "source_id": "algebre2:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre2-td03-e03",
+                "title": "Exercice 3",
+                "type": "td",
+                "source_id": "algebre2:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre2-td03-e04",
+                "title": "Exercice 4",
+                "type": "td",
+                "source_id": "algebre2:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre2-td03-e05",
+                "title": "Exercice 5",
+                "type": "td",
+                "source_id": "algebre2:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre2-td03-e06",
+                "title": "Exercice 6",
+                "type": "td",
+                "source_id": "algebre2:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 1
+              },
+              {
+                "id": "algebre2-td03-e07",
+                "title": "Exercice 7",
+                "type": "td",
+                "source_id": "algebre2:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 2
+              },
+              {
+                "id": "algebre2-td03-e08",
+                "title": "Exercice 8",
+                "type": "td",
+                "source_id": "algebre2:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 2
+              },
+              {
+                "id": "algebre2-td03-e09",
+                "title": "Exercice 9",
+                "type": "td",
+                "source_id": "algebre2:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_from_page_images",
+                "pdf_page": 2
+              }
+            ]
+          }
+        ],
+        "tp": []
+      }
+    },
+    {
+      "id": "thermodynamique",
+      "name": "Thermodynamique",
+      "status": "verified_partial",
+      "sections": {
+        "cours": [
+          {
+            "id": "thermodynamique-c01",
+            "title": "Chapitre 1 : Introduction à la thermodynamique",
+            "source_id": "thermodynamique:cours:1",
+            "units": [
+              {
+                "id": "thermodynamique-c01-u01",
+                "title": "Lecture guidée : pages 1–3",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "id": "thermodynamique-c01-u02",
+                "title": "Lecture guidée : pages 4–4",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  4,
+                  4
+                ]
+              }
+            ],
+            "source_confidence": "visual_verified_chapter_title"
+          },
+          {
+            "id": "thermodynamique-c02",
+            "title": "Chapitre 2 : Équations d’état et gaz parfaits",
+            "source_id": "thermodynamique:cours:2",
+            "units": [
+              {
+                "id": "thermodynamique-c02-u01",
+                "title": "Lecture guidée : pages 1–3",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "id": "thermodynamique-c02-u02",
+                "title": "Lecture guidée : pages 4–6",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  4,
+                  6
+                ]
+              },
+              {
+                "id": "thermodynamique-c02-u03",
+                "title": "Lecture guidée : pages 7–9",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  7,
+                  9
+                ]
+              },
+              {
+                "id": "thermodynamique-c02-u04",
+                "title": "Lecture guidée : pages 10–12",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  10,
+                  12
+                ]
+              },
+              {
+                "id": "thermodynamique-c02-u05",
+                "title": "Lecture guidée : pages 13–13",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  13,
+                  13
+                ]
+              }
+            ],
+            "source_confidence": "visual_verified_chapter_title"
+          },
+          {
+            "id": "thermodynamique-c03",
+            "title": "Chapitre 3 : Langage thermodynamique : généralités",
+            "source_id": "thermodynamique:cours:3",
+            "units": [
+              {
+                "id": "thermodynamique-c03-u01",
+                "title": "Lecture guidée : pages 1–3",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "id": "thermodynamique-c03-u02",
+                "title": "Lecture guidée : pages 4–6",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  4,
+                  6
+                ]
+              },
+              {
+                "id": "thermodynamique-c03-u03",
+                "title": "Lecture guidée : pages 7–9",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  7,
+                  9
+                ]
+              },
+              {
+                "id": "thermodynamique-c03-u04",
+                "title": "Lecture guidée : pages 10–12",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  10,
+                  12
+                ]
+              },
+              {
+                "id": "thermodynamique-c03-u05",
+                "title": "Lecture guidée : pages 13–13",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  13,
+                  13
+                ]
+              }
+            ],
+            "source_confidence": "visual_verified_chapter_title"
+          },
+          {
+            "id": "thermodynamique-c04",
+            "title": "Chapitre 4 : Premier principe : travail et chaleur",
+            "source_id": "thermodynamique:cours:4",
+            "units": [
+              {
+                "id": "thermodynamique-c04-u01",
+                "title": "Lecture guidée : pages 1–3",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "id": "thermodynamique-c04-u02",
+                "title": "Lecture guidée : pages 4–6",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  4,
+                  6
+                ]
+              },
+              {
+                "id": "thermodynamique-c04-u03",
+                "title": "Lecture guidée : pages 7–9",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  7,
+                  9
+                ]
+              },
+              {
+                "id": "thermodynamique-c04-u04",
+                "title": "Lecture guidée : pages 10–12",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  10,
+                  12
+                ]
+              },
+              {
+                "id": "thermodynamique-c04-u05",
+                "title": "Lecture guidée : pages 13–15",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  13,
+                  15
+                ]
+              },
+              {
+                "id": "thermodynamique-c04-u06",
+                "title": "Lecture guidée : pages 16–18",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  16,
+                  18
+                ]
+              },
+              {
+                "id": "thermodynamique-c04-u07",
+                "title": "Lecture guidée : pages 19–21",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  19,
+                  21
+                ]
+              },
+              {
+                "id": "thermodynamique-c04-u08",
+                "title": "Lecture guidée : pages 22–24",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  22,
+                  24
+                ]
+              },
+              {
+                "id": "thermodynamique-c04-u09",
+                "title": "Lecture guidée : pages 25–27",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  25,
+                  27
+                ]
+              },
+              {
+                "id": "thermodynamique-c04-u10",
+                "title": "Lecture guidée : pages 28–30",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  28,
+                  30
+                ]
+              },
+              {
+                "id": "thermodynamique-c04-u11",
+                "title": "Lecture guidée : pages 31–32",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  31,
+                  32
+                ]
+              }
+            ],
+            "source_confidence": "visual_verified_chapter_title"
+          },
+          {
+            "id": "thermodynamique-c05",
+            "title": "Chapitre 5 : Deuxième principe : entropie",
+            "source_id": "thermodynamique:cours:5",
+            "units": [
+              {
+                "id": "thermodynamique-c05-u01",
+                "title": "Lecture guidée : pages 1–3",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:5",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "id": "thermodynamique-c05-u02",
+                "title": "Lecture guidée : pages 4–6",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:5",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  4,
+                  6
+                ]
+              },
+              {
+                "id": "thermodynamique-c05-u03",
+                "title": "Lecture guidée : pages 7–9",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:5",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  7,
+                  9
+                ]
+              },
+              {
+                "id": "thermodynamique-c05-u04",
+                "title": "Lecture guidée : pages 10–11",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:5",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  10,
+                  11
+                ]
+              }
+            ],
+            "source_confidence": "visual_verified_chapter_title"
+          },
+          {
+            "id": "thermodynamique-c06",
+            "title": "Chapitre 6 : Applications des deux principes : cycles et machines",
+            "source_id": "thermodynamique:cours:6",
+            "units": [
+              {
+                "id": "thermodynamique-c06-u01",
+                "title": "Lecture guidée : pages 1–3",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:6",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "id": "thermodynamique-c06-u02",
+                "title": "Lecture guidée : pages 4–6",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:6",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  4,
+                  6
+                ]
+              },
+              {
+                "id": "thermodynamique-c06-u03",
+                "title": "Lecture guidée : pages 7–9",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:6",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  7,
+                  9
+                ]
+              },
+              {
+                "id": "thermodynamique-c06-u04",
+                "title": "Lecture guidée : pages 10–12",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:6",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  10,
+                  12
+                ]
+              },
+              {
+                "id": "thermodynamique-c06-u05",
+                "title": "Lecture guidée : pages 13–15",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:6",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  13,
+                  15
+                ]
+              },
+              {
+                "id": "thermodynamique-c06-u06",
+                "title": "Lecture guidée : pages 16–18",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:6",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  16,
+                  18
+                ]
+              }
+            ],
+            "source_confidence": "visual_verified_chapter_title"
+          },
+          {
+            "id": "thermodynamique-c07",
+            "title": "Chapitre 7 : Fonctions thermodynamiques / potentiels",
+            "source_id": "thermodynamique:cours:7",
+            "units": [
+              {
+                "id": "thermodynamique-c07-u01",
+                "title": "Lecture guidée : pages 1–3",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:7",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "id": "thermodynamique-c07-u02",
+                "title": "Lecture guidée : pages 4–6",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:7",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  4,
+                  6
+                ]
+              },
+              {
+                "id": "thermodynamique-c07-u03",
+                "title": "Lecture guidée : pages 7–9",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:7",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  7,
+                  9
+                ]
+              }
+            ],
+            "source_confidence": "visual_verified_chapter_title"
+          },
+          {
+            "id": "thermodynamique-c08",
+            "title": "Chapitre 8 : Transitions de phase",
+            "source_id": "thermodynamique:cours:8",
+            "units": [
+              {
+                "id": "thermodynamique-c08-u01",
+                "title": "Lecture guidée : pages 1–3",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:8",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "id": "thermodynamique-c08-u02",
+                "title": "Lecture guidée : pages 4–6",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:8",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  4,
+                  6
+                ]
+              },
+              {
+                "id": "thermodynamique-c08-u03",
+                "title": "Lecture guidée : pages 7–9",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:8",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  7,
+                  9
+                ]
+              },
+              {
+                "id": "thermodynamique-c08-u04",
+                "title": "Lecture guidée : pages 10–12",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:8",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  10,
+                  12
+                ]
+              },
+              {
+                "id": "thermodynamique-c08-u05",
+                "title": "Lecture guidée : pages 13–15",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:8",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  13,
+                  15
+                ]
+              },
+              {
+                "id": "thermodynamique-c08-u06",
+                "title": "Lecture guidée : pages 16–18",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:8",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  16,
+                  18
+                ]
+              },
+              {
+                "id": "thermodynamique-c08-u07",
+                "title": "Lecture guidée : pages 19–21",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:8",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  19,
+                  21
+                ]
+              },
+              {
+                "id": "thermodynamique-c08-u08",
+                "title": "Lecture guidée : pages 22–22",
+                "type": "cours",
+                "source_id": "thermodynamique:cours:8",
+                "duration_hint_minutes": 20,
+                "confidence": "editorial_page_split_verified_scan",
+                "pdf_pages": [
+                  22,
+                  22
+                ]
+              }
+            ],
+            "source_confidence": "visual_verified_chapter_title"
+          }
+        ],
+        "td": [
+          {
+            "id": "thermodynamique-td01",
+            "title": "TD Série 1",
+            "source_id": "thermodynamique:td:1",
+            "units": [
+              {
+                "id": "thermodynamique-td01-e01",
+                "title": "Exercice 1",
+                "type": "td",
+                "source_id": "thermodynamique:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "visually_verified_exercises"
+              },
+              {
+                "id": "thermodynamique-td01-e02",
+                "title": "Exercice 2",
+                "type": "td",
+                "source_id": "thermodynamique:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "visually_verified_exercises"
+              },
+              {
+                "id": "thermodynamique-td01-e03",
+                "title": "Exercice 3",
+                "type": "td",
+                "source_id": "thermodynamique:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "visually_verified_exercises"
+              },
+              {
+                "id": "thermodynamique-td01-e04",
+                "title": "Exercice 4",
+                "type": "td",
+                "source_id": "thermodynamique:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "visually_verified_exercises"
+              }
+            ]
+          },
+          {
+            "id": "thermodynamique-td02",
+            "title": "TD Série 2",
+            "source_id": "thermodynamique:td:2",
+            "units": [
+              {
+                "id": "thermodynamique-td02-e01",
+                "title": "Exercice 1",
+                "type": "td",
+                "source_id": "thermodynamique:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "visually_verified_exercises",
+                "pdf_page": 2
+              },
+              {
+                "id": "thermodynamique-td02-e02",
+                "title": "Exercice 2",
+                "type": "td",
+                "source_id": "thermodynamique:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "visually_verified_exercises",
+                "pdf_page": 2
+              },
+              {
+                "id": "thermodynamique-td02-e03",
+                "title": "Exercice 3",
+                "type": "td",
+                "source_id": "thermodynamique:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "visually_verified_exercises",
+                "pdf_page": 2
+              },
+              {
+                "id": "thermodynamique-td02-e04",
+                "title": "Exercice 4",
+                "type": "td",
+                "source_id": "thermodynamique:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "visually_verified_exercises",
+                "pdf_page": 1
+              },
+              {
+                "id": "thermodynamique-td02-e05",
+                "title": "Exercice 5",
+                "type": "td",
+                "source_id": "thermodynamique:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "visually_verified_exercises",
+                "pdf_page": 1
+              }
+            ]
+          },
+          {
+            "id": "thermodynamique-td03",
+            "title": "TD Série 3",
+            "source_id": "thermodynamique:td:3",
+            "units": [
+              {
+                "id": "thermodynamique-td03-e01",
+                "title": "Exercice 1",
+                "type": "td",
+                "source_id": "thermodynamique:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "visually_verified_exercises",
+                "pdf_page": 1
+              },
+              {
+                "id": "thermodynamique-td03-e02",
+                "title": "Exercice 2",
+                "type": "td",
+                "source_id": "thermodynamique:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "visually_verified_exercises",
+                "pdf_page": 1
+              },
+              {
+                "id": "thermodynamique-td03-e03",
+                "title": "Exercice 3",
+                "type": "td",
+                "source_id": "thermodynamique:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "visually_verified_exercises",
+                "pdf_page": 1
+              },
+              {
+                "id": "thermodynamique-td03-e04",
+                "title": "Exercice 4",
+                "type": "td",
+                "source_id": "thermodynamique:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "visually_verified_exercises",
+                "pdf_page": 1
+              },
+              {
+                "id": "thermodynamique-td03-e05",
+                "title": "Exercice 5",
+                "type": "td",
+                "source_id": "thermodynamique:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "visually_verified_exercises",
+                "pdf_page": 2
+              },
+              {
+                "id": "thermodynamique-td03-e06",
+                "title": "Exercice 6",
+                "type": "td",
+                "source_id": "thermodynamique:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "visually_verified_exercises",
+                "pdf_page": 2
+              }
+            ]
+          },
+          {
+            "id": "thermodynamique-td04",
+            "title": "TD Série 4",
+            "source_id": "thermodynamique:td:4",
+            "units": [
+              {
+                "id": "thermodynamique-td04-e01",
+                "title": "Exercice 1",
+                "type": "td",
+                "source_id": "thermodynamique:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "visually_verified_exercises",
+                "pdf_page": 1
+              },
+              {
+                "id": "thermodynamique-td04-e02",
+                "title": "Exercice 2",
+                "type": "td",
+                "source_id": "thermodynamique:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "visually_verified_exercises",
+                "pdf_page": 1
+              },
+              {
+                "id": "thermodynamique-td04-e03",
+                "title": "Exercice 3",
+                "type": "td",
+                "source_id": "thermodynamique:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "visually_verified_exercises",
+                "pdf_page": 1
+              },
+              {
+                "id": "thermodynamique-td04-e04",
+                "title": "Exercice 4",
+                "type": "td",
+                "source_id": "thermodynamique:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "visually_verified_exercises",
+                "pdf_page": 2
+              },
+              {
+                "id": "thermodynamique-td04-e05",
+                "title": "Exercice 5",
+                "type": "td",
+                "source_id": "thermodynamique:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "visually_verified_exercises",
+                "pdf_page": 2
+              },
+              {
+                "id": "thermodynamique-td04-e06",
+                "title": "Exercice 6",
+                "type": "td",
+                "source_id": "thermodynamique:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "visually_verified_exercises",
+                "pdf_page": 2
+              },
+              {
+                "id": "thermodynamique-td04-e07",
+                "title": "Exercice 7",
+                "type": "td",
+                "source_id": "thermodynamique:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "visually_verified_exercises",
+                "pdf_page": 3
+              },
+              {
+                "id": "thermodynamique-td04-e08",
+                "title": "Exercice 8",
+                "type": "td",
+                "source_id": "thermodynamique:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "visually_verified_exercises",
+                "pdf_page": 3
+              }
+            ]
+          }
+        ],
+        "tp": []
+      }
+    },
+    {
+      "id": "mecanique",
+      "name": "Mécanique du point",
+      "status": "verified_partial",
+      "sections": {
+        "cours": [
+          {
+            "id": "mecanique-c01",
+            "title": "Chapitre 1 : Coordonnées et cinématique du point",
+            "source_id": "mecanique:cours:1",
+            "units": [
+              {
+                "id": "mecanique-c01-u01",
+                "title": "Rappels : produit vectoriel et produit mixte",
+                "type": "cours",
+                "source_id": "mecanique:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "mecanique-c01-u02",
+                "title": "Rappels : champs scalaires et vectoriels",
+                "type": "cours",
+                "source_id": "mecanique:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "mecanique-c01-u03",
+                "title": "Coordonnées cartésiennes",
+                "type": "cours",
+                "source_id": "mecanique:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "mecanique-c01-u04",
+                "title": "Coordonnées cylindriques",
+                "type": "cours",
+                "source_id": "mecanique:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "mecanique-c01-u05",
+                "title": "Coordonnées sphériques",
+                "type": "cours",
+                "source_id": "mecanique:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "mecanique-c01-u06",
+                "title": "Vecteur vitesse",
+                "type": "cours",
+                "source_id": "mecanique:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "mecanique-c01-u07",
+                "title": "Vecteur accélération",
+                "type": "cours",
+                "source_id": "mecanique:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "mecanique-c01-u08",
+                "title": "Mouvements circulaires",
+                "type": "cours",
+                "source_id": "mecanique:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              }
+            ],
+            "source_confidence": "verified_pdf_headings"
+          },
+          {
+            "id": "mecanique-c02",
+            "title": "Changements de référentiels et dynamique",
+            "source_id": "mecanique:cours:2",
+            "units": [
+              {
+                "id": "mecanique-c02-u01",
+                "title": "Dérivation dans un repère mobile",
+                "type": "cours",
+                "source_id": "mecanique:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "mecanique-c02-u02",
+                "title": "Composition des vitesses",
+                "type": "cours",
+                "source_id": "mecanique:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "mecanique-c02-u03",
+                "title": "Composition des accélérations",
+                "type": "cours",
+                "source_id": "mecanique:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "mecanique-c02-u04",
+                "title": "Principe d’inertie",
+                "type": "cours",
+                "source_id": "mecanique:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "mecanique-c02-u05",
+                "title": "Référentiels galiléens et dynamique terrestre",
+                "type": "cours",
+                "source_id": "mecanique:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "mecanique-c02-u06",
+                "title": "Loi fondamentale de la dynamique",
+                "type": "cours",
+                "source_id": "mecanique:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "mecanique-c02-u07",
+                "title": "Classification des forces",
+                "type": "cours",
+                "source_id": "mecanique:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "mecanique-c02-u08",
+                "title": "Quantité de mouvement et moment cinétique",
+                "type": "cours",
+                "source_id": "mecanique:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              }
+            ],
+            "source_confidence": "verified_pdf_headings"
+          },
+          {
+            "id": "mecanique-c03",
+            "title": "Chapitre III : Travail et énergie",
+            "source_id": "mecanique:cours:3",
+            "units": [
+              {
+                "id": "mecanique-c03-u01",
+                "title": "Travail d’une force",
+                "type": "cours",
+                "source_id": "mecanique:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "mecanique-c03-u02",
+                "title": "Énergie potentielle",
+                "type": "cours",
+                "source_id": "mecanique:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "mecanique-c03-u03",
+                "title": "Énergie cinétique",
+                "type": "cours",
+                "source_id": "mecanique:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "mecanique-c03-u04",
+                "title": "Théorème de l’énergie cinétique",
+                "type": "cours",
+                "source_id": "mecanique:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "mecanique-c03-u05",
+                "title": "Énergie mécanique et conservation",
+                "type": "cours",
+                "source_id": "mecanique:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              }
+            ],
+            "source_confidence": "verified_pdf_headings"
+          },
+          {
+            "id": "mecanique-c04",
+            "title": "Chapitre IV : Mouvements à force centrale",
+            "source_id": "mecanique:cours:4",
+            "units": [
+              {
+                "id": "mecanique-c04-u01",
+                "title": "Force centrale et moment cinétique",
+                "type": "cours",
+                "source_id": "mecanique:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "mecanique-c04-u02",
+                "title": "Loi des aires",
+                "type": "cours",
+                "source_id": "mecanique:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "mecanique-c04-u03",
+                "title": "Énergie et forces centrales",
+                "type": "cours",
+                "source_id": "mecanique:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "mecanique-c04-u04",
+                "title": "Classification des trajectoires",
+                "type": "cours",
+                "source_id": "mecanique:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "mecanique-c04-u05",
+                "title": "Trajectoires elliptiques",
+                "type": "cours",
+                "source_id": "mecanique:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "mecanique-c04-u06",
+                "title": "Troisième loi de Kepler",
+                "type": "cours",
+                "source_id": "mecanique:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "mecanique-c04-u07",
+                "title": "Satellites et vitesse de libération",
+                "type": "cours",
+                "source_id": "mecanique:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "mecanique-c04-u08",
+                "title": "Orbites et satellites géostationnaires",
+                "type": "cours",
+                "source_id": "mecanique:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              }
+            ],
+            "source_confidence": "verified_pdf_headings"
+          },
+          {
+            "id": "mecanique-c05",
+            "title": "Chapitre 6 : Chocs de deux particules",
+            "source_id": "mecanique:cours:5",
+            "units": [
+              {
+                "id": "mecanique-c05-u01",
+                "title": "Définition d’une collision",
+                "type": "cours",
+                "source_id": "mecanique:cours:5",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "mecanique-c05-u02",
+                "title": "Conservation de la quantité de mouvement",
+                "type": "cours",
+                "source_id": "mecanique:cours:5",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "mecanique-c05-u03",
+                "title": "Collisions élastiques et inélastiques",
+                "type": "cours",
+                "source_id": "mecanique:cours:5",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "mecanique-c05-u04",
+                "title": "Collision élastique directe",
+                "type": "cours",
+                "source_id": "mecanique:cours:5",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "mecanique-c05-u05",
+                "title": "Collision type boules de billard",
+                "type": "cours",
+                "source_id": "mecanique:cours:5",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              }
+            ],
+            "source_confidence": "verified_pdf_heading_filename_mismatch"
+          }
+        ],
+        "td": [
+          {
+            "id": "mecanique-td01",
+            "title": "TD Série 1",
+            "source_id": "mecanique:td:1",
+            "units": [
+              {
+                "id": "mecanique-td01-e01",
+                "title": "Exercice 1",
+                "type": "td",
+                "source_id": "mecanique:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "mecanique-td01-e02",
+                "title": "Exercice 2",
+                "type": "td",
+                "source_id": "mecanique:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "mecanique-td01-e03",
+                "title": "Exercice 3",
+                "type": "td",
+                "source_id": "mecanique:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              },
+              {
+                "id": "mecanique-td01-e04",
+                "title": "Exercice 4",
+                "type": "td",
+                "source_id": "mecanique:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              }
+            ]
+          },
+          {
+            "id": "mecanique-td02",
+            "title": "TD Série 2",
+            "source_id": "mecanique:td:2",
+            "units": [
+              {
+                "id": "mecanique-td02-e01",
+                "title": "Exercice 1",
+                "type": "td",
+                "source_id": "mecanique:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "mecanique-td02-e02",
+                "title": "Exercice 2",
+                "type": "td",
+                "source_id": "mecanique:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "mecanique-td02-e03",
+                "title": "Exercice 3",
+                "type": "td",
+                "source_id": "mecanique:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              },
+              {
+                "id": "mecanique-td02-e04",
+                "title": "Exercice 4",
+                "type": "td",
+                "source_id": "mecanique:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              }
+            ]
+          },
+          {
+            "id": "mecanique-td03",
+            "title": "TD Série 3",
+            "source_id": "mecanique:td:3",
+            "units": [
+              {
+                "id": "mecanique-td03-e01",
+                "title": "Exercice 1",
+                "type": "td",
+                "source_id": "mecanique:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "mecanique-td03-e02",
+                "title": "Exercice 2",
+                "type": "td",
+                "source_id": "mecanique:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "mecanique-td03-e03",
+                "title": "Exercice 3",
+                "type": "td",
+                "source_id": "mecanique:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              }
+            ]
+          },
+          {
+            "id": "mecanique-td04",
+            "title": "TD Série 4",
+            "source_id": "mecanique:td:4",
+            "units": [
+              {
+                "id": "mecanique-td04-e01",
+                "title": "Exercice 1",
+                "type": "td",
+                "source_id": "mecanique:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "mecanique-td04-e02",
+                "title": "Exercice 2",
+                "type": "td",
+                "source_id": "mecanique:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "mecanique-td04-e03",
+                "title": "Exercice 3",
+                "type": "td",
+                "source_id": "mecanique:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              },
+              {
+                "id": "mecanique-td04-e04",
+                "title": "Exercice 4",
+                "type": "td",
+                "source_id": "mecanique:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              },
+              {
+                "id": "mecanique-td04-e05",
+                "title": "Exercice 5",
+                "type": "td",
+                "source_id": "mecanique:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              }
+            ]
+          },
+          {
+            "id": "mecanique-td05",
+            "title": "TD Série 5",
+            "source_id": "mecanique:td:5",
+            "units": [
+              {
+                "id": "mecanique-td05-e01",
+                "title": "Exercice 1",
+                "type": "td",
+                "source_id": "mecanique:td:5",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "mecanique-td05-e02",
+                "title": "Exercice 2",
+                "type": "td",
+                "source_id": "mecanique:td:5",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "mecanique-td05-e03",
+                "title": "Exercice 3",
+                "type": "td",
+                "source_id": "mecanique:td:5",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              },
+              {
+                "id": "mecanique-td05-e04",
+                "title": "Exercice 4",
+                "type": "td",
+                "source_id": "mecanique:td:5",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              }
+            ]
+          }
+        ],
+        "tp": []
+      }
+    },
+    {
+      "id": "informatique1",
+      "name": "Informatique 1 : Algorithmique / Python",
+      "status": "verified_partial",
+      "sections": {
+        "cours": [
+          {
+            "id": "informatique1-c01",
+            "title": "Partie 1 : Introduction / variables",
+            "source_id": "informatique1:cours:1",
+            "units": [
+              {
+                "id": "informatique1-c01-u01",
+                "title": "Notion d’un algorithme",
+                "type": "cours",
+                "source_id": "informatique1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c01-u02",
+                "title": "Conception d’un algorithme",
+                "type": "cours",
+                "source_id": "informatique1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c01-u03",
+                "title": "Représentation et structure d’un algorithme",
+                "type": "cours",
+                "source_id": "informatique1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c01-u04",
+                "title": "Introduction à Python",
+                "type": "cours",
+                "source_id": "informatique1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c01-u05",
+                "title": "Installation et environnement Python",
+                "type": "cours",
+                "source_id": "informatique1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c01-u06",
+                "title": "Variables et constantes",
+                "type": "cours",
+                "source_id": "informatique1:cours:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              }
+            ],
+            "source_confidence": "verified_pdf_headings"
+          },
+          {
+            "id": "informatique1-c02",
+            "title": "Partie 2 : Types et affectation",
+            "source_id": "informatique1:cours:2",
+            "units": [
+              {
+                "id": "informatique1-c02-u01",
+                "title": "Types entiers et réels",
+                "type": "cours",
+                "source_id": "informatique1:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c02-u02",
+                "title": "Types booléens et complexes",
+                "type": "cours",
+                "source_id": "informatique1:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c02-u03",
+                "title": "Caractères et chaînes",
+                "type": "cours",
+                "source_id": "informatique1:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c02-u04",
+                "title": "Affectation",
+                "type": "cours",
+                "source_id": "informatique1:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c02-u05",
+                "title": "Variantes de l’affectation",
+                "type": "cours",
+                "source_id": "informatique1:cours:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              }
+            ],
+            "source_confidence": "verified_pdf_headings"
+          },
+          {
+            "id": "informatique1-c03",
+            "title": "Partie 3 : Opérateurs et conditionnelles",
+            "source_id": "informatique1:cours:3",
+            "units": [
+              {
+                "id": "informatique1-c03-u01",
+                "title": "Opérateurs arithmétiques",
+                "type": "cours",
+                "source_id": "informatique1:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c03-u02",
+                "title": "Opérateurs logiques et comparaisons",
+                "type": "cours",
+                "source_id": "informatique1:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c03-u03",
+                "title": "Priorité des opérations",
+                "type": "cours",
+                "source_id": "informatique1:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c03-u04",
+                "title": "Transtypage",
+                "type": "cours",
+                "source_id": "informatique1:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c03-u05",
+                "title": "Entrées et sorties",
+                "type": "cours",
+                "source_id": "informatique1:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c03-u06",
+                "title": "Structure séquentielle",
+                "type": "cours",
+                "source_id": "informatique1:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c03-u07",
+                "title": "Conditions simples",
+                "type": "cours",
+                "source_id": "informatique1:cours:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              }
+            ],
+            "source_confidence": "verified_pdf_headings"
+          },
+          {
+            "id": "informatique1-c04",
+            "title": "Partie 4 : Conditions et boucles",
+            "source_id": "informatique1:cours:4",
+            "units": [
+              {
+                "id": "informatique1-c04-u01",
+                "title": "Conditions à choix multiples",
+                "type": "cours",
+                "source_id": "informatique1:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c04-u02",
+                "title": "if / elif / else",
+                "type": "cours",
+                "source_id": "informatique1:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c04-u03",
+                "title": "Structures répétitives",
+                "type": "cours",
+                "source_id": "informatique1:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c04-u04",
+                "title": "Boucle TantQue",
+                "type": "cours",
+                "source_id": "informatique1:cours:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              }
+            ],
+            "source_confidence": "verified_pdf_headings"
+          },
+          {
+            "id": "informatique1-c05",
+            "title": "Partie 5 : Boucles",
+            "source_id": "informatique1:cours:5",
+            "units": [
+              {
+                "id": "informatique1-c05-u01",
+                "title": "Boucle Répéter Jusqu’à",
+                "type": "cours",
+                "source_id": "informatique1:cours:5",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c05-u02",
+                "title": "Boucle Pour",
+                "type": "cours",
+                "source_id": "informatique1:cours:5",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c05-u03",
+                "title": "Python while",
+                "type": "cours",
+                "source_id": "informatique1:cours:5",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c05-u04",
+                "title": "Python for",
+                "type": "cours",
+                "source_id": "informatique1:cours:5",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              }
+            ],
+            "source_confidence": "verified_pdf_headings"
+          },
+          {
+            "id": "informatique1-c06",
+            "title": "Partie 6 : Contrôle et tableaux",
+            "source_id": "informatique1:cours:6",
+            "units": [
+              {
+                "id": "informatique1-c06-u01",
+                "title": "break et continue",
+                "type": "cours",
+                "source_id": "informatique1:cours:6",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c06-u02",
+                "title": "Indentation et blocs",
+                "type": "cours",
+                "source_id": "informatique1:cours:6",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c06-u03",
+                "title": "Commentaires",
+                "type": "cours",
+                "source_id": "informatique1:cours:6",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c06-u04",
+                "title": "Erreurs et débogage",
+                "type": "cours",
+                "source_id": "informatique1:cours:6",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c06-u05",
+                "title": "Bibliothèques",
+                "type": "cours",
+                "source_id": "informatique1:cours:6",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c06-u06",
+                "title": "Tableau à une dimension",
+                "type": "cours",
+                "source_id": "informatique1:cours:6",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c06-u07",
+                "title": "Manipulation d’un tableau",
+                "type": "cours",
+                "source_id": "informatique1:cours:6",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c06-u08",
+                "title": "Tableau à deux dimensions",
+                "type": "cours",
+                "source_id": "informatique1:cours:6",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              }
+            ],
+            "source_confidence": "verified_pdf_headings"
+          },
+          {
+            "id": "informatique1-c07",
+            "title": "Partie 7 : Tri",
+            "source_id": "informatique1:cours:7",
+            "units": [
+              {
+                "id": "informatique1-c07-u01",
+                "title": "Tableaux dynamiques",
+                "type": "cours",
+                "source_id": "informatique1:cours:7",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c07-u02",
+                "title": "Tri par sélection",
+                "type": "cours",
+                "source_id": "informatique1:cours:7",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c07-u03",
+                "title": "Tri par insertion",
+                "type": "cours",
+                "source_id": "informatique1:cours:7",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c07-u04",
+                "title": "Tri à bulles",
+                "type": "cours",
+                "source_id": "informatique1:cours:7",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c07-u05",
+                "title": "Tri rapide",
+                "type": "cours",
+                "source_id": "informatique1:cours:7",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              }
+            ],
+            "source_confidence": "verified_pdf_headings"
+          },
+          {
+            "id": "informatique1-c08",
+            "title": "Partie 8 : Recherche",
+            "source_id": "informatique1:cours:8",
+            "units": [
+              {
+                "id": "informatique1-c08-u01",
+                "title": "Recherche séquentielle",
+                "type": "cours",
+                "source_id": "informatique1:cours:8",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              },
+              {
+                "id": "informatique1-c08-u02",
+                "title": "Recherche dichotomique",
+                "type": "cours",
+                "source_id": "informatique1:cours:8",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_source_heading"
+              }
+            ],
+            "source_confidence": "verified_pdf_headings"
+          }
+        ],
+        "td": [
+          {
+            "id": "informatique1-td01",
+            "title": "TD Série 1",
+            "source_id": "informatique1:td:1",
+            "units": [
+              {
+                "id": "informatique1-td01-e01",
+                "title": "Exercice 1",
+                "type": "td",
+                "source_id": "informatique1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-td01-e02",
+                "title": "Exercice 2",
+                "type": "td",
+                "source_id": "informatique1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-td01-e03",
+                "title": "Exercice 3",
+                "type": "td",
+                "source_id": "informatique1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-td01-e04",
+                "title": "Exercice 4",
+                "type": "td",
+                "source_id": "informatique1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-td01-e05",
+                "title": "Exercice 5",
+                "type": "td",
+                "source_id": "informatique1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-td01-e06",
+                "title": "Exercice 6",
+                "type": "td",
+                "source_id": "informatique1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-td01-e07",
+                "title": "Exercice 7",
+                "type": "td",
+                "source_id": "informatique1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-td01-e08",
+                "title": "Exercice 8",
+                "type": "td",
+                "source_id": "informatique1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              },
+              {
+                "id": "informatique1-td01-e09",
+                "title": "Exercice 9",
+                "type": "td",
+                "source_id": "informatique1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              },
+              {
+                "id": "informatique1-td01-e10",
+                "title": "Exercice 10",
+                "type": "td",
+                "source_id": "informatique1:td:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              }
+            ]
+          },
+          {
+            "id": "informatique1-td02",
+            "title": "TD Série 2",
+            "source_id": "informatique1:td:2",
+            "units": [
+              {
+                "id": "informatique1-td02-e01",
+                "title": "Exercice 1",
+                "type": "td",
+                "source_id": "informatique1:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-td02-e02",
+                "title": "Exercice 2",
+                "type": "td",
+                "source_id": "informatique1:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-td02-e03",
+                "title": "Exercice 3",
+                "type": "td",
+                "source_id": "informatique1:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-td02-e04",
+                "title": "Exercice 4",
+                "type": "td",
+                "source_id": "informatique1:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-td02-e05",
+                "title": "Exercice 5",
+                "type": "td",
+                "source_id": "informatique1:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-td02-e06",
+                "title": "Exercice 6",
+                "type": "td",
+                "source_id": "informatique1:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-td02-e07",
+                "title": "Exercice 7",
+                "type": "td",
+                "source_id": "informatique1:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-td02-e08",
+                "title": "Exercice 8",
+                "type": "td",
+                "source_id": "informatique1:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-td02-e09",
+                "title": "Exercice 9",
+                "type": "td",
+                "source_id": "informatique1:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-td02-e10",
+                "title": "Exercice 10",
+                "type": "td",
+                "source_id": "informatique1:td:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              }
+            ]
+          },
+          {
+            "id": "informatique1-td03",
+            "title": "TD Série 3",
+            "source_id": "informatique1:td:3",
+            "units": [
+              {
+                "id": "informatique1-td03-e01",
+                "title": "Exercice 1",
+                "type": "td",
+                "source_id": "informatique1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-td03-e02",
+                "title": "Exercice 2",
+                "type": "td",
+                "source_id": "informatique1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-td03-e03",
+                "title": "Exercice 3",
+                "type": "td",
+                "source_id": "informatique1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-td03-e04",
+                "title": "Exercice 4",
+                "type": "td",
+                "source_id": "informatique1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-td03-e05",
+                "title": "Exercice 5",
+                "type": "td",
+                "source_id": "informatique1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-td03-e06",
+                "title": "Exercice 6",
+                "type": "td",
+                "source_id": "informatique1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              },
+              {
+                "id": "informatique1-td03-e07",
+                "title": "Exercice 7",
+                "type": "td",
+                "source_id": "informatique1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              },
+              {
+                "id": "informatique1-td03-e08",
+                "title": "Exercice 8",
+                "type": "td",
+                "source_id": "informatique1:td:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              }
+            ]
+          },
+          {
+            "id": "informatique1-td04",
+            "title": "TD Série 4",
+            "source_id": "informatique1:td:4",
+            "units": [
+              {
+                "id": "informatique1-td04-e01",
+                "title": "Exercice 1",
+                "type": "td",
+                "source_id": "informatique1:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-td04-e02",
+                "title": "Exercice 2",
+                "type": "td",
+                "source_id": "informatique1:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-td04-e03",
+                "title": "Exercice 3",
+                "type": "td",
+                "source_id": "informatique1:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-td04-e04",
+                "title": "Exercice 4",
+                "type": "td",
+                "source_id": "informatique1:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-td04-e05",
+                "title": "Exercice 5",
+                "type": "td",
+                "source_id": "informatique1:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              },
+              {
+                "id": "informatique1-td04-e06",
+                "title": "Exercice 6",
+                "type": "td",
+                "source_id": "informatique1:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              },
+              {
+                "id": "informatique1-td04-e07",
+                "title": "Exercice 7",
+                "type": "td",
+                "source_id": "informatique1:td:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              }
+            ]
+          },
+          {
+            "id": "informatique1-td05",
+            "title": "TD Série 5",
+            "source_id": "informatique1:td:5",
+            "units": [
+              {
+                "id": "informatique1-td05-e01",
+                "title": "Exercice 1",
+                "type": "td",
+                "source_id": "informatique1:td:5",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-td05-e02",
+                "title": "Exercice 2",
+                "type": "td",
+                "source_id": "informatique1:td:5",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-td05-e03",
+                "title": "Exercice 3",
+                "type": "td",
+                "source_id": "informatique1:td:5",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-td05-e04",
+                "title": "Exercice 4",
+                "type": "td",
+                "source_id": "informatique1:td:5",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-td05-e05",
+                "title": "Exercice 5",
+                "type": "td",
+                "source_id": "informatique1:td:5",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              }
+            ]
+          }
+        ],
+        "tp": [
+          {
+            "id": "informatique1-tp01",
+            "title": "TP 1",
+            "source_id": "informatique1:tp:1",
+            "units": [
+              {
+                "id": "informatique1-tp01-e01",
+                "title": "Exercice 1",
+                "type": "tp",
+                "source_id": "informatique1:tp:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-tp01-e02",
+                "title": "Exercice 2",
+                "type": "tp",
+                "source_id": "informatique1:tp:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-tp01-e03",
+                "title": "Exercice 3",
+                "type": "tp",
+                "source_id": "informatique1:tp:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-tp01-e04",
+                "title": "Exercice 4",
+                "type": "tp",
+                "source_id": "informatique1:tp:1",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              }
+            ]
+          },
+          {
+            "id": "informatique1-tp02",
+            "title": "TP 2",
+            "source_id": "informatique1:tp:2",
+            "units": [
+              {
+                "id": "informatique1-tp02-e01",
+                "title": "Exercice 1",
+                "type": "tp",
+                "source_id": "informatique1:tp:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-tp02-e02",
+                "title": "Exercice 2",
+                "type": "tp",
+                "source_id": "informatique1:tp:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-tp02-e03",
+                "title": "Exercice 3",
+                "type": "tp",
+                "source_id": "informatique1:tp:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-tp02-e04",
+                "title": "Exercice 4",
+                "type": "tp",
+                "source_id": "informatique1:tp:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-tp02-e05",
+                "title": "Exercice 5",
+                "type": "tp",
+                "source_id": "informatique1:tp:2",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              }
+            ]
+          },
+          {
+            "id": "informatique1-tp03",
+            "title": "TP 3",
+            "source_id": "informatique1:tp:3",
+            "units": [
+              {
+                "id": "informatique1-tp03-e01",
+                "title": "Exercice 1",
+                "type": "tp",
+                "source_id": "informatique1:tp:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-tp03-e02",
+                "title": "Exercice 2",
+                "type": "tp",
+                "source_id": "informatique1:tp:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-tp03-e03",
+                "title": "Exercice 3",
+                "type": "tp",
+                "source_id": "informatique1:tp:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-tp03-e04",
+                "title": "Exercice 4",
+                "type": "tp",
+                "source_id": "informatique1:tp:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-tp03-e05",
+                "title": "Exercice 5",
+                "type": "tp",
+                "source_id": "informatique1:tp:3",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              }
+            ]
+          },
+          {
+            "id": "informatique1-tp04",
+            "title": "TP 4",
+            "source_id": "informatique1:tp:4",
+            "units": [
+              {
+                "id": "informatique1-tp04-e01",
+                "title": "Exercice 1",
+                "type": "tp",
+                "source_id": "informatique1:tp:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-tp04-e02",
+                "title": "Exercice 2",
+                "type": "tp",
+                "source_id": "informatique1:tp:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-tp04-e03",
+                "title": "Exercice 3",
+                "type": "tp",
+                "source_id": "informatique1:tp:4",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              }
+            ]
+          },
+          {
+            "id": "informatique1-tp05",
+            "title": "TP 5",
+            "source_id": "informatique1:tp:5",
+            "units": [
+              {
+                "id": "informatique1-tp05-e01",
+                "title": "Exercice 1",
+                "type": "tp",
+                "source_id": "informatique1:tp:5",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-tp05-e02",
+                "title": "Exercice 2",
+                "type": "tp",
+                "source_id": "informatique1:tp:5",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-tp05-e03",
+                "title": "Exercice 3",
+                "type": "tp",
+                "source_id": "informatique1:tp:5",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              }
+            ]
+          },
+          {
+            "id": "informatique1-tp06",
+            "title": "TP 6",
+            "source_id": "informatique1:tp:6",
+            "units": [
+              {
+                "id": "informatique1-tp06-e01",
+                "title": "Exercice 1",
+                "type": "tp",
+                "source_id": "informatique1:tp:6",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 1
+              },
+              {
+                "id": "informatique1-tp06-e02",
+                "title": "Exercice 2",
+                "type": "tp",
+                "source_id": "informatique1:tp:6",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 2
+              },
+              {
+                "id": "informatique1-tp06-e03",
+                "title": "Exercice 3",
+                "type": "tp",
+                "source_id": "informatique1:tp:6",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_exercise_headers",
+                "pdf_page": 3
+              }
+            ]
+          },
+          {
+            "id": "informatique1-tpbonus",
+            "title": "Exercice pratique : gestion d’un stock numérique",
+            "source_id": "informatique1:tp:bonus",
+            "units": [
+              {
+                "id": "informatique1-tpbonus-u01",
+                "title": "Afficher taille, minimum, maximum et somme",
+                "type": "tp",
+                "source_id": "informatique1:tp:bonus",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_pdf_operations"
+              },
+              {
+                "id": "informatique1-tpbonus-u02",
+                "title": "Supprimer toutes les occurrences de 5",
+                "type": "tp",
+                "source_id": "informatique1:tp:bonus",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_pdf_operations"
+              },
+              {
+                "id": "informatique1-tpbonus-u03",
+                "title": "Insérer 100 au début et 200 à la fin",
+                "type": "tp",
+                "source_id": "informatique1:tp:bonus",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_pdf_operations"
+              },
+              {
+                "id": "informatique1-tpbonus-u04",
+                "title": "Ajouter 60, 70 et 80 un par un",
+                "type": "tp",
+                "source_id": "informatique1:tp:bonus",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_pdf_operations"
+              },
+              {
+                "id": "informatique1-tpbonus-u05",
+                "title": "Retirer et enregistrer la valeur en position 3",
+                "type": "tp",
+                "source_id": "informatique1:tp:bonus",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_pdf_operations"
+              },
+              {
+                "id": "informatique1-tpbonus-u06",
+                "title": "Supprimer les éléments d’indices 2 à 6",
+                "type": "tp",
+                "source_id": "informatique1:tp:bonus",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_pdf_operations"
+              },
+              {
+                "id": "informatique1-tpbonus-u07",
+                "title": "Inverser la liste",
+                "type": "tp",
+                "source_id": "informatique1:tp:bonus",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_pdf_operations"
+              },
+              {
+                "id": "informatique1-tpbonus-u08",
+                "title": "Trier en ordre décroissant",
+                "type": "tp",
+                "source_id": "informatique1:tp:bonus",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_pdf_operations"
+              },
+              {
+                "id": "informatique1-tpbonus-u09",
+                "title": "Créer une sous-liste de 4 éléments",
+                "type": "tp",
+                "source_id": "informatique1:tp:bonus",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_pdf_operations"
+              },
+              {
+                "id": "informatique1-tpbonus-u10",
+                "title": "Réinitialiser complètement la liste",
+                "type": "tp",
+                "source_id": "informatique1:tp:bonus",
+                "duration_hint_minutes": 20,
+                "confidence": "verified_pdf_operations"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "methodologie",
+      "name": "Méthodologie de Travail Universitaire",
+      "status": "awaiting_real_material",
+      "sections": {
+        "cours": [],
+        "td": [],
+        "tp": []
+      },
+      "missing_reason": "Aucun dossier Méthodologie trouvé dans si/S1, donc aucune sous-partie ni exercice n’a été inventé."
+    }
+  ],
+  "suggested_course_td_links": [
+    {
+      "cours_id": "analyse1-c01",
+      "td_id": "analyse1-td01",
+      "status": "proposed_not_confirmed",
+      "confidence": "high",
+      "reason": "Récurrence, inégalités, sommes"
+    },
+    {
+      "cours_id": "analyse1-c02",
+      "td_id": "analyse1-td02",
+      "status": "proposed_not_confirmed",
+      "confidence": "high",
+      "reason": "Suites numériques"
+    },
+    {
+      "cours_id": "analyse1-c03",
+      "td_id": "analyse1-td03",
+      "status": "proposed_not_confirmed",
+      "confidence": "high",
+      "reason": "Limites et continuité des fonctions"
+    },
+    {
+      "cours_id": "analyse1-c04",
+      "td_id": "analyse1-td03",
+      "status": "proposed_not_confirmed",
+      "confidence": "medium",
+      "reason": "Sujets de fonctions, prolongements et dérivées"
+    },
+    {
+      "cours_id": "algebre1-c01",
+      "td_id": "algebre1-td01",
+      "status": "proposed_not_confirmed",
+      "confidence": "high",
+      "reason": "Logique et quantificateurs"
+    },
+    {
+      "cours_id": "algebre1-c02",
+      "td_id": "algebre1-td02",
+      "status": "proposed_not_confirmed",
+      "confidence": "high",
+      "reason": "Relations binaires"
+    },
+    {
+      "cours_id": "algebre1-c02",
+      "td_id": "algebre1-td03",
+      "status": "proposed_not_confirmed",
+      "confidence": "medium",
+      "reason": "Applications et fonctions indicatrices"
+    },
+    {
+      "cours_id": "algebre1-c03",
+      "td_id": "algebre1-td04",
+      "status": "proposed_not_confirmed",
+      "confidence": "high",
+      "reason": "Congruences, Z/nZ et arithmétique"
+    },
+    {
+      "cours_id": "algebre2-c01",
+      "td_id": "algebre2-td01",
+      "status": "proposed_not_confirmed",
+      "confidence": "high",
+      "reason": "Groupes et anneaux"
+    },
+    {
+      "cours_id": "algebre2-c02",
+      "td_id": "algebre2-td02",
+      "status": "proposed_not_confirmed",
+      "confidence": "high",
+      "reason": "Polynômes"
+    },
+    {
+      "cours_id": "algebre2-c03",
+      "td_id": "algebre2-td03",
+      "status": "proposed_not_confirmed",
+      "confidence": "high",
+      "reason": "Fractions rationnelles"
+    },
+    {
+      "cours_id": "mecanique-c01",
+      "td_id": "mecanique-td01",
+      "status": "proposed_not_confirmed",
+      "confidence": "medium",
+      "reason": "Vecteurs et coordonnées"
+    },
+    {
+      "cours_id": "mecanique-c01",
+      "td_id": "mecanique-td02",
+      "status": "proposed_not_confirmed",
+      "confidence": "high",
+      "reason": "Cinématique"
+    },
+    {
+      "cours_id": "mecanique-c02",
+      "td_id": "mecanique-td03",
+      "status": "proposed_not_confirmed",
+      "confidence": "high",
+      "reason": "Changements de référentiel"
+    },
+    {
+      "cours_id": "mecanique-c03",
+      "td_id": "mecanique-td04",
+      "status": "proposed_not_confirmed",
+      "confidence": "medium",
+      "reason": "Dynamique et énergie"
+    },
+    {
+      "cours_id": "mecanique-c04",
+      "td_id": "mecanique-td05",
+      "status": "proposed_not_confirmed",
+      "confidence": "medium",
+      "reason": "Gravitation et forces centrales"
+    },
+    {
+      "cours_id": "informatique1-c01",
+      "td_id": "informatique1-td01",
+      "status": "proposed_not_confirmed",
+      "confidence": "high",
+      "reason": "Instructions élémentaires"
+    },
+    {
+      "cours_id": "informatique1-c04",
+      "td_id": "informatique1-td02",
+      "status": "proposed_not_confirmed",
+      "confidence": "high",
+      "reason": "Conditions"
+    },
+    {
+      "cours_id": "informatique1-c05",
+      "td_id": "informatique1-td03",
+      "status": "proposed_not_confirmed",
+      "confidence": "high",
+      "reason": "Boucles"
+    },
+    {
+      "cours_id": "informatique1-c06",
+      "td_id": "informatique1-td04",
+      "status": "proposed_not_confirmed",
+      "confidence": "high",
+      "reason": "Tableaux"
+    },
+    {
+      "cours_id": "informatique1-c07",
+      "td_id": "informatique1-td05",
+      "status": "proposed_not_confirmed",
+      "confidence": "high",
+      "reason": "Tri et recherche"
+    },
+    {
+      "cours_id": "thermodynamique-c02",
+      "td_id": "thermodynamique-td02",
+      "status": "proposed_not_confirmed",
+      "confidence": "medium",
+      "reason": "Équation d’état et gaz parfaits"
+    },
+    {
+      "cours_id": "thermodynamique-c04",
+      "td_id": "thermodynamique-td03",
+      "status": "proposed_not_confirmed",
+      "confidence": "high",
+      "reason": "Premier principe"
+    },
+    {
+      "cours_id": "thermodynamique-c05",
+      "td_id": "thermodynamique-td04",
+      "status": "proposed_not_confirmed",
+      "confidence": "high",
+      "reason": "Entropie et cycles"
+    }
+  ],
+  "review_needed": [
+    "Verify tiny subsection titles where lecture PDFs use slides instead of a table of contents",
+    "Thermodynamique chapter PDF scans require careful manual micro-title transcription beyond page chunks",
+    "Algebre 2 photographed TD exercise numbers should receive a final visual spot-check before publication",
+    "Méthodologie course has no source in si/S1",
+    "Manually approve which Drive links, if any, may be published."
+  ]
+}
